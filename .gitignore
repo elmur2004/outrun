@@ -1,0 +1,15 @@
+# Brand source files stay local: the Brand Book and Brand Foundation PDFs are marked
+# confidential, and the folder is ~70 MB of binaries. The theme gets only the logo SVGs
+# and converted fonts it needs (see docs/00-discovery.md, §8 Q22).
+/OUTRUN Branding/
+
+# OS / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Tooling
+node_modules/
+.shopify/
+*.log
+*.zip
