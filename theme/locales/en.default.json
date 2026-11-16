@@ -115,5 +115,27 @@
     "text": "This page doesn’t exist, or it moved. The road continues below.",
     "home": "Back to the start",
     "shop": "Shop the drop"
+  },
+  "notify": {
+    "email": "Email",
+    "which": "Which line",
+    "both": "Both",
+    "success": "You’re on the list. We’ll message you once, when it opens.",
+    "error": "Enter an email we can reach.",
+    "prefer_whatsapp": "Prefer WhatsApp?",
+    "message_us": "Message us"
+  },
+  "contact": {
+    "phone": "Phone",
+    "workshop": "Workshop",
+    "email": "Email",
+    "copy": "Copy",
+    "copied": "Copied",
+    "call": "Call",
+    "write": "Write to us",
+    "whatsapp_message": "Hi OUTRUN"
+  },
+  "heat": {
+    "draft_note": "Only visible in the theme editor: replace these placeholder figures with tested ones, then tick “Figures are tested” to show them."
   }
 }

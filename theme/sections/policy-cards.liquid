@@ -1,0 +1,48 @@
+{{ 'section-support.css' | asset_url | stylesheet_tag }}
+
+<section class="sec pattern-air" id="{{ section.settings.anchor | handleize | default: 'policies' }}">
+  <div class="wrap">
+    <div class="policy">
+      {%- for block in section.blocks -%}
+        <article class="rv" {{ block.shopify_attributes }}>
+          {% render 'icon', name: block.settings.icon %}
+          <h3>{{ block.settings.title | escape }}</h3>
+          <p>{{ block.settings.text | escape }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Policy cards",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "anchor", "label": "Anchor", "info": "Links can jump here with #anchor.", "default": "policies" }
+  ],
+  "blocks": [
+    {
+      "type": "policy",
+      "name": "Policy",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "box", "label": "Box" },
+            { "value": "swap", "label": "Exchange" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "chat", "label": "Chat" }
+          ],
+          "default": "box"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Open before you pay" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Cash on delivery with inspection. Open the box, check every cap, then pay." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Policy cards" }]
+}
+{% endschema %}

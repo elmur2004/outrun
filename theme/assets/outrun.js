@@ -333,6 +333,63 @@ function veils() {
   update();
 }
 
+// Counters count up once when they come into view (calm motion: shown at their final value).
+function countUps() {
+  const els = fresh('[data-count]', 'countBound');
+  if (!els.length) return;
+  const format = (n) => n.toLocaleString('en-US');
+  els.forEach((el) => {
+    const to = Number(el.dataset.count);
+    const ghost = el.parentElement?.querySelector('.count-ghost');
+    if (ghost && !Number.isNaN(to)) ghost.textContent = format(to); // reserves the final width
+    if (!isCalm() && to) el.textContent = '0';
+  });
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    io.unobserve(e.target);
+    const el = e.target;
+    const to = Number(el.dataset.count);
+    if (isCalm() || !to) { el.textContent = format(to); return; }
+    const t0 = performance.now();
+    const step = (now) => {
+      const k = Math.min(1, (now - t0) / 1600);
+      el.textContent = format(Math.round(to * (1 - (1 - k) ** 3)));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }), { threshold: 0.5 });
+  els.forEach((el) => io.observe(el));
+}
+
+// Copy buttons (contact tiles): copy, then say so for a moment.
+function copyButtons() {
+  fresh('[data-copy]', 'copyBound').forEach((b) => b.addEventListener('click', async () => {
+    const label = b.textContent;
+    try {
+      await navigator.clipboard.writeText(b.dataset.copy);
+      b.textContent = b.dataset.copied || label;
+      setTimeout(() => { b.textContent = label; }, 2000);
+    } catch (e) {
+      toast(b.dataset.copy); // no clipboard access: show the value so it can be copied by hand
+    }
+  }));
+}
+
+// Film: plays the uploaded video in place; without one, the poster gets a slow zoom (as in the design).
+function films() {
+  fresh('[data-film]', 'filmBound').forEach((film) => film.addEventListener('click', () => {
+    const tpl = film.querySelector('template');
+    if (tpl) {
+      const video = tpl.content.querySelector('video').cloneNode(true);
+      film.replaceWith(video);
+      video.play().catch(() => {});
+      video.focus();
+      return;
+    }
+    film.classList.toggle('playing');
+  }));
+}
+
 // Mobile menu: native modal <dialog>, slid in with a class so the close can animate too.
 function mobileMenu() {
   const dialog = document.getElementById('MobileMenu');
@@ -371,6 +428,11 @@ sectionSweeps();
 magneticButtons();
 reels();
 veils();
+countUps();
+copyButtons();
+films();
 
 // Theme editor: re-run per-section behaviors when a section is re-rendered.
-document.addEventListener('shopify:section:load', () => { reveals(); magneticButtons(); reels(); veils(); calmToggles(); mobileMenu(); });
+document.addEventListener('shopify:section:load', () => {
+  reveals(); magneticButtons(); reels(); veils(); calmToggles(); mobileMenu(); countUps(); copyButtons(); films();
+});

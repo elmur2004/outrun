@@ -1,0 +1,85 @@
+{{ 'section-made-here.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign verified = section.settings.figures_verified
+  assign show_counters = false
+  if verified or request.design_mode
+    assign show_counters = true
+  endif
+-%}
+<section class="sec heat dark night">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      </div>
+      {%- if section.settings.text != blank -%}
+        <p class="lead">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%}
+      Brand rule: no untested claims. Counters only show on the storefront once the figures are confirmed;
+      until then they appear in the theme editor only, outlined as placeholders.
+    {%- endcomment -%}
+    {%- if show_counters and section.blocks.size > 0 -%}
+      <div class="counters{% unless verified %} counters--draft{% endunless %}">
+        {%- for block in section.blocks -%}
+          {%- assign value = block.settings.value | remove: ',' | strip -%}
+          <div {{ block.shopify_attributes }}>
+            <b>
+              <span class="count">
+                <span class="count-ghost num" aria-hidden="true">{{ value }}</span>
+                <span class="count-live num" data-count="{{ value }}">{{ value }}</span>
+              </span>
+              {%- if block.settings.unit != blank -%}<small>{{ block.settings.unit | escape }}</small>{%- endif -%}
+            </b>
+            <span>{{ block.settings.caption | escape }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- unless verified -%}
+        <p class="draft-note">{{ 'heat.draft_note' | t }}</p>
+      {%- endunless -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Heat test",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The August heat test" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Parked in August. Driven the same day." },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Caps sit on dark wheels under the midday sun, then go straight onto the road. Then we check every one."
+    },
+    {
+      "type": "checkbox",
+      "id": "figures_verified",
+      "label": "Figures are tested",
+      "info": "The counters stay hidden on the store until this is ticked. Only publish figures you have measured.",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "counter",
+      "name": "Counter",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Number", "default": "68" },
+        { "type": "text", "id": "unit", "label": "Unit", "default": "°C" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "Peak wheel-surface temperature logged" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Heat test" }]
+}
+{% endschema %}

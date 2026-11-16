@@ -1,0 +1,65 @@
+{
+  "sections": {
+    "header": {
+      "type": "page-header",
+      "settings": {
+        "glow_word": "NEXT",
+        "eyebrow": "Coming next",
+        "heading": "Under the cover.",
+        "lead": "Two new lines are in the workshop. Scroll to bring the light across."
+      }
+    },
+    "lines": {
+      "type": "teaser-lines",
+      "blocks": {
+        "ride": {
+          "type": "line",
+          "settings": {
+            "alt": "Silhouette of the upcoming OUTRUN Ride e-scooter",
+            "phase": "Phase two",
+            "name": "OUTRUN Ride",
+            "caption": "E-scooters, e-skateboards and hoverboards.",
+            "link_label": "Notify me",
+            "link": "#notify"
+          }
+        },
+        "kart": {
+          "type": "line",
+          "settings": {
+            "alt": "Silhouette of the upcoming OUTRUN Kart electric kart",
+            "phase": "Phase three",
+            "name": "OUTRUN Kart",
+            "caption": "Electric fun karts.",
+            "link_label": "Notify me",
+            "link": "#notify"
+          }
+        }
+      },
+      "block_order": [
+        "ride",
+        "kart"
+      ],
+      "settings": {
+        "layout": "stacked",
+        "eyebrow": "",
+        "heading": "",
+        "lead": ""
+      }
+    },
+    "notify": {
+      "type": "notify-signup",
+      "settings": {
+        "eyebrow": "Notify me",
+        "heading": "Be first when they drop.",
+        "text": "Leave your email. One message when a line opens, nothing else.",
+        "button_label": "Notify me",
+        "anchor": "notify"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "lines",
+    "notify"
+  ]
+}

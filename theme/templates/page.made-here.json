@@ -1,0 +1,119 @@
+{
+  "sections": {
+    "hero": {
+      "type": "made-hero",
+      "settings": {
+        "image_alt": "CAD drawings of the cap on screen beside a 3D printer in the OUTRUN workshop",
+        "glow_word": "WORKSHOP",
+        "eyebrow": "Made Here",
+        "heading": "Crafted in our own workshop.",
+        "lead": "Design, build, finish and test, under one roof. Shown, never shouted."
+      }
+    },
+    "steps": {
+      "type": "craft-steps",
+      "blocks": {
+        "design": {
+          "type": "step",
+          "settings": {
+            "eyebrow": "Design",
+            "heading": "Every piece starts in CAD.",
+            "text": "Each cap is drawn to the millimetre for its hub. Fit is designed before anything is cut."
+          }
+        },
+        "build": {
+          "type": "step",
+          "settings": {
+            "eyebrow": "Build",
+            "heading": "Built in-house, in small runs.",
+            "text": "Small runs keep every set close to the bench, and keep the drop rare."
+          }
+        },
+        "finish": {
+          "type": "step",
+          "settings": {
+            "eyebrow": "Finish",
+            "heading": "Every edge checked by hand.",
+            "text": "Shells are finished, bearings seated and plates set by hand. The detail is the product."
+          }
+        },
+        "test": {
+          "type": "step",
+          "settings": {
+            "eyebrow": "Test",
+            "heading": "Real heat, real roads, real use.",
+            "text": "Tested moving, not just standing still."
+          }
+        }
+      },
+      "block_order": [
+        "design",
+        "build",
+        "finish",
+        "test"
+      ],
+      "settings": {}
+    },
+    "heat": {
+      "type": "heat-test",
+      "blocks": {
+        "temp": {
+          "type": "counter",
+          "settings": {
+            "value": "68",
+            "unit": "°C",
+            "caption": "Peak wheel-surface temperature logged"
+          }
+        },
+        "km": {
+          "type": "counter",
+          "settings": {
+            "value": "1000",
+            "unit": "km",
+            "caption": "Road kilometres per test set"
+          }
+        },
+        "lost": {
+          "type": "counter",
+          "settings": {
+            "value": "0",
+            "unit": "",
+            "caption": "Caps lost in testing"
+          }
+        }
+      },
+      "block_order": [
+        "temp",
+        "km",
+        "lost"
+      ],
+      "settings": {
+        "eyebrow": "The August heat test",
+        "heading": "Parked in August. Driven the same day.",
+        "text": "Caps sit on dark wheels under the midday sun, then go straight onto the road. Then we check every one.",
+        "figures_verified": false
+      }
+    },
+    "film": {
+      "type": "video-feature",
+      "settings": {
+        "label": "Workshop film",
+        "heading": "The build, from CAD to the road"
+      }
+    },
+    "trust": {
+      "type": "trust-bar",
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 96
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "steps",
+    "heat",
+    "film",
+    "trust"
+  ]
+}

@@ -257,7 +257,7 @@
         "eyebrow": "The craft",
         "heading": "Crafted in our own workshop.",
         "link_label": "Inside the workshop",
-        "link": "/collections/all"
+        "link": "/pages/made-here"
       }
     },
     "trust": {
@@ -278,7 +278,7 @@
             "name": "OUTRUN Ride",
             "caption": "E-scooters, e-skateboards and hoverboards.",
             "link_label": "Notify me",
-            "link": "/collections/all"
+            "link": "/pages/coming-next#notify"
           }
         },
         "kart": {
@@ -289,7 +289,7 @@
             "name": "OUTRUN Kart",
             "caption": "Electric fun karts.",
             "link_label": "Notify me",
-            "link": "/collections/all"
+            "link": "/pages/coming-next#notify"
           }
         }
       },

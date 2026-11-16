@@ -1,7 +1,7 @@
 {% doc %}
   Line icons from the design (stroke 1.2–1.3, no fill). Decorative: always aria-hidden.
 
-  @param {string} name - wheel | menu | close | arrow | play | pause | box | swap | shield | chat | upload
+  @param {string} name - wheel | menu | close | arrow | play | pause | box | swap | shield | chat | upload | alert | check
   @param {string} [class] - extra CSS class
 {% enddoc %}
 {%- case name -%}
@@ -23,6 +23,10 @@
     <svg class="{{ class }}" viewBox="0 0 26 26" width="26" height="26" aria-hidden="true" focusable="false"><path d="M4 9h17l-4-4M22 17H5l4 4"/></svg>
   {%- when 'shield' -%}
     <svg class="{{ class }}" viewBox="0 0 26 26" width="26" height="26" aria-hidden="true" focusable="false"><path d="M13 3l8 3v7c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 13l3 3 5-6"/></svg>
+  {%- when 'alert' -%}
+    <svg class="{{ class }}" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v6M12 16.5v.5"/></svg>
+  {%- when 'check' -%}
+    <svg class="{{ class }}" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5"/><path d="M7.5 12.5l3 3 6-6.5"/></svg>
   {%- when 'upload' -%}
     <svg class="{{ class }}" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true" focusable="false"><path d="M12 16V4M7 9l5-5 5 5M4 16v4h16v-4"/></svg>
   {%- when 'chat' -%}

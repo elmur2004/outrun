@@ -5,10 +5,12 @@
     "header": {
       "type": "header",
       "settings": {
-        "menu": "main-menu",
+        "menu": "outrun-main",
         "menu_tagline": "Drive the feeling."
       }
     }
   },
-  "order": ["header"]
+  "order": [
+    "header"
+  ]
 }

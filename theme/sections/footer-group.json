@@ -4,8 +4,15 @@
   "sections": {
     "footer": {
       "type": "footer",
-      "settings": {}
+      "settings": {
+        "menu_1_heading": "Shop",
+        "menu_1": "outrun-shop",
+        "menu_2_heading": "Help",
+        "menu_2": "outrun-help"
+      }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }
