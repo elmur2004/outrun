@@ -21,7 +21,8 @@ export const FINISHES = {
 };
 
 /* ---------- Emblem faces (canvas textures) ---------- */
-export function emblemCanvas(edition, customImg) {
+// Street: customImg is the make's badge artwork; without it, label (the make's name) is lettered on the plate.
+export function emblemCanvas(edition, customImg, label) {
   const s = 512, c = document.createElement('canvas'); c.width = c.height = s;
   const g = c.getContext('2d');
   const bg = g.createRadialGradient(s * .38, s * .3, 10, s / 2, s / 2, s / 2);
@@ -36,16 +37,24 @@ export function emblemCanvas(edition, customImg) {
     g.save(); g.beginPath(); g.arc(s / 2, s / 2, s / 2 - 40, 0, Math.PI * 2); g.clip();
     const r = Math.min((s - 120) / customImg.width, (s - 120) / customImg.height);
     const w = customImg.width * r, h = customImg.height * r; g.drawImage(customImg, s / 2 - w / 2, s / 2 - h / 2, w, h); g.restore();
+  } else if (edition === 'street' && label) {
+    // No badge artwork uploaded yet for this make: its name, lettered on the plate.
+    const text = String(label).toUpperCase();
+    g.strokeStyle = 'rgba(191,216,232,.5)'; g.lineWidth = 3;
+    g.beginPath(); g.arc(s / 2, s / 2, 168, 0, Math.PI * 2); g.stroke();
+    let size = 76;
+    g.font = `600 ${size}px "Chakra Petch", sans-serif`;
+    while (g.measureText(text).width > 280 && size > 28) { size -= 2; g.font = `600 ${size}px "Chakra Petch", sans-serif`; }
+    g.fillStyle = '#F7FAFC'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.shadowColor = 'rgba(126,211,246,.45)'; g.shadowBlur = 14;
+    g.fillText(text, s / 2, s / 2 + 2);
   } else if (edition === 'street') {
-    // Neutral placeholder emblem: the merchant's per-make badge artwork goes here.
-    g.save(); g.translate(s / 2, s / 2 - 18);
-    g.strokeStyle = '#BFD8E8'; g.lineWidth = 10;
-    g.beginPath(); for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; g.lineTo(Math.cos(a) * 110, Math.sin(a) * 110); } g.closePath(); g.stroke();
-    g.lineWidth = 4; g.beginPath(); for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; g.lineTo(Math.cos(a) * 78, Math.sin(a) * 78); } g.closePath(); g.stroke();
-    g.fillStyle = '#F7FAFC'; g.font = '600 30px "Chakra Petch", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
-    g.fillText('BADGE', 0, 2); g.restore();
-    g.fillStyle = 'rgba(191,216,232,.7)'; g.font = '500 20px "Chakra Petch", sans-serif'; g.textAlign = 'center';
-    g.fillText('YOUR CAR’S OWN', s / 2, s / 2 + 150);
+    // Neutral face for cars we don't have a make for ("Other").
+    g.save(); g.translate(s / 2, s / 2);
+    g.strokeStyle = 'rgba(191,216,232,.7)'; g.lineWidth = 6;
+    g.beginPath(); for (let i = 0; i < 6; i++) { const a = Math.PI / 6 + i * Math.PI / 3; g.lineTo(Math.cos(a) * 120, Math.sin(a) * 120); } g.closePath(); g.stroke();
+    g.fillStyle = '#F7FAFC'; g.font = '600 34px "Chakra Petch", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText('YOUR CAR', 0, 2); g.restore();
   } else {
     if (customImg) {
       g.save(); g.beginPath(); g.arc(s / 2, s / 2, s / 2 - 24, 0, Math.PI * 2); g.clip();
@@ -64,9 +73,10 @@ export function emblemCanvas(edition, customImg) {
 }
 function tex(canvas) { const t = new THREE.CanvasTexture(canvas); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; }
 const texCache = {};
-export function emblemTexture(edition, customImg) {
+export function emblemTexture(edition, customImg, label) {
   if (customImg) return tex(emblemCanvas(edition, customImg));
-  return texCache[edition] ??= tex(emblemCanvas(edition));
+  const key = edition === 'street' ? `street|${label || ''}` : edition;
+  return texCache[key] ??= tex(emblemCanvas(edition, null, label));
 }
 
 /* Plate material: printed face that can dissolve from one emblem to another (the "morph"). */
@@ -95,7 +105,7 @@ function plateMaterial(map) {
 }
 
 /* ---------- Floating cap: shell, bearing, counterweight, emblem plate ---------- */
-export function buildCap(edition = 'signature', finish = 'gloss', customImg) {
+export function buildCap(edition = 'signature', finish = 'gloss', customImg, label) {
   const cap = new THREE.Group(); cap.name = 'cap';
   const prof = [[0, 0], [.97, 0], [1, .03], [1, .2], [.95, .27], [.86, .3], [.84, .3], [.84, .26], [0, .26]].map(([r, y]) => new THREE.Vector2(r, y));
   const shellGeo = new THREE.LatheGeometry(prof, 96); shellGeo.rotateX(Math.PI / 2);
@@ -106,7 +116,7 @@ export function buildCap(edition = 'signature', finish = 'gloss', customImg) {
   spark.position.z = .3; shell.add(spark);
 
   const plateGroup = new THREE.Group(); plateGroup.name = 'plate';
-  const plate = new THREE.Mesh(new THREE.CircleGeometry(.8, 96), plateMaterial(emblemTexture(edition, customImg)));
+  const plate = new THREE.Mesh(new THREE.CircleGeometry(.8, 96), plateMaterial(emblemTexture(edition, customImg, label)));
   const gloss = new THREE.Mesh(new THREE.CircleGeometry(.8, 96), new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: .14, metalness: 0, roughness: .04, clearcoat: 1, envMapIntensity: 2.2, depthWrite: false }));
   gloss.position.z = .004; plateGroup.add(plate, gloss); plateGroup.position.z = .28;
 
@@ -195,7 +205,7 @@ export function buildWheel(opts = {}) {
   wheel.add(streaks);
   // cap holder: NOT inside the spin group, so the logo stays level
   const capHolder = new THREE.Group(); capHolder.name = 'capHolder'; capHolder.position.z = .12; capHolder.scale.setScalar(.2);
-  const cap = buildCap(opts.edition || 'signature', opts.finish || 'gloss'); capHolder.add(cap); wheel.add(capHolder);
+  const cap = buildCap(opts.edition || 'signature', opts.finish || 'gloss', opts.img, opts.label); capHolder.add(cap); wheel.add(capHolder);
   wheel.userData = { spin, blur, streaks, capHolder, cap, angle: 0, speed: 0, swing: .9, swingV: 0 };
   return wheel;
 }
@@ -296,15 +306,20 @@ export function mountHero(canvas, host, { labels = {}, calm = false, onStage } =
 }
 
 /* ---------- EDITIONS SHOWCASE ---------- */
-export function mountEditions(canvas, { editions = ['street', 'signature', 'custom'], active = 1, onActive, calm = false } = {}) {
+// street: { img, label } for the Street cap's face (see streetEmblem() in outrun.js).
+export function mountEditions(canvas, { editions = ['street', 'signature', 'custom'], active = 1, onActive, calm = false, street = null } = {}) {
   const S = studio(canvas, { fov: 30 }); const { scene, camera } = S;
-  const caps = editions.map((e, i) => { const c = buildCap(e, i === 2 ? 'steel' : i === 0 ? 'ice' : 'gloss'); c.userData.edition = e; c.userData.i = i; scene.add(c); return c; });
+  const caps = editions.map((e, i) => {
+    const img = e === 'street' ? street?.img || null : null, label = e === 'street' ? street?.label || null : null;
+    const c = buildCap(e, i === 2 ? 'steel' : i === 0 ? 'ice' : 'gloss', img, label);
+    c.userData.edition = e; c.userData.i = i; c.userData.custom = img; c.userData.label = label; scene.add(c); return c;
+  });
   const floor = floorGlow(); floor.position.y = -1.3; scene.add(floor);
   let act = active; const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
   const pick = e => { const r = canvas.getBoundingClientRect(); ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(ptr, camera);
     const hit = ray.intersectObjects(caps, true)[0]; if (!hit) return -1; let o = hit.object; while (o && o.userData.i === undefined) o = o.parent; return o ? o.userData.i : -1; };
   const set = i => { if (i < 0 || i === act) return; const prev = caps[act]; act = i;
-    morphCap(caps[i], emblemTexture(caps[i].userData.edition, caps[i].userData.custom), 1000);
+    morphCap(caps[i], emblemTexture(caps[i].userData.edition, caps[i].userData.custom, caps[i].userData.label), 1000);
     caps[i].userData.plate.material.uniforms.mapA.value = prev.userData.plate.material.uniforms.mapB.value;
     onActive?.(i); };
   const onMove = e => { if (e.pointerType === 'mouse') { const i = pick(e); canvas.style.cursor = i >= 0 ? 'pointer' : ''; if (i >= 0) set(i); } };
@@ -329,16 +344,21 @@ export function mountEditions(canvas, { editions = ['street', 'signature', 'cust
   return {
     setActive: set,
     setCustom(img) { const c = caps[2]; c.userData.custom = img; morphCap(c, emblemTexture('custom', img), 900); },
-    setStreet(img) { const c = caps[0]; c.userData.custom = img; morphCap(c, emblemTexture('street', img), 900); },
+    setStreet(street) {
+      const c = caps.find((x) => x.userData.edition === 'street'); if (!c) return;
+      c.userData.custom = street?.img || null; c.userData.label = street?.label || null;
+      morphCap(c, emblemTexture('street', c.userData.custom, c.userData.label), 900);
+    },
     dispose() { S.dispose(); },
   };
 }
 
 /* ---------- PRODUCT 360° VIEWER ---------- */
-export function mountViewer(canvas, { edition = 'signature', finish = 'gloss', calm = false } = {}) {
+export function mountViewer(canvas, { edition = 'signature', finish = 'gloss', calm = false, street = null } = {}) {
   const S = studio(canvas, { fov: 30 }); const { scene, camera } = S;
   const rig = new THREE.Group(); scene.add(rig);
-  const wheel = buildWheel({ edition, finish }); rig.add(wheel);
+  const isStreet = edition === 'street';
+  const wheel = buildWheel({ edition, finish, img: isStreet ? street?.img : null, label: isStreet ? street?.label : null }); rig.add(wheel);
   const { cap, capHolder } = wheel.userData;
   const floor = floorGlow(); floor.position.y = -1.55; scene.add(floor);
   let yaw = -.5, pitch = .05, vy = 0, vp = 0, drag = null, spinOn = false, sp = 0, show = 0, idle = 0;
@@ -362,7 +382,7 @@ export function mountViewer(canvas, { edition = 'signature', finish = 'gloss', c
     cap.userData.plate.material.uniforms.sheen.value = (now / 3800) % 1; cap.userData.morph?.(now);
   });
   return {
-    setEdition(e, img) { morphCap(cap, emblemTexture(e, img), 800); },
+    setEdition(e, img, label) { morphCap(cap, emblemTexture(e, img, label), 800); },
     setFinish(f) { setCapFinish(cap, f); },
     setSpin(v) { spinOn = v; idle = 0; wheel.userData.swingV += v ? -2.4 : 1.6; },
     dispose() { S.dispose(); },
@@ -381,7 +401,7 @@ export async function renderThumbs(items, frames = 12, size = 320) {
   const camera = new THREE.PerspectiveCamera(30, 1, .1, 50); camera.position.set(0, .35, 4.6); camera.lookAt(0, 0, 0);
   const out = {};
   for (const it of items) {
-    const cap = buildCap(it.edition, it.finish); cap.rotation.x = -.08; scene.add(cap); out[it.id] = [];
+    const cap = buildCap(it.edition, it.finish, it.img, it.label); cap.rotation.x = -.08; scene.add(cap); out[it.id] = [];
     for (let f = 0; f < frames; f++) { cap.rotation.y = -.55 + f / frames * Math.PI * 2; renderer.render(scene, camera); out[it.id].push(canvas.toDataURL('image/jpeg', .82)); }
     scene.remove(cap); await new Promise(r => setTimeout(r, 0));
   }

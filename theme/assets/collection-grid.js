@@ -1,6 +1,6 @@
 // <collection-grid>: filter chips (edition, finish, make as fitment context), sort, and spinning 3D cards.
 // Ported from mountShop() in design-handoff/app.js. Every variant card is a real link, so the grid works without JS.
-import { webgl, threeDEnabled, isCalm, editionKey, finishKey } from 'outrun';
+import { webgl, threeDEnabled, isCalm, editionKey, finishKey, streetEmblem } from 'outrun';
 
 const KEYS = ['make', 'edition', 'finish'];
 
@@ -60,6 +60,7 @@ class CollectionGrid extends HTMLElement {
       card.href = url.pathname + url.search;
     });
     if (this.empty) this.empty.hidden = shown > 0;
+    this.rerenderStreet();
 
     if (remember) {
       const url = new URL(location.href);
@@ -71,10 +72,10 @@ class CollectionGrid extends HTMLElement {
     }
   }
 
-  // One offscreen renderer draws every cap's turntable frames, once, when the grid is near the viewport.
+  // One offscreen renderer draws every cap's turntable frames when the grid is near the viewport.
   setup3D() {
-    const cards = this.cards.filter((c) => c.hasAttribute('data-card-3d'));
-    if (!cards.length) return;
+    this.capCards = this.cards.filter((c) => c.hasAttribute('data-card-3d'));
+    if (!this.capCards.length) return;
     if (!webgl || !threeDEnabled()) {
       this.grid.classList.add('no-3d');
       return;
@@ -84,10 +85,8 @@ class CollectionGrid extends HTMLElement {
       if (!entry.isIntersecting) return;
       this.io.disconnect();
       try {
-        const S = await import('outrun-3d');
-        const items = cards.map((c) => ({ id: c.dataset.variant, edition: editionKey(c.dataset.edition), finish: finishKey(c.dataset.finish) }));
-        const frames = await S.renderThumbs(items, isCalm() ? 1 : 12, 320);
-        cards.forEach((c) => this.attachFrames(c, frames[c.dataset.variant]));
+        this.S = await import('outrun-3d');
+        await this.render(this.capCards);
       } catch (err) {
         console.warn('[OUTRUN] 3D cards unavailable, showing product photos.', err);
         this.grid.classList.add('no-3d');
@@ -96,20 +95,52 @@ class CollectionGrid extends HTMLElement {
     this.io.observe(this.grid);
   }
 
+  // Street caps wear the selected make's badge: the first make for "All", a neutral face for "Other".
+  streetFor(make) {
+    if (make === 'other') return Promise.resolve({ img: null, label: null });
+    return streetEmblem(make === 'all' ? undefined : this.chip('make', make)?.dataset.name);
+  }
+
+  async render(cards) {
+    const token = (this.renderToken = (this.renderToken || 0) + 1);
+    this.renderedMake = this.state.make;
+    const street = await this.streetFor(this.state.make);
+    const items = cards.map((c) => {
+      const edition = editionKey(c.dataset.edition);
+      const face = edition === 'street' ? street : {};
+      return { id: c.dataset.variant, edition, finish: finishKey(c.dataset.finish), img: face.img || null, label: face.label || null };
+    });
+    const frames = await this.S.renderThumbs(items, isCalm() ? 1 : 12, 320);
+    const outdated = token !== this.renderToken; // a newer make choice is redrawing the Street cards
+    cards.forEach((c) => {
+      if (outdated && editionKey(c.dataset.edition) === 'street') return;
+      this.attachFrames(c, frames[c.dataset.variant]);
+    });
+  }
+
+  // After a make chip changes, redraw only the Street cards.
+  rerenderStreet() {
+    if (!this.S || this.renderedMake === this.state.make) return;
+    const streetCards = this.capCards.filter((c) => editionKey(c.dataset.edition) === 'street');
+    if (streetCards.length) this.render(streetCards).catch(() => {});
+  }
+
   attachFrames(card, frames) {
     if (!frames?.length) return;
+    card.frames = frames;
+    card.frame = 0;
     const img = card.querySelector('.card-img');
     img.removeAttribute('srcset');
     img.removeAttribute('sizes');
     img.src = frames[0];
     card.classList.add('has-frames');
-    if (frames.length < 2) return;
+    if (card.dataset.spinBound) return; // listeners read card.frames, so a redraw needs no new ones
+    card.dataset.spinBound = '1';
     let timer = 0;
-    let f = 0;
     const start = () => {
-      if (isCalm()) return;
+      if (isCalm() || !card.frames || card.frames.length < 2) return;
       clearInterval(timer);
-      timer = setInterval(() => { f = (f + 1) % frames.length; img.src = frames[f]; }, 70);
+      timer = setInterval(() => { card.frame = (card.frame + 1) % card.frames.length; img.src = card.frames[card.frame]; }, 70);
       this.timers.push(timer);
     };
     const stop = () => clearInterval(timer);

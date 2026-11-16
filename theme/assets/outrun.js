@@ -171,6 +171,37 @@ export const finishKey = (value) => {
   return 'gloss';
 };
 
+/* ---------- Street edition face: the chosen make's badge ---------- */
+let fitment;
+export function fitmentMakes() {
+  if (!fitment) {
+    try { fitment = JSON.parse(document.getElementById('FitmentData')?.textContent || '{}').makes || []; } catch (e) { fitment = []; }
+  }
+  return fitment;
+}
+
+const badges = new Map();
+// Resolves to { img, label } for the Street cap: the make's badge image when uploaded (Shopify's CDN allows
+// cross-origin use, so WebGL can draw it), and its name, lettered on the plate when there's no badge yet.
+// No argument: the first make. 'Other' or an unknown make: a neutral face ({ img: null, label: null }).
+export async function streetEmblem(makeName) {
+  const makes = fitmentMakes();
+  const make = makeName === undefined ? makes[0] : makes.find((m) => m.name === makeName);
+  if (!make) return { img: null, label: null };
+  if (document.fonts) await document.fonts.load('600 76px "Chakra Petch"').catch(() => {});
+  if (!make.badge) return { img: null, label: make.name };
+  if (!badges.has(make.badge)) {
+    badges.set(make.badge, new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = () => resolve(null);
+      img.src = make.badge;
+    }));
+  }
+  return { img: await badges.get(make.badge), label: make.name };
+}
+
 let scenes;
 // Returns a handle: handle.api() is the scene's API once mounted, handle.dispose() tears it down.
 export function lazy3D(wrap, mount) {

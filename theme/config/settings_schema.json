@@ -180,7 +180,7 @@
     "settings": [
       {
         "type": "paragraph",
-        "content": "Makes and models for the home page fitment picker and the product page. If the store has \"Fitment make\" metaobject entries, those are used instead of this list."
+        "content": "Makes, models and badge artwork are managed in Content → Metaobjects → Fitment make. This list is only a fallback, used if the store has no Fitment make entries."
       },
       {
         "type": "textarea",

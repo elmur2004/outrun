@@ -1,20 +1,44 @@
 {% doc %}
-  Fitment makes and models, from "Fitment make" metaobject entries (type fitment_make: name, models)
-  when the store has any, otherwise Theme settings → Fitment. One source for home and product page.
+  Fitment makes, their models and badge artwork. One source for the home picker, product page and Shop chips.
+  Source: "Fitment make" metaobject entries (Content → Metaobjects; fields name, models, badge, position),
+  sorted by position. Falls back to Theme settings → Fitment when the store has no entries.
 
-  @param {string} format - 'json' ({ "makes": [ { "id", "name", "models": [] } ] }), 'tiles' (home make buttons),
+  @param {string} format - 'json' ({ "makes": [ { "id", "name", "models": [], "badge" } ] }), 'tiles' (home make buttons),
     'options' (make <option>s, value = make name), 'model_options' (model <option>s grouped by make)
     or 'chips' (collection filter chips)
 {% enddoc %}
 {%- liquid
   assign names = ''
   assign model_lists = ''
+  assign badges = ''
   assign entries = shop.metaobjects.fitment_make.values
   if entries.size > 0
+    # Sort by position: build "1001-0,1003-1,..." keys (position + 1000, then entry index) and sort them as text.
+    assign keys = ''
     for entry in entries
-      assign m = entry.models.value | join: ','
-      assign names = names | append: entry.name.value | append: '|'
-      assign model_lists = model_lists | append: m | append: '|'
+      assign pos = entry.position.value | default: 999 | plus: 1000
+      assign keys = keys | append: pos | append: '-' | append: forloop.index0 | append: ','
+    endfor
+    assign keys = keys | split: ',' | sort
+    for key in keys
+      assign wanted = key | split: '-' | last | plus: 0
+      for entry in entries
+        if forloop.index0 == wanted
+          assign m = entry.models.value | join: ','
+          # ' ' (not '') keeps the list aligned: split drops trailing empty items
+          assign badge = ' '
+          if entry.badge.value
+            if entry.badge.value.media_type == 'image'
+              assign badge = entry.badge.value | image_url: width: 640
+            else
+              assign badge = entry.badge.value.url
+            endif
+          endif
+          assign names = names | append: entry.name.value | append: '|'
+          assign model_lists = model_lists | append: m | append: '|'
+          assign badges = badges | append: badge | append: '|'
+        endif
+      endfor
     endfor
   else
     assign lines = settings.fitment_makes | newline_to_br | split: '<br />'
@@ -24,18 +48,21 @@
       if n != blank and parts.size > 1
         assign names = names | append: n | append: '|'
         assign model_lists = model_lists | append: parts.last | append: '|'
+        assign badges = badges | append: ' |'
       endif
     endfor
   endif
   assign names = names | split: '|'
   assign model_lists = model_lists | split: '|'
+  assign badges = badges | split: '|'
 -%}
 {%- case format -%}
   {%- when 'json' -%}
-    {"makes":[
+    {"source":{% if entries.size > 0 %}"metaobjects"{% else %}"settings"{% endif %},"makes":[
     {%- for name in names -%}
       {%- assign models = model_lists[forloop.index0] | split: ',' -%}
-      {"id":{{ name | handleize | json }},"name":{{ name | json }},"models":[
+      {%- assign badge = badges[forloop.index0] | strip -%}
+      {"id":{{ name | handleize | json }},"name":{{ name | json }},"badge":{% if badge != blank %}{{ badge | json }}{% else %}null{% endif %},"models":[
       {%- assign first = true -%}
       {%- for model in models -%}
         {%- assign mm = model | strip -%}

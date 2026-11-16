@@ -52,7 +52,7 @@ Store data the theme relies on (created through the Admin API, 2026-11-16; value
 | Product `floating-center-caps` | Options **Edition** (Street, Signature, Custom) × **Finish** (Gloss Black, Satin Steel, Ice Chrome). The theme matches these option names; they're set in the product section's settings. |
 | Product `gift-box` | Single variant, inventory not tracked. Chosen in Theme settings → Cart → Gift box product. |
 | Product metafields `outrun.*` | `run_size` (integer, stock meter total), `drop_label` (run name), `fitment_required` (boolean; `false` hides make/model, e.g. on the gift box) |
-| Fitment makes/models | Theme settings → Fitment, shared by the home page and the product page. Metaobject entries of type `fitment_make` (fields `name`, `models`) take over if created. |
+| Metaobject `fitment_make` ("Fitment make") | Fields `name`, `models` (list), `badge` (image), `position`. Storefront-readable. Entries: Mercedes, BMW, MG. One source for the home fitment tiles, the product page make/model dropdowns and the Shop page make chips; `badge` is the Street edition's 3D face (the make's name is lettered on the cap until artwork is uploaded). Theme settings → Fitment is only a fallback when no entries exist. |
 
 Setup:
 

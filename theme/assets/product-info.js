@@ -1,7 +1,7 @@
 // <product-info>: variant picker, 3D viewer, fitment, custom design upload, gift box and add to cart.
 // Ported from mountPDP() in design-handoff/app.js, rebuilt on Shopify's product form:
 // the form still works without JS (variant <select>, required make/model, file upload).
-import { lazy3D, isCalm, toast, addToCart, openCart, editionKey, finishKey } from 'outrun';
+import { lazy3D, isCalm, toast, addToCart, openCart, editionKey, finishKey, streetEmblem } from 'outrun';
 
 class ProductInfo extends HTMLElement {
   connectedCallback() {
@@ -100,7 +100,11 @@ class ProductInfo extends HTMLElement {
     // 3D viewer follows edition and finish.
     const api = this.viewer?.api();
     if (api && userChange) {
-      if (edition) api.setEdition(editionKey(edition), isCustom ? this.customImage : null);
+      if (edition) {
+        const key = editionKey(edition);
+        if (key === 'street') api.setEdition(key, this.street?.img || null, this.street?.label || null);
+        else api.setEdition(key, isCustom ? this.customImage : null);
+      }
       if (this.cfg.finishIndex >= 0) api.setFinish(finishKey(options[this.cfg.finishIndex]));
     }
   }
@@ -120,7 +124,10 @@ class ProductInfo extends HTMLElement {
     const options = this.selected();
     const edition = this.cfg.editionIndex >= 0 ? editionKey(options[this.cfg.editionIndex]) : 'signature';
     const finish = this.cfg.finishIndex >= 0 ? finishKey(options[this.cfg.finishIndex]) : 'gloss';
-    this.viewer = lazy3D(this.querySelector('.viewer .cv-wrap'), (S, canvas) => S.mountViewer(canvas, { edition, finish, calm: isCalm() }));
+    this.street = null;
+    this.refreshStreet();
+    this.viewer = lazy3D(this.querySelector('.viewer .cv-wrap'), (S, canvas) =>
+      S.mountViewer(canvas, { edition, finish, calm: isCalm(), street: this.street }));
 
     const spin = this.querySelector('[data-spin]');
     const live = this.querySelector('[data-live]');
@@ -130,6 +137,18 @@ class ProductInfo extends HTMLElement {
       if (live) live.hidden = !on;
       this.viewer.api()?.setSpin(on);
     });
+  }
+
+  // Street cap face: the chosen make's badge (first make until one is chosen, neutral for "Other").
+  async refreshStreet() {
+    const token = (this.streetToken = (this.streetToken || 0) + 1);
+    const make = this.makeSelect?.value;
+    const street = await streetEmblem(make || undefined);
+    if (token !== this.streetToken) return; // a newer make choice won
+    this.street = street;
+    const options = this.selected();
+    const edition = this.cfg.editionIndex >= 0 ? options[this.cfg.editionIndex] : null;
+    if (edition && editionKey(edition) === 'street') this.viewer?.api()?.setEdition('street', street.img, street.label);
   }
 
   /* ---------- Fitment ---------- */
@@ -171,6 +190,7 @@ class ProductInfo extends HTMLElement {
     const placeholder = new Option(this.chooseLabel, '');
     this.modelSelect.replaceChildren(placeholder, ...models.map((m) => new Option(m, m)));
     if (isOther) this.otherInput.focus();
+    this.refreshStreet();
   }
 
   fitmentProblem() {

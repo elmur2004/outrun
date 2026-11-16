@@ -97,6 +97,9 @@
 
     {% section 'cart-drawer' %}
 
+    {%- comment -%} Makes, models and badge artwork: read by outrun.js for the Street edition's 3D face. {%- endcomment -%}
+    <script type="application/json" id="FitmentData">{% render 'fitment-data', format: 'json' %}</script>
+
     <div class="toast" data-toast role="status" aria-live="polite"></div>
   </body>
 </html>
