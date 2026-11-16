@@ -24,12 +24,7 @@
       <div>
         <p class="fit-steps" id="{{ section.id }}-make">01 · {{ 'fitment.make' | t }}</p>
         <div class="makes" role="group" aria-labelledby="{{ section.id }}-make">
-          {%- for block in section.blocks -%}
-            <button class="make" type="button" data-make="{{ block.id }}" aria-pressed="false" {{ block.shopify_attributes }}>
-              <span>{{ 'fitment.make' | t }}</span>
-              <b class="latin">{{ block.settings.name | escape }}</b>
-            </button>
-          {%- endfor -%}
+          {% render 'fitment-data', format: 'tiles' %}
           {%- if section.settings.show_other -%}
             <button class="make" type="button" data-make="other" aria-pressed="false">
               <span>{{ 'fitment.other' | t }}</span>
@@ -85,28 +80,7 @@
   </template>
 
   <script type="application/json" data-fitment>
-    {
-      "whatsapp": {{ wa_number | json }},
-      "whatsappMessage": {{ 'fitment.whatsapp_message' | t | json }},
-      "makes": {
-        {%- for block in section.blocks -%}
-          {%- assign models = block.settings.models | newline_to_br | replace: '<br />', ',' | split: ',' -%}
-          {{ block.id | json }}: {
-            "name": {{ block.settings.name | json }},
-            "models": [
-              {%- assign first = true -%}
-              {%- for model in models -%}
-                {%- assign m = model | strip -%}
-                {%- if m != blank -%}
-                  {%- unless first %},{% endunless %}{{ m | json }}
-                  {%- assign first = false -%}
-                {%- endif -%}
-              {%- endfor -%}
-            ]
-          }{% unless forloop.last %},{% endunless %}
-        {%- endfor -%}
-      }
-    }
+    {"whatsapp": {{ wa_number | json }}, "whatsappMessage": {{ 'fitment.whatsapp_message' | t | json }}, "data": {% render 'fitment-data', format: 'json' %}}
   </script>
 </fitment-picker>
 
@@ -114,9 +88,28 @@
 {
   "name": "Fitment",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Find your fit" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Made to the millimetre for your car." },
-    { "type": "textarea", "id": "lead", "label": "Text", "default": "Mercedes, BMW and MG at launch. Anything else, we make in about a day." },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Find your fit"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Made to the millimetre for your car."
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Text",
+      "default": "Mercedes, BMW and MG at launch. Anything else, we make in about a day."
+    },
+    {
+      "type": "paragraph",
+      "content": "Makes and models are edited once, in Theme settings → Fitment (or as Fitment make metaobject entries), and shared with the product page."
+    },
     {
       "type": "url",
       "id": "link",
@@ -146,22 +139,10 @@
       "default": false
     }
   ],
-  "blocks": [
+  "presets": [
     {
-      "type": "make",
-      "name": "Make",
-      "settings": [
-        { "type": "text", "id": "name", "label": "Make", "default": "Mercedes" },
-        {
-          "type": "textarea",
-          "id": "models",
-          "label": "Models",
-          "info": "One per line, or separated by commas.",
-          "default": "A-Class, C-Class, E-Class, S-Class, CLA, GLA, GLC, GLE"
-        }
-      ]
+      "name": "Fitment"
     }
-  ],
-  "presets": [{ "name": "Fitment" }]
+  ]
 }
 {% endschema %}

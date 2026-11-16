@@ -1,0 +1,27 @@
+collection-grid { display: block; padding-bottom: 96px; }
+
+/* Sticky filter bar (handoff: .filters). Sticks inside its section, under the header. */
+.filters {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--hdr)); z-index: 20;
+  padding-block: 24px; border-bottom: 1px solid var(--hair);
+  background: var(--glass); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+}
+.filters-row { display: flex; flex-wrap: wrap; gap: 16px 40px; }
+.fgroup { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.fgroup .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.sort { margin-inline-start: auto; }
+.select--sm { height: 38px; width: auto; min-width: 180px; padding-inline-end: 40px; font-size: 14px; }
+@media (max-width: 700px) {
+  .filters { padding-block: 14px; }
+  .filters-row { gap: 14px; }
+  .fgroup { width: 100%; }
+  .fgroup .row { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .fgroup .row::-webkit-scrollbar { display: none; }
+  .sort { margin-inline-start: 0; }
+}
+
+.col-sec .grid { margin-top: 32px; }
+.empty { grid-column: 1 / -1; padding: 64px 16px; text-align: center; color: var(--muted); background: var(--surface); display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.empty[hidden] { display: none; }
+
+.pagination { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 40px; }

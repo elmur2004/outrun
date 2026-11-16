@@ -1,0 +1,28 @@
+{{ 'section-page-header.css' | asset_url | stylesheet_tag }}
+
+<section class="phead dark night phead--404">
+  <div class="glow-word reveal bgw latin" aria-hidden="true">404</div>
+  <div class="wrap">
+    <span class="eyebrow latin">404</span>
+    <h1>{{ 'not_found.heading' | t }}</h1>
+    <p class="lead">{{ 'not_found.text' | t }}</p>
+    <div class="phead-actions">
+      <a class="btn solid" href="{{ routes.root_url }}">{{ 'not_found.home' | t }}</a>
+      <a class="btn" href="{{ section.settings.shop_link }}">{{ 'not_found.shop' | t }}</a>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .phead--404 { min-height: 70vh; display: flex; align-items: flex-end; }
+  .phead--404 .wrap { width: 100%; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "404",
+  "settings": [
+    { "type": "url", "id": "shop_link", "label": "Shop button link", "default": "/collections/all" }
+  ]
+}
+{% endschema %}

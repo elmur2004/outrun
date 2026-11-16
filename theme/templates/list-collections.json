@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "header": {
+      "type": "page-header",
+      "settings": {
+        "glow_word": "LINES",
+        "eyebrow": "OUTRUN",
+        "heading": "Collections",
+        "lead": ""
+      }
+    },
+    "main": {
+      "type": "main-list-collections",
+      "settings": {}
+    }
+  },
+  "order": [
+    "header",
+    "main"
+  ]
+}

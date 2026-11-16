@@ -155,5 +155,62 @@
       { "type": "text", "id": "trust_4_title", "label": "Title", "default": "Real people" },
       { "type": "text", "id": "trust_4_text", "label": "Text", "default": "Phone, WhatsApp and a real workshop." }
     ]
+  },
+  {
+    "name": "Product options",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "How the product page and the collection grid read the caps' options. Names must match the option names in Shopify admin."
+      },
+      { "type": "text", "id": "edition_option", "label": "Edition option name", "info": "Shown as cards with captions.", "default": "Edition" },
+      {
+        "type": "textarea",
+        "id": "edition_captions",
+        "label": "Edition captions",
+        "info": "One per line: Value: caption",
+        "default": "Street: Your car’s own badge, floating level.\nSignature: The OUTRUN symbol. Two speed lines.\nCustom: Your design, cut and finished for your wheels."
+      },
+      { "type": "text", "id": "finish_option", "label": "Finish option name", "info": "Shown as swatches.", "default": "Finish" },
+      { "type": "text", "id": "custom_value", "label": "Custom edition value", "info": "This edition asks for a design file.", "default": "Custom" }
+    ]
+  },
+  {
+    "name": "Fitment",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Makes and models for the home page fitment picker and the product page. If the store has \"Fitment make\" metaobject entries, those are used instead of this list."
+      },
+      {
+        "type": "textarea",
+        "id": "fitment_makes",
+        "label": "Makes and models",
+        "info": "One make per line: Make: model, model, model",
+        "default": "Mercedes: A-Class, C-Class, E-Class, S-Class, CLA, GLA, GLC, GLE\nBMW: 1 Series, 3 Series, 4 Series, 5 Series, 7 Series, X1, X3, X5\nMG: MG4, MG5, MG6, ZS, HS, RX5"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "product",
+        "id": "gift_product",
+        "label": "Gift box product",
+        "info": "Offered as a checkbox on the product page and as an upsell in the cart."
+      },
+      { "type": "header", "content": "Cash on delivery note" },
+      { "type": "text", "id": "cod_title", "label": "Title", "default": "Open before you pay" },
+      { "type": "text", "id": "cod_text", "label": "Text", "default": "Cash on delivery. Check every cap before you hand over a pound." },
+      { "type": "header", "content": "Below the checkout button" },
+      {
+        "type": "text",
+        "id": "shipping_note",
+        "label": "Shipping note",
+        "info": "Say what delivery costs, or where the price appears. Surprise fees lose sales.",
+        "default": "Taxes and delivery at checkout."
+      }
+    ]
   }
 ]

@@ -65,12 +65,15 @@
     <script>
       window.OUTRUN_CONFIG = {
         routes: {
+          root: {{ routes.root_url | json }},
           cart: {{ routes.cart_url | json }},
-          cartAdd: {{ routes.cart_add_url | json }}
+          cartAdd: {{ routes.cart_add_url | json }},
+          cartChange: {{ routes.cart_change_url | json }}
         },
         strings: {
           added: {{ 'cart.added' | t | json }},
-          error: {{ 'cart.error' | t | json }}
+          error: {{ 'cart.error' | t | json }},
+          cartError: {{ 'cart.update_error' | t | json }}
         }
       };
     </script>
@@ -91,6 +94,8 @@
     </main>
 
     {% sections 'footer-group' %}
+
+    {% section 'cart-drawer' %}
 
     <div class="toast" data-toast role="status" aria-live="polite"></div>
   </body>

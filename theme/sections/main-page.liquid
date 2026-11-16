@@ -1,0 +1,20 @@
+<section class="sec">
+  <div class="wrap">
+    <div class="rte page-body">{{ page.content }}</div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .page-body { max-width: 72ch; }
+  .page-body > * + * { margin-top: 1em; }
+  .page-body h2, .page-body h3 { margin-top: 1.6em; }
+  .page-body a { border-bottom: 1px solid var(--steel); }
+  .page-body ul, .page-body ol { padding-inline-start: 1.2em; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Page content",
+  "settings": []
+}
+{% endschema %}

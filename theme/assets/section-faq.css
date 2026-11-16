@@ -1,0 +1,18 @@
+.faq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 40px; }
+.faq-head { display: flex; flex-direction: column; gap: 18px; }
+.faq-head h2 { font-size: var(--t-h2); }
+
+.faq { border-top: 1px solid var(--hair); }
+.faq details { border-bottom: 1px solid var(--hair); }
+.faq summary {
+  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px;
+  padding: 22px 0; font-family: var(--f-display); font-size: clamp(17px, 1.6vw, 20px); font-weight: 500;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary i { width: 14px; height: 14px; position: relative; flex: none; }
+.faq summary i::before, .faq summary i::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--eyebrow); transition: transform 0.3s; }
+.faq summary i::after { transform: rotate(90deg); }
+.faq details[open] summary i::after { transform: rotate(0); }
+.faq-a { padding: 0 0 22px; color: var(--muted); max-width: 68ch; }
+.faq-a p + p { margin-top: 0.8em; }
+.faq-a a { color: var(--fg); border-bottom: 1px solid var(--steel); }

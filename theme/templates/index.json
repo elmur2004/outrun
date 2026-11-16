@@ -45,22 +45,51 @@
         },
         "part_plate": {
           "type": "part_label",
-          "settings": { "part": "plate", "side": "left", "title": "Emblem plate", "caption": "Your edition’s face" }
+          "settings": {
+            "part": "plate",
+            "side": "left",
+            "title": "Emblem plate",
+            "caption": "Your edition’s face"
+          }
         },
         "part_shell": {
           "type": "part_label",
-          "settings": { "part": "shell", "side": "right", "title": "Shell", "caption": "Machined, finished by hand" }
+          "settings": {
+            "part": "shell",
+            "side": "right",
+            "title": "Shell",
+            "caption": "Machined, finished by hand"
+          }
         },
         "part_bearing": {
           "type": "part_label",
-          "settings": { "part": "bearing", "side": "right", "title": "Sealed bearing", "caption": "Lets the face turn free" }
+          "settings": {
+            "part": "bearing",
+            "side": "right",
+            "title": "Sealed bearing",
+            "caption": "Lets the face turn free"
+          }
         },
         "part_weight": {
           "type": "part_label",
-          "settings": { "part": "weight", "side": "right", "title": "Counterweight", "caption": "Keeps the logo upright" }
+          "settings": {
+            "part": "weight",
+            "side": "right",
+            "title": "Counterweight",
+            "caption": "Keeps the logo upright"
+          }
         }
       },
-      "block_order": ["line_1", "line_2", "line_3", "line_4", "part_plate", "part_shell", "part_bearing", "part_weight"],
+      "block_order": [
+        "line_1",
+        "line_2",
+        "line_3",
+        "line_4",
+        "part_plate",
+        "part_shell",
+        "part_bearing",
+        "part_weight"
+      ],
       "settings": {
         "eyebrow": "Drop 01 · Floating center caps",
         "heading_1": "Drive",
@@ -71,7 +100,7 @@
         "drop_label": "Drop 01",
         "run_label": "Run 01 · Limited",
         "cta_label": "Shop the drop",
-        "cta_link": "/collections/all",
+        "cta_link": "/products/floating-center-caps",
         "cta_2_label": "Find your fit",
         "cta_2_link": "#fit",
         "enable_story": true,
@@ -83,48 +112,55 @@
       "blocks": {
         "street": {
           "type": "edition",
-          "settings": { "name": "Street", "status": "Launch", "caption": "Your car’s own badge, floating level.", "emblem": "street" }
+          "settings": {
+            "name": "Street",
+            "status": "Launch",
+            "caption": "Your car’s own badge, floating level.",
+            "emblem": "street",
+            "link": "/products/floating-center-caps?variant=50488597676389"
+          }
         },
         "signature": {
           "type": "edition",
-          "settings": { "name": "Signature", "status": "Launch", "caption": "The OUTRUN symbol. Two speed lines.", "emblem": "signature" }
+          "settings": {
+            "name": "Signature",
+            "status": "Launch",
+            "caption": "The OUTRUN symbol. Two speed lines.",
+            "emblem": "signature",
+            "link": "/products/floating-center-caps?variant=50488597774693"
+          }
         },
         "custom": {
           "type": "edition",
-          "settings": { "name": "Custom", "status": "On request", "caption": "Your design, cut and finished for your wheels.", "emblem": "custom" }
+          "settings": {
+            "name": "Custom",
+            "status": "On request",
+            "caption": "Your design, cut and finished for your wheels.",
+            "emblem": "custom",
+            "link": "/products/floating-center-caps?variant=50488597872997"
+          }
         }
       },
-      "block_order": ["street", "signature", "custom"],
+      "block_order": [
+        "street",
+        "signature",
+        "custom"
+      ],
       "settings": {
         "eyebrow": "Three editions",
         "heading": "Pick the face that rides with you.",
         "lead": "Same floating build. Three faces. Hover or tap a cap to bring it forward.",
         "active": 2,
-        "link": "/collections/all"
+        "link": "/products/floating-center-caps"
       }
     },
     "fitment": {
       "type": "fitment",
-      "blocks": {
-        "mercedes": {
-          "type": "make",
-          "settings": { "name": "Mercedes", "models": "A-Class, C-Class, E-Class, S-Class, CLA, GLA, GLC, GLE" }
-        },
-        "bmw": {
-          "type": "make",
-          "settings": { "name": "BMW", "models": "1 Series, 3 Series, 4 Series, 5 Series, 7 Series, X1, X3, X5" }
-        },
-        "mg": {
-          "type": "make",
-          "settings": { "name": "MG", "models": "MG4, MG5, MG6, ZS, HS, RX5" }
-        }
-      },
-      "block_order": ["mercedes", "bmw", "mg"],
       "settings": {
         "eyebrow": "Find your fit",
         "heading": "Made to the millimetre for your car.",
         "lead": "Mercedes, BMW and MG at launch. Anything else, we make in about a day.",
-        "link": "/collections/all",
+        "link": "/products/floating-center-caps",
         "show_other": true,
         "anchor": "fit",
         "card_streak": false
@@ -133,12 +169,45 @@
     "videos": {
       "type": "customer-videos",
       "blocks": {
-        "clip_1": { "type": "clip", "settings": { "car": "BMW 3 Series", "edition": "Street", "tag": "Customer clip 01" } },
-        "clip_2": { "type": "clip", "settings": { "car": "Mercedes C-Class", "edition": "Signature", "tag": "Customer clip 02" } },
-        "clip_3": { "type": "clip", "settings": { "car": "BMW X5", "edition": "Street", "tag": "Customer clip 03" } },
-        "clip_4": { "type": "clip", "settings": { "car": "Mercedes E-Class", "edition": "Signature", "tag": "Customer clip 04" } }
+        "clip_1": {
+          "type": "clip",
+          "settings": {
+            "car": "BMW 3 Series",
+            "edition": "Street",
+            "tag": "Customer clip 01"
+          }
+        },
+        "clip_2": {
+          "type": "clip",
+          "settings": {
+            "car": "Mercedes C-Class",
+            "edition": "Signature",
+            "tag": "Customer clip 02"
+          }
+        },
+        "clip_3": {
+          "type": "clip",
+          "settings": {
+            "car": "BMW X5",
+            "edition": "Street",
+            "tag": "Customer clip 03"
+          }
+        },
+        "clip_4": {
+          "type": "clip",
+          "settings": {
+            "car": "Mercedes E-Class",
+            "edition": "Signature",
+            "tag": "Customer clip 04"
+          }
+        }
       },
-      "block_order": ["clip_1", "clip_2", "clip_3", "clip_4"],
+      "block_order": [
+        "clip_1",
+        "clip_2",
+        "clip_3",
+        "clip_4"
+      ],
       "settings": {
         "eyebrow": "On real cars",
         "heading": "Performance looks better here.",
@@ -149,12 +218,41 @@
     "craft": {
       "type": "craft-strip",
       "blocks": {
-        "design": { "type": "step", "settings": { "title": "Design", "text": "Every piece starts in CAD." } },
-        "build": { "type": "step", "settings": { "title": "Build", "text": "In-house, in small runs." } },
-        "finish": { "type": "step", "settings": { "title": "Finish", "text": "Every edge checked by hand." } },
-        "test": { "type": "step", "settings": { "title": "Test", "text": "Real heat, real roads, real use." } }
+        "design": {
+          "type": "step",
+          "settings": {
+            "title": "Design",
+            "text": "Every piece starts in CAD."
+          }
+        },
+        "build": {
+          "type": "step",
+          "settings": {
+            "title": "Build",
+            "text": "In-house, in small runs."
+          }
+        },
+        "finish": {
+          "type": "step",
+          "settings": {
+            "title": "Finish",
+            "text": "Every edge checked by hand."
+          }
+        },
+        "test": {
+          "type": "step",
+          "settings": {
+            "title": "Test",
+            "text": "Real heat, real roads, real use."
+          }
+        }
       },
-      "block_order": ["design", "build", "finish", "test"],
+      "block_order": [
+        "design",
+        "build",
+        "finish",
+        "test"
+      ],
       "settings": {
         "eyebrow": "The craft",
         "heading": "Crafted in our own workshop.",
@@ -164,7 +262,10 @@
     },
     "trust": {
       "type": "trust-bar",
-      "settings": { "padding_top": 0, "padding_bottom": 0 }
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
     },
     "teaser": {
       "type": "teaser-lines",
@@ -192,7 +293,10 @@
           }
         }
       },
-      "block_order": ["ride", "kart"],
+      "block_order": [
+        "ride",
+        "kart"
+      ],
       "settings": {
         "eyebrow": "One name. Three lines.",
         "heading": "Car is live. Ride and Kart are next.",
@@ -208,9 +312,19 @@
         "text": "Foam-set caps in a navy box that opens slowly. For Valentine’s, birthdays and Eid.",
         "occasions": "Valentine’s, Birthdays, Eid",
         "button_label": "Add gift box",
-        "fallback_link": "/collections/all"
+        "fallback_link": "/collections/all",
+        "product": "gift-box"
       }
     }
   },
-  "order": ["hero", "editions", "fitment", "videos", "craft", "trust", "teaser", "gift"]
+  "order": [
+    "hero",
+    "editions",
+    "fitment",
+    "videos",
+    "craft",
+    "trust",
+    "teaser",
+    "gift"
+  ]
 }

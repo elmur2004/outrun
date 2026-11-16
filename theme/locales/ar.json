@@ -12,7 +12,10 @@
   },
   "general": {
     "page": "صفحة {{ page }}",
-    "scroll": "انزل"
+    "scroll": "انزل",
+    "pagination": "الصفحات",
+    "previous": "الصفحة اللي فاتت",
+    "next": "الصفحة الجاية"
   },
   "footer": {
     "calm_motion": "حركة هادية",
@@ -49,6 +52,68 @@
   "cart": {
     "added": "اتضاف. الطقم بتاعك في السلة.",
     "error": "معرفناش نضيفه. جرّب تاني.",
-    "sold_out": "خلص"
+    "sold_out": "خلص",
+    "title": "السلة",
+    "empty": "السلة فاضية.",
+    "subtotal": "الإجمالي",
+    "checkout": "كمّل الطلب",
+    "remove": "شيل",
+    "continue": "اطلب من الـ Drop",
+    "gift_upsell": "خليها هدية",
+    "to_checkout": "بيكمّل على الـ checkout العادي بتاع شوبيفاي.",
+    "close": "اقفل السلة",
+    "increase": "زوّد كمية {{ product }}",
+    "decrease": "قلّل كمية {{ product }}",
+    "quantity_for": "كمية {{ product }}",
+    "update_error": "معرفناش نعدّل السلة. جرّب تاني.",
+    "discount": "الخصم"
+  },
+  "product": {
+    "choose": "اختار",
+    "stock_html": "فاضل {{ count }} من {{ total }} طقم في {{ run }}",
+    "upload_heading": "ارفع تصميمك",
+    "upload_text": "PNG أو SVG بتباين عالي. بنبعتلك بروفة على واتساب قبل ما نقص.",
+    "upload_button": "اختار ملف",
+    "upload_drop": "أو اسحبه هنا",
+    "upload_done": "بقى على الغطا. لف العارض وشوفه.",
+    "upload_required": "ارفع تصميمك عشان تطلب الـ Custom.",
+    "gift_option": "ضيف علبة الهدية",
+    "add_to_cart": "ضيف للسلة",
+    "adding": "بيتضاف…",
+    "sold_out": "خلص",
+    "unavailable": "مش متاح",
+    "need_fitment": "اختار الماركة والموديل الأول، عشان نبعتلك المقاس الصح.",
+    "other_car_label": "عربيتك (الماركة والموديل والسنة)",
+    "spin": "لف العجلة",
+    "drag": "اسحب عشان تلف",
+    "live": "بيتعدل لوحده، قدامك",
+    "quantity": "الكمية",
+    "regular_price": "السعر الأصلي",
+    "sale_price": "سعر الخصم"
+  },
+  "collection": {
+    "all": "الكل",
+    "finish": "التشطيب",
+    "set_of_4": "طقم ٤ قطع",
+    "no_match": "مفيش حاجة مطابقة. شيل فلتر.",
+    "clear": "امسح الفلاتر",
+    "sort": "الترتيب",
+    "apply": "طبّق",
+    "empty": "المجموعة دي فاضية دلوقتي.",
+    "filters": "فلتر الأغطية",
+    "count": "ظاهر {{ count }}"
+  },
+  "search": {
+    "title": "البحث",
+    "placeholder": "دوّر على أغطية، إصدارات، تشطيبات",
+    "submit": "دوّر",
+    "results": "{{ count }} نتيجة لـ «{{ terms }}»",
+    "no_results": "مفيش نتايج لـ «{{ terms }}». جرّب إصدار أو تشطيب."
+  },
+  "not_found": {
+    "heading": "طريق غلط.",
+    "text": "الصفحة دي مش موجودة، أو اتنقلت. الطريق مكمّل تحت.",
+    "home": "ارجع للبداية",
+    "shop": "اطلب من الـ Drop"
   }
 }

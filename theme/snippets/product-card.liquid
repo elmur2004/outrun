@@ -1,0 +1,104 @@
+{% doc %}
+  Product card from the design (.card): square shot on the navy radial, badge, 360° tag, label, title, caption, price.
+  Pass a variant to make the card that variant: the collection grid shows one card per Edition × Finish,
+  and collection-grid.js renders a spinning 3D cap for those cards. Load component-card.css where it's used.
+
+  @param {object} product - the product
+  @param {object} [variant] - one of the product's variants
+{% enddoc %}
+{%- liquid
+  assign edition_name = settings.edition_option | default: 'Edition'
+  assign finish_name = settings.finish_option | default: 'Finish'
+  assign edition_index = -1
+  assign finish_index = -1
+  for option in product.options
+    if option == edition_name
+      assign edition_index = forloop.index0
+    elsif option == finish_name
+      assign finish_index = forloop.index0
+    endif
+  endfor
+
+  assign v = variant | default: product.selected_or_first_available_variant
+  assign url = product.url
+  if variant
+    assign url = variant.url
+  endif
+
+  assign edition = ''
+  assign finish = ''
+  if variant and edition_index >= 0 and finish_index >= 0
+    assign edition = variant.options[edition_index]
+    assign finish = variant.options[finish_index]
+  endif
+  assign is_cap = false
+  if edition != blank and finish != blank
+    assign is_cap = true
+  endif
+
+  assign caption = ''
+  if is_cap
+    assign caption_lines = settings.edition_captions | newline_to_br | split: '<br />'
+    for line in caption_lines
+      assign parts = line | strip | split: ':'
+      assign key = parts.first | strip
+      if key == edition
+        assign caption = line | strip | remove_first: parts.first | remove_first: ':' | strip
+      endif
+    endfor
+  endif
+
+  assign image = v.featured_image | default: product.featured_image
+-%}
+<a
+  class="card{% if is_cap %} card--3d{% endif %}"
+  href="{{ url }}"
+  {% if is_cap %}
+    data-card-3d
+    data-variant="{{ v.id }}"
+    data-edition="{{ edition | handleize }}"
+    data-finish="{{ finish | handleize }}"
+  {% endif %}
+>
+  <div class="shot">
+    {%- if image -%}
+      {{
+        image
+        | image_url: width: 640
+        | image_tag: widths: '320, 480, 640', sizes: '(max-width: 980px) 50vw, 33vw', alt: '', loading: 'lazy', class: 'card-img'
+      }}
+    {%- else -%}
+      <img class="card-img" src="{{ 'ph-boxcaps.jpg' | asset_url }}" width="1500" height="602" alt="" loading="lazy">
+    {%- endif -%}
+    {%- if is_cap -%}
+      <span class="ph" aria-hidden="true"><i></i></span>
+      <span class="r360 label latin" aria-hidden="true">360°</span>
+    {%- endif -%}
+    {%- if v.available == false -%}
+      <span class="badge label">{{ 'product.sold_out' | t }}</span>
+    {%- elsif is_cap -%}
+      <span class="badge label" data-card-badge>{{ 'fitment.in_run' | t }}</span>
+    {%- endif -%}
+  </div>
+  <div class="info">
+    {%- if is_cap -%}
+      <span class="label latin">{{ product.title | escape }}</span>
+      <h3 class="latin">{{ edition | escape }} · {{ finish | escape }}</h3>
+      {%- if caption != blank -%}
+        <span class="sub">{{ caption | escape }}</span>
+      {%- endif -%}
+    {%- else -%}
+      {%- if product.type != blank -%}
+        <span class="label">{{ product.type | escape }}</span>
+      {%- endif -%}
+      <h3>{{ product.title | escape }}</h3>
+    {%- endif -%}
+    <span class="price">
+      {%- if v.compare_at_price > v.price -%}
+        <s class="num latin">{{ v.compare_at_price | money }}</s>
+      {%- endif %}
+      <span class="num latin">{{ v.price | money }}</span>
+      {%- if is_cap %} <span class="label">· {{ 'collection.set_of_4' | t }}</span>{% endif -%}
+    </span>
+  </div>
+</a>

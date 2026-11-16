@@ -45,6 +45,15 @@ Font stack, used everywhere: `"Chakra Petch", "Changa", "Segoe UI", system-ui, s
 | Live theme | Horizon (`170182803813`). Don't push to it. |
 | Editor | https://vjukkp-ct.myshopify.com/admin/themes/170183491941/editor |
 
+Store data the theme relies on (created through the Admin API, 2026-11-16; values are placeholders until launch):
+
+| What | Details |
+|---|---|
+| Product `floating-center-caps` | Options **Edition** (Street, Signature, Custom) × **Finish** (Gloss Black, Satin Steel, Ice Chrome). The theme matches these option names; they're set in the product section's settings. |
+| Product `gift-box` | Single variant, inventory not tracked. Chosen in Theme settings → Cart → Gift box product. |
+| Product metafields `outrun.*` | `run_size` (integer, stock meter total), `drop_label` (run name), `fitment_required` (boolean; `false` hides make/model, e.g. on the gift box) |
+| Fitment makes/models | Theme settings → Fitment, shared by the home page and the product page. Metaobject entries of type `fitment_make` (fields `name`, `models`) take over if created. |
+
 Setup:
 
 - Install Shopify CLI: `npm i -g @shopify/cli` (Node 18+). The first command opens a browser sign-in.

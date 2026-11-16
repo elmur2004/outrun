@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "settings": {
+        "shop_link": "/collections/all"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,80 @@
+{% doc %}
+  Fitment makes and models, from "Fitment make" metaobject entries (type fitment_make: name, models)
+  when the store has any, otherwise Theme settings → Fitment. One source for home and product page.
+
+  @param {string} format - 'json' ({ "makes": [ { "id", "name", "models": [] } ] }), 'tiles' (home make buttons),
+    'options' (make <option>s, value = make name), 'model_options' (model <option>s grouped by make)
+    or 'chips' (collection filter chips)
+{% enddoc %}
+{%- liquid
+  assign names = ''
+  assign model_lists = ''
+  assign entries = shop.metaobjects.fitment_make.values
+  if entries.size > 0
+    for entry in entries
+      assign m = entry.models.value | join: ','
+      assign names = names | append: entry.name.value | append: '|'
+      assign model_lists = model_lists | append: m | append: '|'
+    endfor
+  else
+    assign lines = settings.fitment_makes | newline_to_br | split: '<br />'
+    for line in lines
+      assign parts = line | strip | split: ':'
+      assign n = parts.first | strip
+      if n != blank and parts.size > 1
+        assign names = names | append: n | append: '|'
+        assign model_lists = model_lists | append: parts.last | append: '|'
+      endif
+    endfor
+  endif
+  assign names = names | split: '|'
+  assign model_lists = model_lists | split: '|'
+-%}
+{%- case format -%}
+  {%- when 'json' -%}
+    {"makes":[
+    {%- for name in names -%}
+      {%- assign models = model_lists[forloop.index0] | split: ',' -%}
+      {"id":{{ name | handleize | json }},"name":{{ name | json }},"models":[
+      {%- assign first = true -%}
+      {%- for model in models -%}
+        {%- assign mm = model | strip -%}
+        {%- if mm != blank -%}
+          {%- unless first %},{% endunless %}{{ mm | json }}
+          {%- assign first = false -%}
+        {%- endif -%}
+      {%- endfor -%}
+      ]}{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+    ]}
+  {%- when 'tiles' -%}
+    {%- for name in names -%}
+      <button class="make" type="button" data-make="{{ name | handleize }}" aria-pressed="false">
+        <span>{{ 'fitment.make' | t }}</span>
+        <b class="latin">{{ name | escape }}</b>
+      </button>
+    {%- endfor -%}
+  {%- when 'options' -%}
+    {%- for name in names -%}
+      <option value="{{ name | escape }}">{{ name | escape }}</option>
+    {%- endfor -%}
+  {%- when 'chips' -%}
+    {%- for name in names -%}
+      <button class="chip latin" type="button" data-f="make" data-v="{{ name | handleize }}" data-name="{{ name | escape }}" aria-pressed="false">
+        {{- name | escape -}}
+      </button>
+    {%- endfor -%}
+  {%- when 'model_options' -%}
+    {%- comment -%} All models grouped by make: usable without JS; product-info.js narrows it to the chosen make. {%- endcomment -%}
+    {%- for name in names -%}
+      {%- assign models = model_lists[forloop.index0] | split: ',' -%}
+      <optgroup label="{{ name | escape }}">
+        {%- for model in models -%}
+          {%- assign mm = model | strip -%}
+          {%- if mm != blank -%}
+            <option value="{{ mm | escape }}">{{ mm | escape }}</option>
+          {%- endif -%}
+        {%- endfor -%}
+      </optgroup>
+    {%- endfor -%}
+{%- endcase -%}

@@ -29,32 +29,105 @@ export function toast(message) {
 }
 
 /* ---------- Cart ---------- */
-export async function refreshCartCount() {
+const drawerEl = () => document.getElementById('CartDrawer');
+
+export async function refreshCartCount(spin = true) {
   try {
     const cart = await fetch(`${config.routes.cart}.js`, { headers: { Accept: 'application/json' } }).then((r) => r.json());
     $$('[data-cart-count]').forEach((el) => { el.textContent = cart.item_count; });
-    $$('[data-cart-button]').forEach((b) => {
-      b.classList.remove('spin');
-      void b.offsetWidth; // restart the wheel spin
-      b.classList.add('spin');
-    });
+    if (spin) {
+      $$('[data-cart-button]').forEach((b) => {
+        b.classList.remove('spin');
+        void b.offsetWidth; // restart the wheel spin
+        b.classList.add('spin');
+      });
+    }
     return cart;
   } catch (e) {
     return null;
   }
 }
 
-export async function addToCart(items) {
-  const res = await fetch(`${config.routes.cartAdd}.js`, {
+async function cartRequest(url, body) {
+  const isForm = body instanceof FormData;
+  const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify({ items }),
+    headers: isForm ? { Accept: 'application/json' } : { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: isForm ? body : JSON.stringify(body),
   });
-  if (!res.ok) throw new Error((await res.json().catch(() => ({}))).description || 'Add to cart failed');
-  await refreshCartCount();
-  document.dispatchEvent(new CustomEvent('outrun:cart-added', { detail: { items } }));
-  return res.json();
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.status) throw new Error(data.description || data.message || config.strings.error);
+  return data;
 }
+
+// items: [{ id, quantity, properties }], or the FormData of a product form (needed for file uploads).
+export async function addToCart(items) {
+  const data = await cartRequest(`${config.routes.cartAdd}.js`, items instanceof FormData ? items : { items });
+  await refreshCartCount();
+  document.dispatchEvent(new CustomEvent('outrun:cart-added', { detail: data }));
+  return data;
+}
+
+// Re-render the drawer from Liquid (Section Rendering API), so its markup lives in one place.
+export async function renderCart() {
+  const drawer = drawerEl();
+  if (!drawer) return;
+  const root = (config.routes.root || '/').replace(/\/$/, '');
+  const html = await fetch(`${root}/?sections=cart-drawer`).then((r) => r.json()).then((j) => j['cart-drawer']);
+  const fresh = new DOMParser().parseFromString(html, 'text/html').querySelector('[data-cart-inner]');
+  const current = drawer.querySelector('[data-cart-inner]');
+  if (fresh && current) current.replaceWith(fresh);
+}
+
+export async function openCart() {
+  const drawer = drawerEl();
+  if (!drawer) { location.href = config.routes.cart; return; }
+  await renderCart().catch(() => {});
+  if (!drawer.open) {
+    drawer.showModal();
+    requestAnimationFrame(() => drawer.classList.add('on'));
+  }
+}
+
+export function closeCart() {
+  const drawer = drawerEl();
+  if (!drawer?.open) return;
+  drawer.classList.remove('on');
+  setTimeout(() => drawer.close(), isCalm() ? 150 : 700);
+}
+
+async function changeLine(line, quantity) {
+  const drawer = drawerEl();
+  drawer?.setAttribute('aria-busy', 'true');
+  try {
+    await cartRequest(`${config.routes.cartChange}.js`, { line: Number(line), quantity: Number(quantity) });
+    if (document.querySelector('[data-cart-page]')) { location.reload(); return; } // the /cart page renders server-side
+    await Promise.all([renderCart(), refreshCartCount(false)]);
+  } catch (err) {
+    toast(err.message || config.strings.cartError);
+  } finally {
+    drawer?.removeAttribute('aria-busy');
+  }
+}
+
+function cartDrawer() {
+  const drawer = drawerEl();
+  if (!drawer || drawer.dataset.bound) return;
+  drawer.dataset.bound = '1';
+  drawer.addEventListener('cancel', (e) => { e.preventDefault(); closeCart(); }); // Escape
+  drawer.addEventListener('click', (e) => {
+    if (e.target === drawer || e.target.closest('[data-cart-close]')) closeCart(); // backdrop or close button
+  });
+}
+
+document.addEventListener('click', (e) => {
+  // The header cart link opens the drawer (it stays a plain link to /cart without JS).
+  const button = e.target.closest('[data-cart-button]');
+  if (button && drawerEl()) { e.preventDefault(); openCart(); return; }
+  // Quantity and remove links, in the drawer and on /cart: AJAX instead of a page load.
+  const change = e.target.closest('[data-line-change]');
+  if (change) { e.preventDefault(); changeLine(change.dataset.line, change.dataset.quantity); }
+});
 
 // Progressive enhancement: any <form data-cart-add> works without JS (posts to /cart/add).
 document.addEventListener('submit', async (e) => {
@@ -66,6 +139,7 @@ document.addEventListener('submit', async (e) => {
   try {
     const data = new FormData(form);
     await addToCart([{ id: Number(data.get('id')), quantity: Number(data.get('quantity') || 1) }]);
+    await openCart();
     toast(config.strings.added);
   } catch (err) {
     toast(err.message || config.strings.error);
@@ -84,6 +158,19 @@ export const webgl = (() => {
   }
 })();
 
+// Theme settings → Motion → Show 3D scenes. (Read the attribute: dataset can't camel-case "-3d".)
+export const threeDEnabled = () => root.getAttribute('data-enable-3d') !== 'false';
+
+// Option values → the 3D scene's keys (street | signature | custom, gloss | steel | ice).
+const handleOf = (s) => String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
+export const editionKey = (value) => ['street', 'signature', 'custom'].find((k) => handleOf(value).includes(k)) || 'signature';
+export const finishKey = (value) => {
+  const h = handleOf(value);
+  if (h.includes('steel') || h.includes('satin')) return 'steel';
+  if (h.includes('ice') || h.includes('chrome')) return 'ice';
+  return 'gloss';
+};
+
 let scenes;
 // Returns a handle: handle.api() is the scene's API once mounted, handle.dispose() tears it down.
 export function lazy3D(wrap, mount) {
@@ -92,7 +179,7 @@ export function lazy3D(wrap, mount) {
   let io = null;
   const handle = { api: () => api, dispose: () => { dead = true; io?.disconnect(); api?.dispose?.(); } };
   if (!wrap) return handle;
-  if (!webgl || root.dataset.enable3d === 'false') {
+  if (!webgl || !threeDEnabled()) {
     wrap.classList.add('no-3d');
     return handle;
   }
@@ -246,6 +333,7 @@ function calmToggles() {
 
 calmToggles();
 mobileMenu();
+cartDrawer();
 scrollProgress();
 reveals();
 sectionSweeps();

@@ -5,6 +5,7 @@
 class FitmentPicker extends HTMLElement {
   connectedCallback() {
     this.data = JSON.parse(this.querySelector('script[data-fitment]').textContent);
+    this.makes = Object.fromEntries(this.data.data.makes.map((m) => [m.id, m]));
     this.models = this.querySelector('[data-models]');
     this.card = this.querySelector('[data-card]');
     this.make = '';
@@ -39,7 +40,7 @@ class FitmentPicker extends HTMLElement {
       return;
     }
 
-    const make = this.data.makes[this.make];
+    const make = this.makes[this.make];
     if (makeChanged) {
       if (make) {
         this.models.replaceChildren(...make.models.map((m) => {

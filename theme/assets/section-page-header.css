@@ -1,0 +1,16 @@
+/* Night page head (handoff: .phead). Shared by collection, search, page and 404 templates. */
+.phead {
+  position: relative; overflow: hidden; color: var(--cloud); border-bottom: 1px solid var(--hair);
+  padding-block: clamp(64px, 10vw, 128px) clamp(40px, 6vw, 72px);
+}
+/* fix (Q14): muted text and the Ice eyebrow fail contrast over the Steel end of the night gradient.
+   A soft navy scrim behind the text keeps the gradient visible elsewhere. */
+.phead::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(10, 30, 46, 0.72) 0%, rgba(10, 30, 46, 0.35) 55%, transparent 80%);
+}
+[dir="rtl"] .phead::before { background: linear-gradient(270deg, rgba(10, 30, 46, 0.72) 0%, rgba(10, 30, 46, 0.35) 55%, transparent 80%); }
+.phead .bgw { position: absolute; inset-inline-end: -2vw; bottom: -3vw; font-size: clamp(110px, 22vw, 340px); opacity: 0.22; }
+.phead .wrap { position: relative; display: flex; flex-direction: column; gap: 20px; }
+.phead h1 { font-size: clamp(40px, 6.4vw, 96px); }
+.phead-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }

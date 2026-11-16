@@ -1,5 +1,7 @@
 {
-  "current": "Default",
+  "current": {
+    "gift_product": "gift-box"
+  },
   "presets": {
     "Default": {}
   }
