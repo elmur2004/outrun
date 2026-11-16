@@ -1,0 +1,54 @@
+{
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu",
+    "cart": "Cart",
+    "switch_language": "Switch language to {{ language }}",
+    "home": "{{ shop }} home",
+    "play_video": "Play video",
+    "pause_video": "Pause video",
+    "skip_intro": "Skip intro"
+  },
+  "general": {
+    "page": "Page {{ page }}",
+    "scroll": "Scroll"
+  },
+  "footer": {
+    "calm_motion": "Calm motion",
+    "whatsapp": "WhatsApp"
+  },
+  "editions": {
+    "edition": "Edition",
+    "shop": "Shop {{ edition }}"
+  },
+  "fitment": {
+    "make": "Make",
+    "model": "Model",
+    "other": "Other",
+    "fitment": "Fitment",
+    "pick_make": "Pick your make",
+    "other_placeholder": "e.g. Audi A4 2020",
+    "other_label": "Your car",
+    "in_run": "In the run",
+    "made_day": "Made in about a day",
+    "wait_heading": "Your car, your fit.",
+    "wait_text": "Choose a make and model to see your set.",
+    "ready_heading_html": "Fits your {{ car }}",
+    "ready_text_html": "Set of 4, sized for the {{ car }}. Clips straight into the original hub.",
+    "ready_cta_html": "Shop for my {{ car }}",
+    "other_heading": "Don’t see your car?",
+    "other_text": "We make it in about a day. Send us your car and wheel on WhatsApp.",
+    "whatsapp_cta": "Request on WhatsApp",
+    "whatsapp_message": "Hi OUTRUN, floating caps for my car: "
+  },
+  "reels": {
+    "tap_to_play": "Tap to play",
+    "clip": "Customer clip"
+  },
+  "cart": {
+    "added": "Added. Your set is in the cart.",
+    "error": "Couldn’t add that. Please try again.",
+    "sold_out": "Sold out"
+  }
+}

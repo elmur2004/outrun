@@ -1,0 +1,230 @@
+{{ 'section-hero-story.css' | asset_url | stylesheet_tag }}
+<script type="module" src="{{ 'hero-story.js' | asset_url }}"></script>
+
+{%- assign story_on = section.settings.enable_story -%}
+<hero-story
+  class="story dark black{% unless story_on %} story--short{% endunless %}"
+  data-stage="0"
+  style="--story-h: {{ section.settings.story_length }}vh;"
+>
+  <div class="stage">
+    {%- if section.settings.glow_word != blank -%}
+      <div class="glow-word reveal bgword latin" aria-hidden="true">{{ section.settings.glow_word | escape }}</div>
+    {%- endif -%}
+
+    <div class="cv-wrap">
+      {% render 'image', image: section.settings.image, fallback: 'ph-wheelspin.jpg', class: 'fallback', eager: true %}
+      <canvas aria-hidden="true"></canvas>
+    </div>
+
+    <i class="streak hero-streak" aria-hidden="true"></i>
+
+    {%- if section.settings.drop_label != blank or section.settings.run_label != blank -%}
+      <div class="drop-tag">
+        <span class="label latin">{{ section.settings.drop_label | escape }}</span>
+        <span class="label">{{ section.settings.run_label | escape }}</span>
+      </div>
+    {%- endif -%}
+
+    <div class="hero-copy">
+      <div class="wrap">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="eyebrow"><span>{{ section.settings.eyebrow | escape }}</span></span>
+        {%- endif -%}
+        <h1 class="hero-h latin">
+          <span class="w"><span>{{ section.settings.heading_1 | escape }}</span></span>
+          <span class="w"><span>{{ section.settings.heading_2 | escape }}</span></span>
+          <span class="w"><span class="glowing">{{ section.settings.heading_3 | escape }}</span></span>
+        </h1>
+        {%- if section.settings.subheading != blank -%}
+          <div class="hero-meta"><p class="hero-sub">{{ section.settings.subheading | escape }}</p></div>
+        {%- endif -%}
+        <div class="hero-ctas">
+          {%- if section.settings.cta_label != blank -%}
+            <a class="btn solid mag" href="{{ section.settings.cta_link }}">
+              {{- section.settings.cta_label | escape }}
+              {% render 'icon', name: 'arrow' -%}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.cta_2_label != blank -%}
+            <a class="btn mag" href="{{ section.settings.cta_2_link }}">{{ section.settings.cta_2_label | escape }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-cue" aria-hidden="true">
+      <span class="label">{{ 'general.scroll' | t }}</span><i></i>
+    </div>
+
+    {%- if story_on -%}
+      <div class="story-steps" aria-hidden="true">
+        {%- for i in (0..4) -%}<i></i>{%- endfor -%}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'story_line' -%}
+            {%- liquid
+              assign heading_class = ''
+              if block.settings.style == 'latin'
+                assign heading_class = 'latin'
+              elsif block.settings.style == 'glowing'
+                assign heading_class = 'latin glowing'
+              endif
+            -%}
+            <div class="story-line {{ block.settings.position }}" data-st="{{ block.settings.stage }}" {{ block.shopify_attributes }}>
+              <h2 class="{{ heading_class }}">{{ block.settings.heading | escape }}</h2>
+              {%- if block.settings.text != blank -%}
+                <p>{{ block.settings.text | escape }}</p>
+              {%- endif -%}
+            </div>
+          {%- when 'part_label' -%}
+            <div
+              class="plabel{% if block.settings.side == 'left' %} l{% endif %}"
+              data-part="{{ block.settings.part }}"
+              aria-hidden="true"
+              {{ block.shopify_attributes }}
+            >
+              <i class="dot"></i><i class="ln"></i>
+              <div class="tx">
+                <b>{{ block.settings.title | escape }}</b>
+                <span>{{ block.settings.caption | escape }}</span>
+              </div>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+
+      <a class="skip-intro label" href="#{{ section.id }}-end">{{ 'accessibility.skip_intro' | t }}</a>
+    {%- endif -%}
+  </div>
+</hero-story>
+<span id="{{ section.id }}-end" class="story-end"></span>
+
+{% schema %}
+{
+  "name": "Hero story",
+  "class": "section-hero-story",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "header", "content": "Hero" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Drop 01 · Floating center caps" },
+    { "type": "text", "id": "heading_1", "label": "Heading line 1", "default": "Drive" },
+    { "type": "text", "id": "heading_2", "label": "Heading line 2", "default": "the" },
+    { "type": "text", "id": "heading_3", "label": "Heading line 3 (glowing, light weight)", "default": "feeling." },
+    { "type": "textarea", "id": "subheading", "label": "Subheading", "default": "The wheel spins. The logo stays still. Floating center caps, finished to the smallest detail, in a limited run." },
+    { "type": "text", "id": "glow_word", "label": "Glow word behind the wheel", "default": "FEELING" },
+    { "type": "text", "id": "drop_label", "label": "Drop tag", "default": "Drop 01" },
+    { "type": "text", "id": "run_label", "label": "Run tag", "default": "Run 01 · Limited" },
+    { "type": "text", "id": "cta_label", "label": "Primary button label", "default": "Shop the drop" },
+    { "type": "url", "id": "cta_link", "label": "Primary button link", "default": "/collections/all" },
+    { "type": "text", "id": "cta_2_label", "label": "Secondary button label", "default": "Find your fit" },
+    {
+      "type": "text",
+      "id": "cta_2_link",
+      "label": "Secondary button target",
+      "info": "An anchor on this page, e.g. #fit for the fitment section.",
+      "default": "#fit"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Fallback image",
+      "info": "Shown before the 3D wheel loads, and instead of it when 3D is off. At least 2400px wide."
+    },
+    { "type": "header", "content": "Scroll story" },
+    {
+      "type": "checkbox",
+      "id": "enable_story",
+      "label": "Enable scroll story",
+      "info": "The wheel slows, the cap comes apart and goes back together as visitors scroll. Off: a single-screen hero.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "story_length",
+      "label": "Story length",
+      "min": 300,
+      "max": 600,
+      "step": 20,
+      "unit": "vh",
+      "default": 520
+    }
+  ],
+  "blocks": [
+    {
+      "type": "story_line",
+      "name": "Story line",
+      "settings": [
+        {
+          "type": "select",
+          "id": "stage",
+          "label": "Stage",
+          "options": [
+            { "value": "1", "label": "1 · wheel slows" },
+            { "value": "2", "label": "2 · cap comes apart" },
+            { "value": "3", "label": "3 · cap reassembles" },
+            { "value": "4", "label": "4 · wheel spins up" }
+          ],
+          "default": "1"
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Position",
+          "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "bot", "label": "Bottom" }
+          ],
+          "default": "top"
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Heading style",
+          "options": [
+            { "value": "normal", "label": "Normal" },
+            { "value": "latin", "label": "Brand line (stays in English)" },
+            { "value": "glowing", "label": "Brand line, glowing" }
+          ],
+          "default": "normal"
+        },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "The wheel spins. The logo stays still." },
+        { "type": "textarea", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "part_label",
+      "name": "Part label",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "part",
+          "label": "Part",
+          "options": [
+            { "value": "plate", "label": "Emblem plate" },
+            { "value": "shell", "label": "Shell" },
+            { "value": "bearing", "label": "Sealed bearing" },
+            { "value": "weight", "label": "Counterweight" }
+          ],
+          "default": "plate"
+        },
+        {
+          "type": "select",
+          "id": "side",
+          "label": "Label side",
+          "options": [
+            { "value": "right", "label": "Right" },
+            { "value": "left", "label": "Left" }
+          ],
+          "default": "right"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Emblem plate" },
+        { "type": "text", "id": "caption", "label": "Caption", "default": "Your edition’s face" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Hero story" }]
+}
+{% endschema %}

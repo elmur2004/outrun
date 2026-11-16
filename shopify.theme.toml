@@ -1,0 +1,8 @@
+# Shopify CLI environments. Run commands from the repo root, e.g.:
+#   shopify theme dev  -e dev        local preview with hot reload
+#   shopify theme push -e dev        upload to the "OUTRUN dev" unpublished theme
+#   shopify theme check -e dev
+[environments.dev]
+store = "vjukkp-ct.myshopify.com"
+path = "theme"
+theme = "OUTRUN dev"

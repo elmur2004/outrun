@@ -1,0 +1,21 @@
+<section
+  class="trust-sec"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+>
+  <div class="wrap">{% render 'trust-bar' %}</div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust bar",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Edit the four promises in Theme settings → Trust items. They're shared across pages."
+    },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 120, "step": 8, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 120, "step": 8, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "Trust bar" }]
+}
+{% endschema %}

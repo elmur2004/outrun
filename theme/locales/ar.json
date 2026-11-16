@@ -1,0 +1,54 @@
+{
+  "accessibility": {
+    "skip_to_content": "انتقل إلى المحتوى",
+    "open_menu": "افتح القائمة",
+    "close_menu": "اقفل القائمة",
+    "cart": "السلة",
+    "switch_language": "غيّر اللغة إلى {{ language }}",
+    "home": "الصفحة الرئيسية لـ {{ shop }}",
+    "play_video": "شغّل الفيديو",
+    "pause_video": "وقّف الفيديو",
+    "skip_intro": "تخطّى المقدمة"
+  },
+  "general": {
+    "page": "صفحة {{ page }}",
+    "scroll": "انزل"
+  },
+  "footer": {
+    "calm_motion": "حركة هادية",
+    "whatsapp": "واتساب"
+  },
+  "editions": {
+    "edition": "الإصدار",
+    "shop": "اطلب {{ edition }}"
+  },
+  "fitment": {
+    "make": "الماركة",
+    "model": "الموديل",
+    "other": "تانية",
+    "fitment": "المقاس",
+    "pick_make": "اختار الماركة",
+    "other_placeholder": "مثلًا: أودي A4 2020",
+    "other_label": "عربيتك",
+    "in_run": "موجود في الـ Run",
+    "made_day": "بيتعمل في حوالي يوم",
+    "wait_heading": "عربيتك، ومقاسها.",
+    "wait_text": "اختار الماركة والموديل عشان تشوف الطقم بتاعك.",
+    "ready_heading_html": "مظبوط على {{ car }}",
+    "ready_text_html": "طقم ٤ قطع، مقاسه مظبوط على {{ car }}. بيتركب في السنتر الأصلي على طول.",
+    "ready_cta_html": "اطلب لعربيتي {{ car }}",
+    "other_heading": "عربيتك مش موجودة؟",
+    "other_text": "بنعملها في حوالي يوم. ابعتلنا العربية والجنط على واتساب.",
+    "whatsapp_cta": "اطلب على واتساب",
+    "whatsapp_message": "أهلًا OUTRUN، عايز أغطية سنتر عائمة لعربيتي: "
+  },
+  "reels": {
+    "tap_to_play": "دوس للتشغيل",
+    "clip": "فيديو عميل"
+  },
+  "cart": {
+    "added": "اتضاف. الطقم بتاعك في السلة.",
+    "error": "معرفناش نضيفه. جرّب تاني.",
+    "sold_out": "خلص"
+  }
+}

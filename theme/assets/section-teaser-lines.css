@@ -1,0 +1,28 @@
+.next-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 760px) { .next-grid { grid-template-columns: 1fr; } }
+
+.veil {
+  --rev: 0; position: relative; aspect-ratio: 4 / 3; overflow: hidden;
+  border-radius: var(--r); border: 1px solid var(--hair); background: var(--black); color: var(--cloud);
+}
+html:not(.js) .veil { --rev: 1; } /* no JS, no scroll-driven sweep: show the silhouette lit */
+.veil.tall { aspect-ratio: 16 / 10; }
+.veil img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.veil .veil-dark { filter: brightness(0.1) contrast(1.6) saturate(0); }
+.veil .veil-lit {
+  --a: calc(var(--rev) * 140%);
+  -webkit-mask-image: linear-gradient(100deg, transparent calc(var(--a) - 40%), #000 calc(var(--a) - 22%), #000 calc(var(--a) - 16%), transparent calc(var(--a) + 4%));
+  mask-image: linear-gradient(100deg, transparent calc(var(--a) - 40%), #000 calc(var(--a) - 22%), #000 calc(var(--a) - 16%), transparent calc(var(--a) + 4%));
+  filter: brightness(0.85) saturate(0.6);
+}
+.veil .cover { position: absolute; inset: 0; background: radial-gradient(70% 50% at 50% 100%, rgba(62, 111, 143, 0.25), transparent 70%); }
+.veil .meta {
+  position: absolute; inset: auto 0 0 0; padding: 20px; display: flex; justify-content: space-between; align-items: flex-end; gap: 16px;
+  background: linear-gradient(transparent, rgba(5, 7, 10, 0.85));
+}
+.veil .meta-tx { display: flex; flex-direction: column; gap: 8px; }
+.veil h3 { font-size: clamp(28px, 3.4vw, 44px); }
+.veil .phase { font-family: var(--f-display); font-size: 12px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ice); }
+[dir="rtl"] .veil .phase { letter-spacing: 0.02em; }
+.veil .caption { font-size: 14px; color: rgba(191, 216, 232, 0.8); }
+.veil .btn { color: var(--cloud); border-color: rgba(220, 231, 239, 0.3); flex: none; }

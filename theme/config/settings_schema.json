@@ -1,0 +1,159 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "OUTRUN",
+    "theme_version": "0.2.0",
+    "theme_author": "OUTRUN",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "t:settings_schema.brand.name",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "t:settings_schema.brand.settings.favicon.label",
+        "info": "t:settings_schema.brand.settings.favicon.info"
+      }
+    ]
+  },
+  {
+    "name": "Contact",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Used in the footer, the mobile menu, fitment requests and WhatsApp links. Placeholder values: replace before launch."
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_number",
+        "label": "WhatsApp number",
+        "info": "International format, digits only (e.g. 201000000000). Used to build wa.me links.",
+        "default": "201000000000"
+      },
+      {
+        "type": "text",
+        "id": "phone",
+        "label": "Phone (as displayed)",
+        "default": "+20 100 000 0000"
+      },
+      {
+        "type": "text",
+        "id": "email",
+        "label": "Email",
+        "default": "hello@outrun.example"
+      },
+      {
+        "type": "text",
+        "id": "address",
+        "label": "Workshop address",
+        "default": "Workshop address · Cairo (placeholder)"
+      },
+      {
+        "type": "text",
+        "id": "hours",
+        "label": "Reply hours",
+        "default": "Replies within the hour, 10:00–22:00"
+      }
+    ]
+  },
+  {
+    "name": "Motion",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Visitors can always switch to calm motion from the footer, and it's on by default for anyone whose device asks for reduced motion."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_3d",
+        "label": "Show 3D scenes",
+        "info": "When off, the hero and editions show their images instead.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "section_sweeps",
+        "label": "Light sweep between sections",
+        "info": "Off by default: the brand allows one light streak per layout.",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "magnetic_buttons",
+        "label": "Magnetic buttons on hover",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Trust items",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Shown in the trust bar on the home, collection and Made Here pages, and on the product page. Edit once here."
+      },
+      { "type": "header", "content": "Item 1" },
+      {
+        "type": "select",
+        "id": "trust_1_icon",
+        "label": "Icon",
+        "options": [
+          { "value": "box", "label": "Box" },
+          { "value": "swap", "label": "Exchange" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "chat", "label": "Chat" }
+        ],
+        "default": "box"
+      },
+      { "type": "text", "id": "trust_1_title", "label": "Title", "default": "Open before you pay" },
+      { "type": "text", "id": "trust_1_text", "label": "Text", "default": "Cash on delivery. Inspect the set first." },
+      { "type": "header", "content": "Item 2" },
+      {
+        "type": "select",
+        "id": "trust_2_icon",
+        "label": "Icon",
+        "options": [
+          { "value": "box", "label": "Box" },
+          { "value": "swap", "label": "Exchange" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "chat", "label": "Chat" }
+        ],
+        "default": "swap"
+      },
+      { "type": "text", "id": "trust_2_title", "label": "Title", "default": "Easy exchange" },
+      { "type": "text", "id": "trust_2_text", "label": "Text", "default": "If it doesn’t fit, we swap it." },
+      { "type": "header", "content": "Item 3" },
+      {
+        "type": "select",
+        "id": "trust_3_icon",
+        "label": "Icon",
+        "options": [
+          { "value": "box", "label": "Box" },
+          { "value": "swap", "label": "Exchange" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "chat", "label": "Chat" }
+        ],
+        "default": "shield"
+      },
+      { "type": "text", "id": "trust_3_title", "label": "Title", "default": "Clear warranty" },
+      { "type": "text", "id": "trust_3_text", "label": "Text", "default": "If it falls off, we replace it." },
+      { "type": "header", "content": "Item 4" },
+      {
+        "type": "select",
+        "id": "trust_4_icon",
+        "label": "Icon",
+        "options": [
+          { "value": "box", "label": "Box" },
+          { "value": "swap", "label": "Exchange" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "chat", "label": "Chat" }
+        ],
+        "default": "chat"
+      },
+      { "type": "text", "id": "trust_4_title", "label": "Title", "default": "Real people" },
+      { "type": "text", "id": "trust_4_text", "label": "Text", "default": "Phone, WhatsApp and a real workshop." }
+    ]
+  }
+]

@@ -1,0 +1,34 @@
+{% doc %}
+  Switches to the next published language (EN ↔ AR) with Shopify's localization form.
+  Renders nothing while only one language is published.
+
+  @param {string} [style] - 'pill' (header: "EN / AR"), 'button' (mobile menu) or 'link' (footer)
+{% enddoc %}
+{%- if localization.available_languages.size > 1 -%}
+  {%- liquid
+    assign current = localization.language
+    for language in localization.available_languages
+      if language.iso_code != current.iso_code
+        assign target = language
+        break
+      endif
+    endfor
+  -%}
+  {%- form 'localization', class: 'lang-form' -%}
+    <input type="hidden" name="language_code" value="{{ target.iso_code }}">
+    {%- case style -%}
+      {%- when 'button' -%}
+        <button class="btn sm" type="submit" lang="{{ target.iso_code }}">{{ target.endonym_name }}</button>
+      {%- when 'link' -%}
+        <button class="link" type="submit" lang="{{ target.iso_code }}">{{ target.endonym_name }}</button>
+      {%- else -%}
+        <button
+          class="icon-btn lang"
+          type="submit"
+          aria-label="{{ 'accessibility.switch_language' | t: language: target.endonym_name }}"
+        >
+          <b>{{ current.iso_code | upcase }}</b>&nbsp;<span>/ {{ target.iso_code | upcase }}</span>
+        </button>
+    {%- endcase -%}
+  {%- endform -%}
+{%- endif -%}

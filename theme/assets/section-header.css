@@ -1,0 +1,66 @@
+/* Sticky on Shopify's section wrapper, not the inner header (a sticky child can't outlive its wrapper). */
+.section-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; }
+
+.hdr {
+  height: var(--hdr); background: var(--glass); border-bottom: 1px solid var(--hair);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+.hdr .wrap { height: 100%; display: flex; align-items: center; gap: 28px; }
+.logo { display: inline-flex; color: var(--fg); }
+.logo svg { height: 20px; width: auto; }
+
+.nav { display: flex; gap: 28px; margin-inline-start: 16px; }
+.nav a {
+  position: relative; padding: 6px 0;
+  font-family: var(--f-display); font-size: 12px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); transition: color 0.25s;
+}
+.nav a:hover, .nav a[aria-current="page"] { color: var(--fg); }
+.nav a[aria-current="page"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 1px; background: var(--fg); }
+
+.hdr-r { margin-inline-start: auto; display: flex; align-items: center; gap: 8px; }
+.lang-form { display: contents; }
+.lang { white-space: nowrap; font-family: var(--f-display); font-size: 12px; letter-spacing: 0.16em; border: 1px solid var(--hair-2); padding: 0 12px; }
+.lang b { font-weight: 600; color: var(--fg); }
+.lang span { color: var(--muted); }
+
+.cart-btn { position: relative; gap: 6px; padding: 0 8px; }
+.cart-btn .wheel { width: 24px; height: 24px; }
+.cart-btn .count { font-size: 12px; min-width: 16px; }
+.cart-btn.spin .wheel { animation: wheelSpin 1s cubic-bezier(0.15, 0.8, 0.25, 1); }
+
+.menu-btn { display: none; }
+@media (max-width: 900px) {
+  .nav { display: none; }
+  .menu-btn { display: inline-flex; }
+  .hdr .wrap { gap: 12px; }
+}
+
+/* ---------- Mobile menu (native <dialog>: focus trap, Escape and inert page for free) ---------- */
+.mnav {
+  position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; border: 0;
+  background: var(--navy); color: var(--cloud);
+  display: flex; flex-direction: column;
+  padding: calc(env(safe-area-inset-top, 0px) + 20px) var(--gutR) calc(env(safe-area-inset-bottom, 0px) + 24px) var(--gut);
+  transform: translateY(-100%); transition: transform 0.6s var(--ease-menu);
+}
+.mnav:not([open]) { display: none; }
+.mnav.open { transform: none; }
+.mnav::backdrop { background: transparent; }
+html:has(.mnav[open]) { overflow: hidden; }
+
+.mnav .top { display: flex; justify-content: space-between; align-items: center; }
+.mnav .logo { color: var(--cloud); }
+.mnav .icon-btn, .mnav .btn { color: var(--cloud); border-color: rgba(220, 231, 239, 0.24); }
+.mnav nav { display: flex; flex-direction: column; gap: 8px; margin-top: 48px; }
+.mnav nav a {
+  font-family: var(--f-display); font-size: 40px; font-weight: 600; line-height: 1.15; color: var(--cloud);
+  border-bottom: 1px solid rgba(220, 231, 239, 0.12); padding-block: 10px;
+}
+.mnav.open nav a { animation: fadeUp 0.7s var(--ease-out) both; }
+.mnav.open nav a:nth-child(2) { animation-delay: 0.07s; }
+.mnav.open nav a:nth-child(3) { animation-delay: 0.14s; }
+.mnav.open nav a:nth-child(4) { animation-delay: 0.21s; }
+.mnav.open nav a:nth-child(5) { animation-delay: 0.28s; }
+.mnav .foot { margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; color: rgba(191, 216, 232, 0.72); }
+.mnav :focus-visible { outline-color: var(--blue); }

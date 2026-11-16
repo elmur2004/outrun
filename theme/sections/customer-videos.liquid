@@ -1,0 +1,113 @@
+{{ 'section-customer-videos.css' | asset_url | stylesheet_tag }}
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        <h2{% if section.settings.heading_latin %} class="latin"{% endif %}>{{ section.settings.heading | escape }}</h2>
+      </div>
+      {%- if section.settings.lead != blank -%}
+        <p class="lead">{{ section.settings.lead | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <ul class="reels" role="list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          case forloop.index
+            when 1
+              assign fallback = 'ph-drop.jpg'
+            when 2
+              assign fallback = 'ph-caliper.jpg'
+            when 3
+              assign fallback = 'ph-carrear2.jpg'
+            else
+              assign fallback = 'ph-wheelspin.jpg'
+          endcase
+        -%}
+        <li {{ block.shopify_attributes }}>
+          <button
+            class="reel"
+            type="button"
+            data-reel
+            aria-pressed="false"
+            aria-label="{{ 'reels.clip' | t }} {{ forloop.index }}: {{ block.settings.car | escape }}"
+          >
+            {%- if block.settings.video != blank -%}
+              {{
+                block.settings.video
+                | video_tag:
+                  class: 'reel-media',
+                  muted: true,
+                  loop: true,
+                  playsinline: true,
+                  controls: false,
+                  preload: 'none',
+                  image_size: '720x'
+              }}
+            {%- else -%}
+              {% render 'image',
+                image: block.settings.poster,
+                fallback: fallback,
+                class: 'reel-media',
+                sizes: '(max-width: 900px) 64vw, 25vw'
+              %}
+            {%- endif -%}
+            {%- if block.settings.tag != blank -%}
+              <span class="tag label">{{ block.settings.tag | escape }}</span>
+            {%- endif -%}
+            <span class="play" aria-hidden="true">
+              {%- render 'icon', name: 'play', class: 'i-play' -%}
+              {%- render 'icon', name: 'pause', class: 'i-pause' -%}
+            </span>
+            <span class="meta">
+              <b class="latin">{{ block.settings.car | escape }}</b>
+              <span class="label">{{ block.settings.edition | escape }} · {{ 'reels.tap_to_play' | t }}</span>
+              <span class="bar"><i></i></span>
+            </span>
+          </button>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Customer videos",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "On real cars" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Performance looks better here." },
+    { "type": "checkbox", "id": "heading_latin", "label": "Heading is a brand line (stays in English)", "default": true },
+    { "type": "textarea", "id": "lead", "label": "Text", "default": "Customer videos, filmed on their own cars. Hover or tap to play." }
+  ],
+  "blocks": [
+    {
+      "type": "clip",
+      "name": "Clip",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Vertical 9:16, 1080×1920 MP4. Plays muted on hover or tap."
+        },
+        {
+          "type": "image_picker",
+          "id": "poster",
+          "label": "Image",
+          "info": "Shown when there's no video."
+        },
+        { "type": "text", "id": "car", "label": "Car", "default": "BMW 3 Series" },
+        { "type": "text", "id": "edition", "label": "Edition", "default": "Street" },
+        { "type": "text", "id": "tag", "label": "Tag", "default": "Customer clip" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Customer videos" }]
+}
+{% endschema %}

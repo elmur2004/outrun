@@ -1,0 +1,22 @@
+{% doc %}
+  The four trust promises, from Theme settings → Trust items (edited once, shown in several places).
+{% enddoc %}
+{{ 'component-trust-bar.css' | asset_url | stylesheet_tag }}
+<ul class="trust" role="list">
+  {%- for i in (1..4) -%}
+    {%- liquid
+      assign icon_key = 'trust_' | append: i | append: '_icon'
+      assign title_key = 'trust_' | append: i | append: '_title'
+      assign text_key = 'trust_' | append: i | append: '_text'
+    -%}
+    {%- if settings[title_key] != blank -%}
+      <li>
+        {% render 'icon', name: settings[icon_key] %}
+        <p>
+          <b>{{ settings[title_key] | escape }}</b>
+          <span>{{ settings[text_key] | escape }}</span>
+        </p>
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+</ul>

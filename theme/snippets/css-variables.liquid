@@ -1,0 +1,81 @@
+{% doc %}
+  Design tokens from the handoff (design-handoff/index.html :root and .dark), see docs/00-discovery.md §2.
+  Render once inside <head>. Colors become merchant color-scheme settings in a later step.
+
+  Changes from the prototype, per the discovery decisions:
+  - Body text uses Chakra Petch, not Changa (brand rule C1 / Q5). Changa only draws Arabic characters.
+  - Focus ring is Steel Blue on light backgrounds (OUTRUN Blue fails 3:1 on Cloud White, Q14).
+{% enddoc %}
+<style>
+  :root {
+    /* Brand palette: five colors and one spark (Brand Book p.31) */
+    --black: #05070A;
+    --navy: #0A1E2E;
+    --steel: #3E6F8F;
+    --ice: #BFD8E8;
+    --cloud: #F7FAFC;
+    --line: #DCE7EF;
+    --blue: #7ED3F6; /* spark only: streaks, focus on dark, status dots. Never a fill. */
+    --ink: #0A1E2E;
+
+    /* Light scheme (default) */
+    --bg: #F7FAFC;
+    --fg: #0A1E2E;
+    --muted: #3C5A70;
+    --eyebrow: #3E6F8F;
+    --hair: rgba(10, 30, 46, 0.12);
+    --hair-2: rgba(10, 30, 46, 0.24);
+    --surface: #FFFFFF;
+    --btn-bg: #0A1E2E;
+    --btn-fg: #F7FAFC;
+    --btn-hover: #3E6F8F;
+    --glass: rgba(247, 250, 252, 0.88);
+    --focus: #3E6F8F;
+    --field-border: rgba(10, 30, 46, 0.5); /* 3.3:1 on white, form fields need 3:1 */
+    --grad: linear-gradient(165deg, #3E6F8F 0%, #0A1E2E 60%, #05070A 100%);
+
+    /* Type */
+    --f-display: "Chakra Petch", "Changa", "Segoe UI", system-ui, sans-serif;
+    --f-body: "Chakra Petch", "Changa", "Segoe UI", system-ui, sans-serif;
+    --t-hero: clamp(48px, 8.4vw, 128px);
+    --t-h2: clamp(32px, 4.6vw, 64px);
+    --t-h3: clamp(22px, 2.2vw, 30px);
+
+    /* Layout */
+    --r: 4px;
+    --wrap: 1320px;
+    --hdr: 64px;
+    --gut: max(16px, env(safe-area-inset-left, 0px));
+    --gutR: max(16px, env(safe-area-inset-right, 0px));
+    --section-pad: clamp(72px, 11vw, 148px);
+
+    /* Motion */
+    --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --ease-menu: cubic-bezier(0.7, 0, 0.2, 1);
+    --ease-drawer: cubic-bezier(0.7, 0, 0.15, 1);
+
+    color-scheme: light;
+  }
+
+  /* Dark scheme: re-scopes the surface tokens for the night stages */
+  .dark {
+    --bg: #0A1E2E;
+    --fg: #F7FAFC;
+    --muted: rgba(191, 216, 232, 0.72);
+    --eyebrow: #BFD8E8;
+    --hair: rgba(220, 231, 239, 0.12);
+    --hair-2: rgba(220, 231, 239, 0.24);
+    --surface: rgba(5, 7, 10, 0.4);
+    --btn-bg: #F7FAFC;
+    --btn-fg: #0A1E2E;
+    --btn-hover: #BFD8E8;
+    --glass: rgba(10, 30, 46, 0.86);
+    --focus: #7ED3F6;
+    --field-border: rgba(220, 231, 239, 0.5); /* 4.2:1 on Navy */
+    background: var(--bg);
+    color: var(--fg);
+    color-scheme: dark;
+  }
+  .dark.black { --bg: #05070A; }
+  .dark.night { background: var(--grad); }
+</style>

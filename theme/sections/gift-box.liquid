@@ -1,0 +1,80 @@
+{{ 'section-gift-box.css' | asset_url | stylesheet_tag }}
+
+<section class="sec gift-sec">
+  <div class="wrap">
+    <div class="gift rv dark">
+      <figure>
+        {% render 'image',
+          image: section.settings.image,
+          fallback: 'ph-boxcaps.jpg',
+          alt: section.settings.image_alt,
+          sizes: '(max-width: 860px) 100vw, 55vw'
+        %}
+      </figure>
+      <div class="body">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+        {%- if section.settings.text != blank -%}
+          <p class="lead">{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.occasions != blank -%}
+          <ul class="occasions" role="list">
+            {%- assign occasions = section.settings.occasions | split: ',' -%}
+            {%- for occasion in occasions -%}
+              <li class="chip">{{ occasion | strip | escape }}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- assign product = section.settings.product -%}
+        {%- if product != blank -%}
+          {%- assign variant = product.selected_or_first_available_variant -%}
+          <form action="{{ routes.cart_add_url }}" method="post" data-cart-add>
+            <input type="hidden" name="id" value="{{ variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+            {%- if variant.available -%}
+              <button class="btn solid mag" type="submit">
+                {{- section.settings.button_label | escape }} · <span class="num latin">{{ variant.price | money }}</span>
+              </button>
+            {%- else -%}
+              <button class="btn solid" type="submit" disabled>{{ 'cart.sold_out' | t }}</button>
+            {%- endif -%}
+          </form>
+        {%- else -%}
+          <a class="btn solid mag" href="{{ section.settings.fallback_link }}">{{ section.settings.button_label | escape }}</a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Gift box",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_alt", "label": "Image description", "default": "Four floating caps set in foam inside the OUTRUN gift box" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The gift box" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "A set of four, boxed like a launch." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Foam-set caps in a navy box that opens slowly. For Valentine’s, birthdays and Eid." },
+    { "type": "text", "id": "occasions", "label": "Occasions", "info": "Separated by commas.", "default": "Valentine’s, Birthdays, Eid" },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Gift box product",
+      "info": "The button adds this product to the cart and shows its price."
+    },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Add gift box" },
+    {
+      "type": "url",
+      "id": "fallback_link",
+      "label": "Button link when no product is chosen",
+      "default": "/collections/all"
+    }
+  ],
+  "presets": [{ "name": "Gift box" }]
+}
+{% endschema %}
