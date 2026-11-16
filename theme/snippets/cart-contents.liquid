@@ -39,8 +39,23 @@
             {%- for property in item.properties -%}
               {%- assign first_char = property.first | slice: 0 -%}
               {%- if property.last != blank and first_char != '_' -%}
+                {%- liquid
+                  # Property names stay English on the order (the workshop reads them); shoppers see them translated.
+                  case property.first
+                    when 'Make'
+                      assign prop_label = 'fitment.make' | t
+                    when 'Model'
+                      assign prop_label = 'fitment.model' | t
+                    when 'Car'
+                      assign prop_label = 'cart.prop_car' | t
+                    when 'Design file'
+                      assign prop_label = 'cart.prop_design' | t
+                    else
+                      assign prop_label = property.first
+                  endcase
+                -%}
                 <span>
-                  {{- property.first | escape }}:
+                  {{- prop_label | escape }}:
                   {% if property.last contains '/uploads/' -%}
                     <a href="{{ property.last }}" target="_blank" rel="noopener">{{ property.last | split: '/' | last | escape }}</a>
                   {%- else -%}

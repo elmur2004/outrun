@@ -54,6 +54,30 @@ Store data the theme relies on (created through the Admin API, 2026-11-16; value
 | Product metafields `outrun.*` | `run_size` (integer, stock meter total), `drop_label` (run name), `fitment_required` (boolean; `false` hides make/model, e.g. on the gift box) |
 | Metaobject `fitment_make` ("Fitment make") | Fields `name`, `models` (list), `badge` (image), `position`. Storefront-readable. Entries: Mercedes, BMW, MG. One source for the home fitment tiles, the product page make/model dropdowns and the Shop page make chips; `badge` is the Street edition's 3D face (the make's name is lettered on the cap until artwork is uploaded). Theme settings → Fitment is only a fallback when no entries exist. |
 
+### Arabic
+
+Arabic is published at `/ar/` (right-to-left; `<html dir>` follows the locale). Three layers:
+
+| What | Where it lives | How to change it |
+|---|---|---|
+| Theme interface text (buttons, labels, fitment card, cart) | `theme/locales/ar.json` | Edit the file, push |
+| Section copy and stored theme settings (headings, trust items, FAQ…) | Shopify translations on the OUTRUN dev theme | Translate & Adapt app, or re-run the script below |
+| Store content (page titles, menu items, product text) | Shopify translations | Translate & Adapt app |
+
+- The Arabic is the designer's own Egyptian copy from the prototype (`design-handoff/app.js`, `T.ar`).
+- Brand lines stay in English, as in the prototype: Drive the feeling., Details move differently., Built for a different road., Performance looks better here., and the footer's Always ahead. Always noticed.
+- Option names (Edition, Finish, Custom) and URL handles aren't translated: the theme matches on the option names.
+- Only *stored* values can be translated. That's why `settings_data.json` and `footer-group.json` spell out values that equal their defaults.
+- When the English copy in a template changes, Shopify marks its Arabic as outdated. To refresh from the prototype copy:
+
+```sh
+node tools/i18n/extract-prototype-copy.mjs design-handoff/app.js /tmp/T.json
+shopify store execute --store vjukkp-ct.myshopify.com --query-file tools/i18n/theme-content.graphql --output-file /tmp/theme-content.json
+python3 tools/i18n/build-theme-ar.py /tmp/theme-content.json /tmp/T.json /tmp/theme-ar.json   # lists anything it couldn't match
+# then register /tmp/theme-ar.json in batches of 50 with tools/i18n/register-translations.graphql
+# (variables: {"id": "gid://shopify/OnlineStoreTheme/170183491941", "t": [...]}, add --allow-mutations)
+```
+
 Setup:
 
 - Install Shopify CLI: `npm i -g @shopify/cli` (Node 18+). The first command opens a browser sign-in.

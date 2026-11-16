@@ -8,7 +8,12 @@
         "menu_1_heading": "Shop",
         "menu_1": "outrun-shop",
         "menu_2_heading": "Help",
-        "menu_2": "outrun-help"
+        "menu_2": "outrun-help",
+        "tagline": "Drive the feeling.",
+        "text": "Exclusive pieces, finished to the smallest detail, that put drivers and riders ahead.",
+        "contact_heading": "Talk to us",
+        "copyright_line": "Always ahead. Always noticed.",
+        "show_calm_toggle": true
       }
     }
   },

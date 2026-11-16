@@ -125,16 +125,19 @@
         {%- for option in product.options_with_values -%}
           {%- liquid
             assign kind = 'chips'
+            assign option_label = option.name
             if option.name == edition_name
               assign kind = 'edition'
+              assign option_label = 'editions.edition' | t
             elsif option.name == finish_name
               assign kind = 'finish'
+              assign option_label = 'collection.finish' | t
             endif
             assign caption_lines = settings.edition_captions | newline_to_br | split: '<br />'
           -%}
           <fieldset class="opt opt--{{ kind }}" data-option="{{ forloop.index0 }}">
             <legend class="opt-h">
-              <span class="label">{{ option.name | escape }}</span>
+              <span class="label">{{ option_label | escape }}</span>
               {%- if kind == 'finish' -%}
                 <span class="label latin" data-selected-name>{{ option.selected_value | escape }}</span>
               {%- endif -%}
