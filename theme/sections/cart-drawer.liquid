@@ -1,0 +1,23 @@
+{{ 'component-cart.css' | asset_url | stylesheet_tag }}
+
+<dialog class="drawer" id="CartDrawer" aria-labelledby="CartDrawerTitle">
+  <div class="drawer-streak" aria-hidden="true"><i></i></div>
+  <div class="drawer-inner" data-cart-inner>
+    <header class="drawer-head">
+      <h2 id="CartDrawerTitle">
+        {{- 'cart.title' | t }} <span class="num muted">({{ cart.item_count }})</span>
+      </h2>
+      <button class="icon-btn" type="button" data-cart-close aria-label="{{ 'cart.close' | t }}">
+        {% render 'icon', name: 'close' %}
+      </button>
+    </header>
+    {% render 'cart-contents' %}
+  </div>
+</dialog>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": []
+}
+{% endschema %}

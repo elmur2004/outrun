@@ -1,0 +1,123 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'section-main-collection.css' | asset_url | stylesheet_tag }}
+<script type="module" src="{{ 'collection-grid.js' | asset_url }}"></script>
+
+{%- paginate collection.products by section.settings.per_page -%}
+  {%- liquid
+    assign edition_name = settings.edition_option | default: 'Edition'
+    assign finish_name = settings.finish_option | default: 'Finish'
+    assign edition_values = ''
+    assign finish_values = ''
+    for product in collection.products
+      for option in product.options_with_values
+        if option.name == edition_name
+          for value in option.values
+            assign edition_values = edition_values | append: value.name | append: '|'
+          endfor
+        elsif option.name == finish_name
+          for value in option.values
+            assign finish_values = finish_values | append: value.name | append: '|'
+          endfor
+        endif
+      endfor
+    endfor
+    assign edition_values = edition_values | split: '|' | uniq
+    assign finish_values = finish_values | split: '|' | uniq
+    assign sort_by = collection.sort_by | default: collection.default_sort_by
+  -%}
+  <collection-grid
+    class="col-sec"
+    data-strings='{"inRun": {{ 'fitment.in_run' | t | json | escape }}, "madeDay": {{ 'fitment.made_day' | t | json | escape }}}'
+  >
+    <div class="filters">
+      <div class="wrap filters-row" role="group" aria-label="{{ 'collection.filters' | t }}">
+        {%- if section.settings.show_make -%}
+          <div class="fgroup">
+            <span class="label">{{ 'fitment.make' | t }}</span>
+            <div class="row">
+              <button class="chip" type="button" data-f="make" data-v="all" aria-pressed="true">{{ 'collection.all' | t }}</button>
+              {% render 'fitment-data', format: 'chips' %}
+              <button class="chip" type="button" data-f="make" data-v="other" aria-pressed="false">{{ 'fitment.other' | t }}</button>
+            </div>
+          </div>
+        {%- endif -%}
+        {%- if edition_values.size > 1 -%}
+          <div class="fgroup">
+            <span class="label">{{ 'editions.edition' | t }}</span>
+            <div class="row">
+              <button class="chip" type="button" data-f="edition" data-v="all" aria-pressed="true">{{ 'collection.all' | t }}</button>
+              {%- for value in edition_values -%}
+                <button class="chip latin" type="button" data-f="edition" data-v="{{ value | handleize }}" aria-pressed="false">{{ value | escape }}</button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+        {%- if finish_values.size > 1 -%}
+          <div class="fgroup">
+            <span class="label">{{ 'collection.finish' | t }}</span>
+            <div class="row">
+              <button class="chip" type="button" data-f="finish" data-v="all" aria-pressed="true">{{ 'collection.all' | t }}</button>
+              {%- for value in finish_values -%}
+                <button class="chip latin" type="button" data-f="finish" data-v="{{ value | handleize }}" aria-pressed="false">{{ value | escape }}</button>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+        {%- if section.settings.show_sort -%}
+          <form class="fgroup sort" method="get" action="{{ collection.url }}">
+            <label class="label" for="Sort-{{ section.id }}">{{ 'collection.sort' | t }}</label>
+            <div class="row">
+              <select class="select select--sm" id="Sort-{{ section.id }}" name="sort_by" data-sort>
+                {%- for option in collection.sort_options -%}
+                  <option value="{{ option.value | escape }}" {% if option.value == sort_by %}selected{% endif %}>
+                    {{- option.name | escape -}}
+                  </option>
+                {%- endfor -%}
+              </select>
+              <noscript><button class="btn sm" type="submit">{{ 'collection.apply' | t }}</button></noscript>
+            </div>
+          </form>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="grid" data-grid>
+        {%- for product in collection.products -%}
+          {%- if section.settings.card_per_variant and product.options contains edition_name and product.options contains finish_name -%}
+            {%- for variant in product.variants -%}
+              {% render 'product-card', product: product, variant: variant %}
+            {%- endfor -%}
+          {%- else -%}
+            {% render 'product-card', product: product %}
+          {%- endif -%}
+        {%- else -%}
+          <div class="empty">{{ 'collection.empty' | t }}</div>
+        {%- endfor -%}
+        <div class="empty" data-empty hidden>
+          <p>{{ 'collection.no_match' | t }}</p>
+          <button class="btn sm" type="button" data-clear>{{ 'collection.clear' | t }}</button>
+        </div>
+      </div>
+      {% render 'pagination', paginate: paginate %}
+    </div>
+  </collection-grid>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "card_per_variant",
+      "label": "One card per edition and finish",
+      "info": "As designed: each variant of the caps gets its own card with a spinning 3D render.",
+      "default": true
+    },
+    { "type": "checkbox", "id": "show_make", "label": "Show make chips", "info": "Sets the fitment context: badges, and the make carried to the product page.", "default": true },
+    { "type": "checkbox", "id": "show_sort", "label": "Show sort", "default": true },
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 8, "max": 48, "step": 4, "default": 24 }
+  ]
+}
+{% endschema %}

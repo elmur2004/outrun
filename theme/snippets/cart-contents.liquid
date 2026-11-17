@@ -1,0 +1,164 @@
+{% doc %}
+  Cart lines, cash-on-delivery note, gift upsell and totals. Shared by the cart drawer and the /cart page.
+  Quantity and remove controls are links to /cart/change, so they work without JS; outrun.js does them via AJAX.
+{% enddoc %}
+{%- liquid
+  assign gift = settings.gift_product
+  assign gift_in_cart = false
+  if gift != blank
+    for item in cart.items
+      if item.product_id == gift.id
+        assign gift_in_cart = true
+      endif
+    endfor
+  endif
+-%}
+<div class="cart-scroll">
+  {%- if cart.item_count == 0 -%}
+    <div class="cart-empty">
+      <p>{{ 'cart.empty' | t }}</p>
+      <a class="btn sm" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue' | t }}</a>
+    </div>
+  {%- else -%}
+    <ul class="lines" role="list">
+      {%- for item in cart.items -%}
+        {%- assign title = item.product.title | escape -%}
+        <li class="line">
+          <a class="line-img" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+            {%- if item.image -%}
+              {{ item.image | image_url: width: 160 | image_tag: width: 72, height: 72, alt: '', loading: 'lazy' }}
+            {%- else -%}
+              <img src="{{ 'ph-boxcaps.jpg' | asset_url }}" width="72" height="72" alt="" loading="lazy">
+            {%- endif -%}
+          </a>
+          <div class="line-info">
+            <a class="line-title latin" href="{{ item.url }}">{{ title }}</a>
+            {%- unless item.product.has_only_default_variant -%}
+              <span class="latin">{{ item.variant.title | escape }}</span>
+            {%- endunless -%}
+            {%- for property in item.properties -%}
+              {%- assign first_char = property.first | slice: 0 -%}
+              {%- if property.last != blank and first_char != '_' -%}
+                {%- liquid
+                  # Property names stay English on the order (the workshop reads them); shoppers see them translated.
+                  case property.first
+                    when 'Make'
+                      assign prop_label = 'fitment.make' | t
+                    when 'Model'
+                      assign prop_label = 'fitment.model' | t
+                    when 'Car'
+                      assign prop_label = 'cart.prop_car' | t
+                    when 'Design file'
+                      assign prop_label = 'cart.prop_design' | t
+                    else
+                      assign prop_label = property.first
+                  endcase
+                -%}
+                <span>
+                  {{- prop_label | escape }}:
+                  {% if property.last contains '/uploads/' -%}
+                    <a href="{{ property.last }}" target="_blank" rel="noopener">{{ property.last | split: '/' | last | escape }}</a>
+                  {%- else -%}
+                    <span class="latin">{{ property.last | escape }}</span>
+                  {%- endif -%}
+                </span>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- for discount in item.line_level_discount_allocations -%}
+              <span class="line-discount">{{ discount.discount_application.title | escape }} (−{{ discount.amount | money }})</span>
+            {%- endfor -%}
+            <div class="line-qty">
+              <a
+                class="qty-btn"
+                href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}"
+                data-line-change
+                data-line="{{ forloop.index }}"
+                data-quantity="{{ item.quantity | minus: 1 }}"
+                aria-label="{{ 'cart.decrease' | t: product: title }}"
+                >−</a
+              >
+              <span class="num" aria-label="{{ 'cart.quantity_for' | t: product: title }}">{{ item.quantity }}</span>
+              <a
+                class="qty-btn"
+                href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | plus: 1 }}"
+                data-line-change
+                data-line="{{ forloop.index }}"
+                data-quantity="{{ item.quantity | plus: 1 }}"
+                aria-label="{{ 'cart.increase' | t: product: title }}"
+                >+</a
+              >
+              <a
+                class="rm"
+                href="{{ item.url_to_remove }}"
+                data-line-change
+                data-line="{{ forloop.index }}"
+                data-quantity="0"
+              >
+                {{- 'cart.remove' | t -}}
+              </a>
+            </div>
+          </div>
+          <span class="line-price num latin">
+            {%- if item.original_line_price > item.final_line_price -%}
+              <s>{{ item.original_line_price | money }}</s>
+            {%- endif -%}
+            {{ item.final_line_price | money -}}
+          </span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  {%- if settings.cod_title != blank -%}
+    <div class="cod">
+      {% render 'icon', name: 'box' %}
+      <p>
+        <b>{{ settings.cod_title | escape }}</b>
+        <span>{{ settings.cod_text | escape }}</span>
+      </p>
+    </div>
+  {%- endif -%}
+
+  {%- if gift != blank and gift_in_cart == false and cart.item_count > 0 -%}
+    {%- assign gift_variant = gift.selected_or_first_available_variant -%}
+    {%- if gift_variant.available -%}
+      <form class="gift-up" action="{{ routes.cart_add_url }}" method="post" data-cart-add>
+        <input type="hidden" name="id" value="{{ gift_variant.id }}">
+        <button class="check" type="submit">
+          <span class="bx" aria-hidden="true"></span>
+          {%- if gift.featured_image -%}
+            {{ gift.featured_image | image_url: width: 128 | image_tag: width: 64, height: 44, alt: '', loading: 'lazy' }}
+          {%- else -%}
+            <img src="{{ 'ph-box.jpg' | asset_url }}" width="64" height="44" alt="" loading="lazy">
+          {%- endif -%}
+          <span class="t">
+            <b>{{ 'cart.gift_upsell' | t }}</b>
+            <span>{{ gift.title | escape }}</span>
+          </span>
+          <span class="num latin">{{ gift_variant.price | money }}</span>
+        </button>
+      </form>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+<form class="cart-foot" action="{{ routes.cart_url }}" method="post">
+  {%- for discount in cart.cart_level_discount_applications -%}
+    <div class="tot tot--discount">
+      <span>{{ 'cart.discount' | t }} · {{ discount.title | escape }}</span>
+      <span class="num latin">−{{ discount.total_allocated_amount | money }}</span>
+    </div>
+  {%- endfor -%}
+  <div class="tot">
+    <span>{{ 'cart.subtotal' | t }}</span>
+    <span class="num latin">{{ cart.total_price | money }}</span>
+  </div>
+  <button class="btn solid block" type="submit" name="checkout" {% if cart.item_count == 0 %}disabled{% endif %}>
+    {{- 'cart.checkout' | t }}
+    {% render 'icon', name: 'arrow' -%}
+  </button>
+  <p class="fine">
+    {%- if settings.shipping_note != blank %}{{ settings.shipping_note | escape }} · {% endif -%}
+    {{- 'cart.to_checkout' | t -}}
+  </p>
+</form>

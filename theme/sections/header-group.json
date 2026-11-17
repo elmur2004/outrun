@@ -1,0 +1,16 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "outrun-main",
+        "menu_tagline": "Drive the feeling."
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

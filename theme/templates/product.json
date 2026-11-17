@@ -1,0 +1,191 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "eyebrow": "OUTRUN Car · Drop 01",
+        "title_latin": true,
+        "price_note": "Set of 4",
+        "run_label": "Run 01",
+        "run_note": "Limited run",
+        "enable_upload": true,
+        "show_gift": true,
+        "gift_caption": "Navy box, foam set, gift card",
+        "show_quantity": false,
+        "show_dynamic_checkout": false
+      }
+    },
+    "specs": {
+      "type": "product-specs",
+      "blocks": {
+        "fits": {
+          "type": "spec",
+          "settings": {
+            "label": "Fits",
+            "value": "Mercedes · BMW · MG at launch"
+          }
+        },
+        "set": {
+          "type": "spec",
+          "settings": {
+            "label": "Set",
+            "value": "4 caps + clips"
+          }
+        },
+        "build": {
+          "type": "spec",
+          "settings": {
+            "label": "Build",
+            "value": "Shell, sealed bearing, counterweight, emblem plate"
+          }
+        },
+        "request": {
+          "type": "spec",
+          "settings": {
+            "label": "Request",
+            "value": "Any other car in about a day"
+          }
+        }
+      },
+      "block_order": [
+        "fits",
+        "set",
+        "build",
+        "request"
+      ],
+      "settings": {}
+    },
+    "videos": {
+      "type": "customer-videos",
+      "blocks": {
+        "clip_1": {
+          "type": "clip",
+          "settings": {
+            "car": "BMW 3 Series",
+            "edition": "Street",
+            "tag": "Customer clip 01"
+          }
+        },
+        "clip_2": {
+          "type": "clip",
+          "settings": {
+            "car": "Mercedes C-Class",
+            "edition": "Signature",
+            "tag": "Customer clip 02"
+          }
+        },
+        "clip_3": {
+          "type": "clip",
+          "settings": {
+            "car": "BMW X5",
+            "edition": "Street",
+            "tag": "Customer clip 03"
+          }
+        },
+        "clip_4": {
+          "type": "clip",
+          "settings": {
+            "car": "Mercedes E-Class",
+            "edition": "Signature",
+            "tag": "Customer clip 04"
+          }
+        }
+      },
+      "block_order": [
+        "clip_1",
+        "clip_2",
+        "clip_3",
+        "clip_4"
+      ],
+      "settings": {
+        "eyebrow": "On real cars",
+        "heading": "Performance looks better here.",
+        "heading_latin": true,
+        "lead": "Customer videos, filmed on their own cars. Hover or tap to play."
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "How does the cap stay level?",
+            "answer": "<p>A sealed bearing lets the face turn free of the wheel. A counterweight under the emblem keeps it upright, so the logo reads level at any speed.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Will it fit my car?",
+            "answer": "<p>Mercedes, BMW and MG fit at launch. Pick your model and we send the matching size. Not listed? Send us your car on WhatsApp and we make it in about a day.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "How do I pay?",
+            "answer": "<p>Cash on delivery. Open the box, check the set, then pay the courier.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "What if it doesn’t fit?",
+            "answer": "<p>We swap it. Message us on WhatsApp with a photo and we arrange the exchange.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "What if a cap falls off?",
+            "answer": "<p>We replace it. That is the warranty, in one line.</p>"
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "question": "Can I send it as a gift?",
+            "answer": "<p>Yes. Add the gift box at checkout and include a note for the card.</p>"
+          }
+        },
+        "q7": {
+          "type": "question",
+          "settings": {
+            "question": "What file do I need for Custom?",
+            "answer": "<p>A PNG or SVG with clear edges works best. We send a proof on WhatsApp before we make your set.</p>"
+          }
+        },
+        "q8": {
+          "type": "question",
+          "settings": {
+            "question": "How long is delivery?",
+            "answer": "<p>Delivery times by city show at checkout. Custom and on-request sets add about a day.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "heading": "Straight answers.",
+        "background": "air",
+        "open_first": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "specs",
+    "videos",
+    "faq"
+  ]
+}

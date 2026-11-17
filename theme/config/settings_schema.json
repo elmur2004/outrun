@@ -1,0 +1,216 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "OUTRUN",
+    "theme_version": "0.2.0",
+    "theme_author": "OUTRUN",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "t:settings_schema.brand.name",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "t:settings_schema.brand.settings.favicon.label",
+        "info": "t:settings_schema.brand.settings.favicon.info"
+      }
+    ]
+  },
+  {
+    "name": "Contact",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Used in the footer, the mobile menu, fitment requests and WhatsApp links. Placeholder values: replace before launch."
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_number",
+        "label": "WhatsApp number",
+        "info": "International format, digits only (e.g. 201000000000). Used to build wa.me links.",
+        "default": "201000000000"
+      },
+      {
+        "type": "text",
+        "id": "phone",
+        "label": "Phone (as displayed)",
+        "default": "+20 100 000 0000"
+      },
+      {
+        "type": "text",
+        "id": "email",
+        "label": "Email",
+        "default": "hello@outrun.example"
+      },
+      {
+        "type": "text",
+        "id": "address",
+        "label": "Workshop address",
+        "default": "Workshop address · Cairo (placeholder)"
+      },
+      {
+        "type": "text",
+        "id": "hours",
+        "label": "Reply hours",
+        "default": "Replies within the hour, 10:00–22:00"
+      }
+    ]
+  },
+  {
+    "name": "Motion",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Visitors can always switch to calm motion from the footer, and it's on by default for anyone whose device asks for reduced motion."
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_3d",
+        "label": "Show 3D scenes",
+        "info": "When off, the hero and editions show their images instead.",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "section_sweeps",
+        "label": "Light sweep between sections",
+        "info": "Off by default: the brand allows one light streak per layout.",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "magnetic_buttons",
+        "label": "Magnetic buttons on hover",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Trust items",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Shown in the trust bar on the home, collection and Made Here pages, and on the product page. Edit once here."
+      },
+      { "type": "header", "content": "Item 1" },
+      {
+        "type": "select",
+        "id": "trust_1_icon",
+        "label": "Icon",
+        "options": [
+          { "value": "box", "label": "Box" },
+          { "value": "swap", "label": "Exchange" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "chat", "label": "Chat" }
+        ],
+        "default": "box"
+      },
+      { "type": "text", "id": "trust_1_title", "label": "Title", "default": "Open before you pay" },
+      { "type": "text", "id": "trust_1_text", "label": "Text", "default": "Cash on delivery. Inspect the set first." },
+      { "type": "header", "content": "Item 2" },
+      {
+        "type": "select",
+        "id": "trust_2_icon",
+        "label": "Icon",
+        "options": [
+          { "value": "box", "label": "Box" },
+          { "value": "swap", "label": "Exchange" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "chat", "label": "Chat" }
+        ],
+        "default": "swap"
+      },
+      { "type": "text", "id": "trust_2_title", "label": "Title", "default": "Easy exchange" },
+      { "type": "text", "id": "trust_2_text", "label": "Text", "default": "If it doesn’t fit, we swap it." },
+      { "type": "header", "content": "Item 3" },
+      {
+        "type": "select",
+        "id": "trust_3_icon",
+        "label": "Icon",
+        "options": [
+          { "value": "box", "label": "Box" },
+          { "value": "swap", "label": "Exchange" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "chat", "label": "Chat" }
+        ],
+        "default": "shield"
+      },
+      { "type": "text", "id": "trust_3_title", "label": "Title", "default": "Clear warranty" },
+      { "type": "text", "id": "trust_3_text", "label": "Text", "default": "If it falls off, we replace it." },
+      { "type": "header", "content": "Item 4" },
+      {
+        "type": "select",
+        "id": "trust_4_icon",
+        "label": "Icon",
+        "options": [
+          { "value": "box", "label": "Box" },
+          { "value": "swap", "label": "Exchange" },
+          { "value": "shield", "label": "Shield" },
+          { "value": "chat", "label": "Chat" }
+        ],
+        "default": "chat"
+      },
+      { "type": "text", "id": "trust_4_title", "label": "Title", "default": "Real people" },
+      { "type": "text", "id": "trust_4_text", "label": "Text", "default": "Phone, WhatsApp and a real workshop." }
+    ]
+  },
+  {
+    "name": "Product options",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "How the product page and the collection grid read the caps' options. Names must match the option names in Shopify admin."
+      },
+      { "type": "text", "id": "edition_option", "label": "Edition option name", "info": "Shown as cards with captions.", "default": "Edition" },
+      {
+        "type": "textarea",
+        "id": "edition_captions",
+        "label": "Edition captions",
+        "info": "One per line: Value: caption",
+        "default": "Street: Your car’s own badge, floating level.\nSignature: The OUTRUN symbol. Two speed lines.\nCustom: Your design, cut and finished for your wheels."
+      },
+      { "type": "text", "id": "finish_option", "label": "Finish option name", "info": "Shown as swatches.", "default": "Finish" },
+      { "type": "text", "id": "custom_value", "label": "Custom edition value", "info": "This edition asks for a design file.", "default": "Custom" }
+    ]
+  },
+  {
+    "name": "Fitment",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Makes, models and badge artwork are managed in Content → Metaobjects → Fitment make. This list is only a fallback, used if the store has no Fitment make entries."
+      },
+      {
+        "type": "textarea",
+        "id": "fitment_makes",
+        "label": "Makes and models",
+        "info": "One make per line: Make: model, model, model",
+        "default": "Mercedes: A-Class, C-Class, E-Class, S-Class, CLA, GLA, GLC, GLE\nBMW: 1 Series, 3 Series, 4 Series, 5 Series, 7 Series, X1, X3, X5\nMG: MG4, MG5, MG6, ZS, HS, RX5"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "product",
+        "id": "gift_product",
+        "label": "Gift box product",
+        "info": "Offered as a checkbox on the product page and as an upsell in the cart."
+      },
+      { "type": "header", "content": "Cash on delivery note" },
+      { "type": "text", "id": "cod_title", "label": "Title", "default": "Open before you pay" },
+      { "type": "text", "id": "cod_text", "label": "Text", "default": "Cash on delivery. Check every cap before you hand over a pound." },
+      { "type": "header", "content": "Below the checkout button" },
+      {
+        "type": "text",
+        "id": "shipping_note",
+        "label": "Shipping note",
+        "info": "Say what delivery costs, or where the price appears. Surprise fees lose sales.",
+        "default": "Taxes and delivery at checkout."
+      }
+    ]
+  }
+]

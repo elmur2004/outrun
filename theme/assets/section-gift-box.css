@@ -1,0 +1,11 @@
+.gift-sec { padding-top: 0; }
+.gift { display: grid; grid-template-columns: 1.25fr 1fr; align-items: stretch; border: 1px solid var(--hair); border-radius: var(--r); overflow: hidden; }
+@media (max-width: 860px) { .gift { grid-template-columns: 1fr; } }
+.gift figure { margin: 0; min-height: 320px; position: relative; overflow: hidden; }
+.gift figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.gift .body { padding: clamp(24px, 4vw, 48px); display: flex; flex-direction: column; gap: 20px; justify-content: center; }
+.gift h2 { font-size: clamp(30px, 3.6vw, 48px); }
+.occasions { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.gift form { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.gift .body > .btn, .gift form { align-self: flex-start; } /* button sized to its label, as designed */
+.gift .btn[aria-busy="true"] { opacity: 0.7; pointer-events: none; }

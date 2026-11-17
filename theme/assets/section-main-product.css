@@ -1,0 +1,145 @@
+/* Product page: sticky 3D viewer + buy column. Ported from the handoff's .pdp/.viewer/.buy styles,
+   rebuilt on native radios, selects and a checkbox (the handoff used aria-pressed buttons). */
+
+product-info { display: block; }
+.pdp { display: grid; grid-template-columns: 1.2fr 1fr; border-bottom: 1px solid var(--hair); }
+@media (max-width: 960px) { .pdp { grid-template-columns: 1fr; } }
+
+/* ---------- Viewer ---------- */
+.viewer {
+  position: sticky; top: var(--hdr); height: calc(100vh - var(--hdr)); min-height: 420px; color: var(--cloud);
+  border-inline-end: 1px solid var(--hair); background: radial-gradient(80% 60% at 50% 45%, #0F2A40, var(--black) 72%);
+}
+@media (max-width: 960px) {
+  .viewer { position: relative; top: 0; height: min(112vw, 560px); min-height: 0; border-inline-end: 0; border-bottom: 1px solid var(--hair); }
+}
+.viewer .cv-wrap { position: absolute; inset: 0; }
+.viewer canvas { cursor: grab; touch-action: pan-y; }
+.viewer canvas:active { cursor: grabbing; }
+.viewer .label { color: rgba(191, 216, 232, 0.75); }
+.vtop { position: absolute; z-index: 3; top: 18px; left: var(--gut); right: var(--gutR); display: flex; justify-content: space-between; pointer-events: none; }
+.vbar { position: absolute; z-index: 3; left: var(--gut); right: var(--gutR); bottom: 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.cv-wrap.no-3d ~ .vtop, .cv-wrap.no-3d ~ .vbar { display: none; } /* nothing to rotate or spin */
+.spin-toggle {
+  display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 16px; border-radius: var(--r);
+  border: 1px solid rgba(220, 231, 239, 0.3); color: var(--cloud); background: rgba(5, 7, 10, 0.5); backdrop-filter: blur(8px);
+  font-family: var(--f-display); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+}
+[dir="rtl"] .spin-toggle { letter-spacing: 0; }
+.spin-toggle[aria-pressed="true"] { border-color: var(--blue); box-shadow: 0 0 18px rgba(126, 211, 246, 0.25); }
+.spin-toggle .wheel { width: 20px; height: 20px; }
+.spin-toggle[aria-pressed="true"] .wheel { animation: wheelSpin 1.2s linear infinite; }
+
+/* ---------- Buy column ---------- */
+.buy { display: flex; flex-direction: column; gap: 28px; min-width: 0; padding: clamp(28px, 4vw, 56px) var(--gutR) 56px var(--gut); }
+@media (min-width: 961px) { .buy { padding-inline: 48px; } }
+.buy-head { display: flex; flex-direction: column; gap: 14px; }
+.buy h1 { font-size: clamp(34px, 4vw, 52px); }
+.buy .lead { font-size: 16px; }
+.buy .rte p + p { margin-top: 0.8em; }
+.buy-form { display: flex; flex-direction: column; gap: 28px; }
+
+.price-row { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.price-row .p { font-family: var(--f-display); font-size: 30px; font-weight: 600; }
+.p-compare { font-family: var(--f-display); font-size: 18px; color: var(--muted); }
+
+.stock { display: flex; flex-direction: column; gap: 8px; }
+.stock-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; color: var(--muted); }
+.stock-row b { color: var(--fg); }
+.track { height: 2px; background: var(--hair); position: relative; overflow: hidden; }
+.track i { position: absolute; inset-block: 0; inset-inline-start: 0; background: var(--ice); transition: width 0.6s var(--ease-out); }
+
+/* No-JS variant select: hidden once product-info.js runs (it removes it) */
+.js .no-js-variant { display: none; }
+
+/* ---------- Options ---------- */
+.opt { border: 0; margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.opt-h { float: left; width: 100%; padding: 0; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: baseline; }
+.opt-h + * { clear: both; }
+.opt-values--edition { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.opt-values--finish, .opt-values--chips { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.seg-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; padding: 12px; cursor: pointer;
+  border: 1px solid var(--hair-2); border-radius: var(--r); text-align: start; transition: border-color 0.25s, background 0.25s;
+}
+.seg-card b { font-family: var(--f-display); font-size: 15px; font-weight: 600; }
+.seg-card span { font-size: 12px; color: var(--muted); line-height: 1.3; }
+.seg-card:hover { border-color: var(--btn-hover); }
+input:checked + .seg-card { border-color: var(--fg); background: var(--surface); }
+input:checked + .seg-card b { color: var(--steel); }
+
+.sw {
+  display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 14px 0 8px; cursor: pointer;
+  border: 1px solid var(--hair-2); border-radius: var(--r); font-size: 14px;
+}
+.sw:hover { border-color: var(--btn-hover); }
+.sw i { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--hair-2); background: var(--steel); }
+/* Default swatches for the three finishes; a swatch set in Shopify admin (color or image) overrides these inline */
+.sw i[data-swatch*="gloss"] { background: radial-gradient(circle at 35% 30%, #3A4450, #0C0F13 60%); }
+.sw i[data-swatch*="steel"] { background: radial-gradient(circle at 35% 30%, #A9BCCB, #5D7486 60%, #34434F); }
+.sw i[data-swatch*="ice"], .sw i[data-swatch*="chrome"] { background: radial-gradient(circle at 35% 30%, #FFFFFF, #D3E2EC 50%, #8FA7B8); }
+input:checked + .sw { border-color: var(--fg); }
+
+.opt-values--chips .chip { cursor: pointer; }
+input:checked + .chip { background: var(--btn-bg); color: var(--btn-fg); border-color: var(--btn-bg); }
+
+.is-unavailable b, .is-unavailable span, .chip.is-unavailable { text-decoration: line-through; text-decoration-color: var(--muted); }
+input:focus-visible + label { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+@media (max-width: 420px) { .opt-values--edition { grid-template-columns: 1fr; } }
+
+/* ---------- Fitment ---------- */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.field--wide { grid-column: 1 / -1; }
+.fitment.invalid .select:invalid, .fitment.invalid .input:placeholder-shown { border-color: var(--fg); box-shadow: 0 0 0 1px var(--fg); }
+.note { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border: 1px dashed var(--hair-2); border-radius: var(--r); font-size: 15px; color: var(--muted); }
+.note svg { width: 20px; height: 20px; flex: none; stroke: var(--steel); fill: none; stroke-width: 1.3; } /* fix: Steel, not OUTRUN Blue, on light */
+.note b { color: var(--fg); font-weight: 500; }
+.note a { color: var(--fg); border-bottom: 1px solid var(--steel); }
+
+/* ---------- Custom design upload ---------- */
+.upload { display: flex; gap: 16px; align-items: center; padding: 18px; border: 1px dashed var(--steel); border-radius: var(--r); transition: border-color 0.3s, background 0.3s; }
+.upload[hidden] { display: none; }
+.upload.over { border-color: var(--blue); background: rgba(126, 211, 246, 0.05); }
+.upload .thumb { width: 56px; height: 56px; flex: none; display: grid; place-items: center; overflow: hidden; border-radius: 50%; background: var(--navy); color: var(--ice); border: 1px solid var(--hair-2); }
+.upload .thumb img { width: 100%; height: 100%; object-fit: cover; }
+.upload-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.upload-tx b { font-weight: 500; }
+.upload-tx span { font-size: 13px; color: var(--muted); }
+.upload-btn { flex: none; cursor: pointer; }
+.upload-btn:focus-within { outline: 2px solid var(--focus); outline-offset: 3px; }
+@media (max-width: 420px) { .upload { flex-wrap: wrap; } .upload-btn { width: 100%; } } /* fix A16: text no longer squeezed to one word per line */
+
+/* ---------- Gift box checkbox (base .check styles live in component-cart.css) ---------- */
+.gift-check input:checked ~ .bx { background: var(--fg); border-color: var(--fg); }
+.gift-check input:checked ~ .bx::after {
+  content: ""; width: 9px; height: 5px; border-left: 2px solid var(--bg); border-bottom: 2px solid var(--bg); transform: rotate(-45deg) translate(1px, -1px);
+}
+.gift-check:has(input:checked) { border-color: var(--fg); }
+.gift-check:focus-within { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+.qty-field { max-width: 140px; }
+.atc { display: flex; gap: 10px; }
+.atc .btn { flex: 1; }
+.btn[aria-busy="true"] { opacity: 0.7; pointer-events: none; }
+.dynamic-checkout { margin-top: -18px; }
+
+/* ---------- Mini trust ---------- */
+.mini-trust { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mini-trust li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--muted); }
+.mini-trust svg { width: 20px; height: 20px; flex: none; margin-top: 2px; stroke: var(--eyebrow); fill: none; stroke-width: 1.3; }
+.mini-trust b { color: var(--fg); font-weight: 500; display: block; }
+
+/* ---------- Mobile sticky add to cart ---------- */
+.sticky-atc {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: none; align-items: center; gap: 12px;
+  padding: 10px var(--gutR) calc(10px + env(safe-area-inset-bottom, 0px)) var(--gut);
+  background: var(--glass); backdrop-filter: blur(12px); border-top: 1px solid var(--hair);
+  transform: translateY(110%); transition: transform 0.4s;
+}
+.sticky-atc.on { transform: none; }
+.sticky-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sticky-title { font-family: var(--f-display); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sticky-atc .p { font-family: var(--f-display); font-size: 16px; font-weight: 600; white-space: nowrap; }
+@media (max-width: 960px) { .sticky-atc { display: flex; } }

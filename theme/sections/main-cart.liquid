@@ -1,0 +1,24 @@
+{{ 'component-cart.css' | asset_url | stylesheet_tag }}
+
+<section class="sec cart-page" data-cart-page>
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">{{ 'cart.title' | t }}</span>
+        <h1>{{ section.settings.heading | escape }}</h1>
+      </div>
+    </div>
+    <div class="cart-page-body">
+      {% render 'cart-contents' %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Your set, ready to go." }
+  ]
+}
+{% endschema %}

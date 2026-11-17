@@ -1,0 +1,63 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+
+<section class="sec search-sec">
+  <div class="wrap">
+    <form class="search-form" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="visually-hidden" for="Search-{{ section.id }}">{{ 'search.title' | t }}</label>
+      <input
+        class="input"
+        type="search"
+        id="Search-{{ section.id }}"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'search.placeholder' | t }}"
+      >
+      <input type="hidden" name="options[prefix]" value="last">
+      <button class="btn solid" type="submit">{{ 'search.submit' | t }}</button>
+    </form>
+
+    {%- if search.performed -%}
+      {%- assign terms = search.terms | escape -%}
+      <p class="search-count" role="status">
+        {%- if search.results_count > 0 -%}
+          {{ 'search.results' | t: count: search.results_count, terms: terms }}
+        {%- else -%}
+          {{ 'search.no_results' | t: terms: terms }}
+        {%- endif -%}
+      </p>
+      {%- paginate search.results by 24 -%}
+        {%- if search.results_count > 0 -%}
+          <div class="grid">
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'product' -%}
+                {% render 'product-card', product: item %}
+              {%- else -%}
+                <a class="card card--text" href="{{ item.url }}">
+                  <div class="info">
+                    <span class="label">{{ item.object_type | escape }}</span>
+                    <h3>{{ item.title | escape }}</h3>
+                  </div>
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        {% render 'pagination', paginate: paginate %}
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .search-form { display: flex; gap: 10px; max-width: 720px; margin-bottom: 32px; }
+  .search-form .input { flex: 1; }
+  .search-count { color: var(--muted); margin-bottom: 24px; }
+  .card--text .info { border-top: 0; min-height: 140px; justify-content: flex-end; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Search results",
+  "settings": []
+}
+{% endschema %}

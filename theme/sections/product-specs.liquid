@@ -1,0 +1,37 @@
+<section class="sec specs-sec" style="padding-bottom: 0;">
+  <div class="wrap">
+    <dl class="specs">
+      {%- for block in section.blocks -%}
+        <div {{ block.shopify_attributes }}>
+          <dt class="label">{{ block.settings.label | escape }}</dt>
+          <dd>{{ block.settings.value | escape }}</dd>
+        </div>
+      {%- endfor -%}
+    </dl>
+  </div>
+</section>
+
+{% stylesheet %}
+  .specs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin: 0; background: var(--hair); border: 1px solid var(--hair); }
+  @media (max-width: 860px) { .specs { grid-template-columns: 1fr 1fr; } }
+  .specs > div { background: var(--surface); padding: 22px; display: flex; flex-direction: column; gap: 8px; }
+  .specs dd { margin: 0; font-family: var(--f-display); font-size: 18px; font-weight: 600; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Specs",
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "spec",
+      "name": "Spec",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Fits" },
+        { "type": "text", "id": "value", "label": "Value", "default": "Mercedes · BMW · MG at launch" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Specs" }]
+}
+{% endschema %}

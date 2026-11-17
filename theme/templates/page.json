@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "header": {
+      "type": "page-header",
+      "settings": {
+        "glow_word": "",
+        "eyebrow": "OUTRUN",
+        "heading": "",
+        "lead": ""
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "settings": {}
+    }
+  },
+  "order": [
+    "header",
+    "main"
+  ]
+}

@@ -1,0 +1,29 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+
+<section class="sec">
+  <div class="wrap">
+    <div class="grid">
+      {%- for collection in collections -%}
+        <a class="card" href="{{ collection.url }}">
+          <div class="shot">
+            {%- assign image = collection.featured_image | default: collection.products.first.featured_image -%}
+            {%- if image -%}
+              {{ image | image_url: width: 640 | image_tag: widths: '320, 480, 640', sizes: '(max-width: 980px) 50vw, 33vw', alt: '', loading: 'lazy', class: 'card-img' }}
+            {%- endif -%}
+          </div>
+          <div class="info">
+            <span class="label num">{{ collection.products_count }}</span>
+            <h3>{{ collection.title | escape }}</h3>
+          </div>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections list",
+  "settings": []
+}
+{% endschema %}

@@ -19,8 +19,8 @@ Date: 2026-11-07
 | Store URL | **Unknown, need it (Q1).** The Shopify connection in this session also needs you to sign in again (`/mcp`). | — |
 | Languages | English plus Egyptian Arabic (RTL). The prototype ships full copy in both. | `app.js` `T.en` / `T.ar` |
 | Currency / markets | EGP (prototype placeholders). Egypt at launch, Saudi/Gulf later through a local partner. | `app.js`, Foundation p.32, p.36 |
-| Handoff | `./Outrun Store Design/` | — |
-| Brand | `./OUTRUN Branding/` | — |
+| Handoff | `./design-handoff/` (was `Outrun Store Design/`) | — |
+| Brand | `./brand/` (was `OUTRUN Branding/`; not in git) | — |
 | Apps | Unknown (Q10) | — |
 | Customer accounts | Unknown (Q9) | — |
 | Theme name | `outrun-theme` (proposed) | — |
@@ -30,14 +30,14 @@ Date: 2026-11-07
 
 ## 1. File inventory
 
-### 1.1 Design handoff: `Outrun Store Design/`
+### 1.1 Design handoff: `design-handoff/`
 
 | File | What it is | How I'll use it |
 |---|---|---|
 | `index.html` (550 lines of inline CSS) | Every design token (`:root`, `.dark`), every component style, responsive rules, motion keyframes, Arabic overrides. Also the empty DOM shell: header, main, footer, drawer, mobile menu, sticky add-to-cart, toast, dev panel. | Tokens go to `snippets/css-variables.liquid` and `assets/base.css`. Component CSS is split per section. |
 | `app.js` (77 KB) | Hash router for 6 "pages"; full EN/AR copy (about 230 keys); page templates; fitment, collection, product, cart, notify and menu behavior; mock data (`PRICE`, `STOCK`, `MODELS`); Shopify handoff notes (`SCHEMA`, `THEME_NOTES`). | Copy is split two ways: UI strings go to `locales/*.json`, merchant content goes to section defaults. Behavior is re-implemented as vanilla custom elements. Mock data is replaced by Liquid objects, settings and metafields. |
 | `three-scenes.js` (28 KB) | Three.js r160 procedural 3D: wheel, floating cap (shell, bearing, counterweight, emblem plate), hero scroll story, editions showcase, product 360° viewer, client-side 360° thumbnail renderer. | Adapted into `assets/outrun-3d.js`, with three.js self-hosted as a theme asset. Treated as progressive enhancement (§6.6). |
-| `img/*.jpg` (10 files) | Photos. All are crops of the brand-book mockup renders. | Optimized and exported to `_upload-to-shopify-files/` as placeholders (§8 Q8). |
+| `img/*.jpg` (10 files) | Photos. All are crops of the brand-book mockup renders. | Optimized and exported to `store-files/` as placeholders (§8 Q8). |
 
 **Photos, and where the design uses them:**
 
@@ -53,7 +53,7 @@ Date: 2026-11-07
 | `box.jpg` | 1500×633 | Gift checkbox thumbnail (64×44), gift product card (1:1), cart line | Fine for thumbnails |
 | `ride.jpg` / `kart.jpg` | 700×437 / 700×430 | "Coming next" silhouette cards (4:3 and 16:10, up to about 1290px wide) | About 1.8× upscaled |
 
-### 1.2 Brand: `OUTRUN Branding/`
+### 1.2 Brand: `brand/`
 
 | File(s) | What it is | How I'll use it |
 |---|---|---|
@@ -585,7 +585,7 @@ All will be designed in the same visual language:
    - The stock meter reads real inventory.
    - Heat-test counters stay hidden until you enter real numbers (brand rule: no untested claims).
 8. **Imagery.** Do higher-resolution originals or real product photos and videos exist?
-   *Default:* ship the 10 current images optimized as placeholders in `_upload-to-shopify-files/` and list the sizes needed: hero ≥ 2400px wide, Made Here hero ≥ 2400×1350, reels as 1080×1920 MP4.
+   *Default:* ship the 10 current images optimized as placeholders in `store-files/` and list the sizes needed: hero ≥ 2400px wide, Made Here hero ≥ 2400×1350, reels as 1080×1920 MP4.
 9. **Customer accounts.**
    *Default:* new customer accounts, so no `customers/*` templates; the account icon links to `/account`.
 10. **Apps.** Reviews, WhatsApp chat, anything else?
@@ -616,4 +616,4 @@ All will be designed in the same visual language:
     - Edition and Finish chips are real Search & Discovery filters.
     - I add a compact Sort select.
     - Pagination appears only when needed.
-22. **Repo layout (Phase 1 detail):** `D:\Outrun` becomes the git root. The theme lives in `theme/` and docs in `docs/`. The handoff and brand folders stay read-only and are ignored by git (about 70 MB of binaries).
+22. **Repo layout (Phase 1 detail):** The repo root is the git root. The theme lives in `theme/` and docs in `docs/`. The handoff (`design-handoff/`) stays read-only; the brand pack (`brand/`) is ignored by git (about 67 MB, confidential PDFs). **Done, see README.md.**

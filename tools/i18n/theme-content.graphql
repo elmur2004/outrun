@@ -1,0 +1,6 @@
+# Translatable content of the OUTRUN dev theme: stored settings (general.*) and JSON template text (section.*).
+query ThemeContent {
+  translatableResource(resourceId: "gid://shopify/OnlineStoreTheme/170183491941") {
+    translatableContent { key value digest }
+  }
+}

@@ -1,0 +1,82 @@
+{% doc %}
+  Responsive image from a section setting, or a bundled placeholder photo when the setting is empty.
+  Placeholders (assets/ph-*.jpg) are crops of brand mockups, for layout only. Replace them before launch.
+
+  @param {object} [image] - image object from an image_picker setting
+  @param {string} fallback - placeholder asset name, e.g. 'ph-wheelspin.jpg'
+  @param {string} [alt] - alt text. Omit for decorative images (most images in this design are).
+  @param {string} [class] - CSS class on the <img>
+  @param {string} [sizes] - sizes attribute, defaults to 100vw
+  @param {boolean} [eager] - true for the LCP image: eager loading, high fetch priority
+{% enddoc %}
+{%- liquid
+  assign img_sizes = sizes | default: '100vw'
+  assign img_alt = alt | default: ''
+  assign img_loading = 'lazy'
+  assign img_priority = 'auto'
+  if eager
+    assign img_loading = 'eager'
+    assign img_priority = 'high'
+  endif
+-%}
+{%- if image -%}
+  {{
+    image
+    | image_url: width: 2400
+    | image_tag:
+      widths: '480, 750, 1100, 1500, 1800, 2400',
+      sizes: img_sizes,
+      class: class,
+      alt: img_alt,
+      loading: img_loading,
+      fetchpriority: img_priority
+  }}
+{%- else -%}
+  {%- liquid
+    case fallback
+      when 'ph-wheelspin.jpg'
+        assign w = 1100
+        assign h = 1078
+      when 'ph-workshop.jpg'
+        assign w = 1600
+        assign h = 375
+      when 'ph-caliper.jpg'
+        assign w = 1000
+        assign h = 851
+      when 'ph-boxcaps.jpg'
+        assign w = 1500
+        assign h = 602
+      when 'ph-carrear.jpg'
+        assign w = 1100
+        assign h = 1152
+      when 'ph-carrear2.jpg'
+        assign w = 1000
+        assign h = 1053
+      when 'ph-drop.jpg'
+        assign w = 600
+        assign h = 916
+      when 'ph-box.jpg'
+        assign w = 1500
+        assign h = 633
+      when 'ph-ride.jpg'
+        assign w = 700
+        assign h = 437
+      when 'ph-kart.jpg'
+        assign w = 700
+        assign h = 430
+      else
+        assign w = 1200
+        assign h = 800
+    endcase
+  -%}
+  <img
+    src="{{ fallback | asset_url }}"
+    alt="{{ img_alt | escape }}"
+    width="{{ w }}"
+    height="{{ h }}"
+    class="{{ class }}"
+    loading="{{ img_loading }}"
+    fetchpriority="{{ img_priority }}"
+    decoding="async"
+  >
+{%- endif -%}

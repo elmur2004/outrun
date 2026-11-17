@@ -1,0 +1,148 @@
+{{ 'section-fitment.css' | asset_url | stylesheet_tag }}
+<script type="module" src="{{ 'fitment.js' | asset_url }}"></script>
+
+{%- liquid
+  assign anchor = section.settings.anchor | handleize | default: 'fit'
+  assign car_slot = '<span class="latin" data-car></span>'
+  assign wa_number = settings.whatsapp_number | remove: '+' | remove: ' '
+-%}
+<fitment-picker class="sec pattern-air" id="{{ anchor }}">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      </div>
+      {%- if section.settings.lead != blank -%}
+        <p class="lead">{{ section.settings.lead | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <div class="fit-grid">
+      <div>
+        <p class="fit-steps" id="{{ section.id }}-make">01 · {{ 'fitment.make' | t }}</p>
+        <div class="makes" role="group" aria-labelledby="{{ section.id }}-make">
+          {% render 'fitment-data', format: 'tiles' %}
+          {%- if section.settings.show_other -%}
+            <button class="make" type="button" data-make="other" aria-pressed="false">
+              <span>{{ 'fitment.other' | t }}</span>
+              <b class="latin" aria-hidden="true">+</b>
+            </button>
+          {%- endif -%}
+        </div>
+
+        <p class="fit-steps fit-steps--model" id="{{ section.id }}-model">02 · {{ 'fitment.model' | t }}</p>
+        <div class="models" role="group" aria-labelledby="{{ section.id }}-model" data-models>
+          <span class="muted">{{ 'fitment.pick_make' | t }}</span>
+        </div>
+      </div>
+
+      <div class="fit-card dark{% if section.settings.card_streak %} fit-card--streak{% endif %}" data-card aria-live="polite">
+        <span class="label">{{ 'fitment.fitment' | t }}</span>
+        <h3>{{ 'fitment.wait_heading' | t }}</h3>
+        <p class="muted">{{ 'fitment.wait_text' | t }}</p>
+        <i class="streak" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+
+  <template data-tpl="wait">
+    <span class="label">{{ 'fitment.fitment' | t }}</span>
+    <h3>{{ 'fitment.wait_heading' | t }}</h3>
+    <p class="muted">{{ 'fitment.wait_text' | t }}</p>
+    <i class="streak" aria-hidden="true"></i>
+  </template>
+  <template data-tpl="ready">
+    <span class="ok">{{ 'fitment.in_run' | t }}</span>
+    <h3>{{ 'fitment.ready_heading_html' | t: car: car_slot }}</h3>
+    <p class="muted">{{ 'fitment.ready_text_html' | t: car: car_slot }}</p>
+    <a class="btn solid mag fit-cta" data-shop href="{{ section.settings.link }}">
+      <span>{{ 'fitment.ready_cta_html' | t: car: car_slot }}</span>
+      {% render 'icon', name: 'arrow' -%}
+    </a>
+    <i class="streak" aria-hidden="true"></i>
+  </template>
+  <template data-tpl="other">
+    <span class="ok">{{ 'fitment.made_day' | t }}</span>
+    <h3>{{ 'fitment.other_heading' | t }}</h3>
+    <p class="muted">{{ 'fitment.other_text' | t }}</p>
+    <a class="btn solid fit-cta" data-wa href="https://wa.me/{{ wa_number }}" target="_blank" rel="noopener">
+      {{- 'fitment.whatsapp_cta' | t }}
+      {% render 'icon', name: 'arrow' -%}
+    </a>
+    <i class="streak" aria-hidden="true"></i>
+  </template>
+  <template data-tpl="other-input">
+    <label class="visually-hidden" for="{{ section.id }}-car">{{ 'fitment.other_label' | t }}</label>
+    <input class="input other-car" id="{{ section.id }}-car" type="text" placeholder="{{ 'fitment.other_placeholder' | t }}" autocomplete="off">
+  </template>
+
+  <script type="application/json" data-fitment>
+    {"whatsapp": {{ wa_number | json }}, "whatsappMessage": {{ 'fitment.whatsapp_message' | t | json }}, "data": {% render 'fitment-data', format: 'json' %}}
+  </script>
+</fitment-picker>
+
+{% schema %}
+{
+  "name": "Fitment",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Find your fit"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Made to the millimetre for your car."
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Text",
+      "default": "Mercedes, BMW and MG at launch. Anything else, we make in about a day."
+    },
+    {
+      "type": "paragraph",
+      "content": "Makes and models are edited once, in Theme settings → Fitment (or as Fitment make metaobject entries), and shared with the product page."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Product link",
+      "info": "Where \"Shop for my car\" goes. The chosen make and model are added to the link.",
+      "default": "/collections/all"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_other",
+      "label": "Show \"Other\" make",
+      "info": "Lets visitors request any other car on WhatsApp (number from Theme settings → Contact).",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "anchor",
+      "label": "Anchor",
+      "info": "Buttons can link here with #anchor.",
+      "default": "fit"
+    },
+    {
+      "type": "checkbox",
+      "id": "card_streak",
+      "label": "Light streak on the result card",
+      "info": "Off by default: the brand allows one streak per layout.",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fitment"
+    }
+  ]
+}
+{% endschema %}

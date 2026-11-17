@@ -1,0 +1,53 @@
+/* Made Here page: workshop hero, craft steps, heat test, film (handoff: .mh-hero, .step, .heat, .counters, .film). */
+
+/* Workshop hero */
+.mh-hero { position: relative; min-height: min(88vh, 860px); display: flex; align-items: flex-end; overflow: hidden; color: var(--cloud); border-bottom: 1px solid var(--hair); }
+.mh-hero .mh-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.55); }
+.mh-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5, 7, 10, 0.2), rgba(5, 7, 10, 0.9)); }
+.mh-hero .wrap { position: relative; z-index: 2; width: 100%; padding-block: 72px; display: flex; flex-direction: column; gap: 20px; }
+.mh-hero h1 { font-size: clamp(44px, 7vw, 108px); }
+.mh-hero .bgw { position: absolute; z-index: 1; top: 16%; inset-inline-start: -1vw; font-size: clamp(80px, 15vw, 240px); opacity: 0.16; }
+
+/* Craft steps: alternating image and text, outlined numbers, image settles as it reveals */
+.step { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 5vw, 72px); align-items: center; padding-block: clamp(48px, 7vw, 96px); border-bottom: 1px solid var(--hair); }
+.step:nth-child(even) figure { order: 2; }
+@media (max-width: 820px) { .step { grid-template-columns: 1fr; } .step:nth-child(even) figure { order: 0; } }
+.step figure { margin: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r); }
+.step figure img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.6s var(--ease-out); }
+.js .step.pre figure img { transform: scale(1.08); }
+.step .tx { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.step .n { font-family: var(--f-display); font-size: clamp(64px, 9vw, 140px); font-weight: 300; line-height: 0.8; color: transparent; -webkit-text-stroke: 1px var(--steel); }
+.step h2 { font-size: clamp(28px, 3.6vw, 48px); }
+
+/* Heat test */
+.heat { position: relative; overflow: hidden; color: var(--cloud); }
+.heat .wrap { position: relative; display: flex; flex-direction: column; gap: 40px; }
+.heat .sec-head { margin: 0; }
+.counters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--hair-2); border: 1px solid var(--hair-2); }
+@media (max-width: 700px) { .counters { grid-template-columns: 1fr; } }
+.counters > div { background: rgba(5, 7, 10, 0.55); padding: 28px; display: flex; flex-direction: column; gap: 6px; }
+.counters b { font-family: var(--f-display); font-size: clamp(48px, 6vw, 84px); font-weight: 600; line-height: 1; }
+.counters b small { font-size: 0.4em; font-weight: 400; color: var(--ice); margin-inline-start: 6px; }
+.counters > div > span { color: var(--muted); }
+/* Chakra Petch has no tabular figures: a hidden copy of the final value reserves the width, so counting doesn't jitter */
+.count { display: inline-grid; }
+.count > * { grid-area: 1 / 1; }
+.count-ghost { visibility: hidden; }
+.counters--draft { outline: 1px dashed #E8C66B; outline-offset: 6px; }
+.draft-note { color: #E8C66B; font-size: 13px; }
+
+/* Film */
+.film {
+  position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; padding: 0; text-align: start;
+  border-radius: var(--r); border: 1px solid var(--hair); color: var(--cloud); background: var(--black);
+}
+.film img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.film.playing img { animation: filmKb 9s linear infinite alternate; }
+@keyframes filmKb { from { transform: scale(1.04) translate(0, 0); } to { transform: scale(1.22) translate(-3%, -4%); } }
+.film .ov { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding: 20px; background: linear-gradient(transparent 50%, rgba(5, 7, 10, 0.85)); }
+.film .ov-tx { display: flex; flex-direction: column; gap: 6px; }
+.film .label { color: rgba(191, 216, 232, 0.8); }
+.film b { font-family: var(--f-display); font-size: 22px; }
+.play-round { width: 52px; height: 52px; flex: none; display: grid; place-items: center; border-radius: 50%; border: 1px solid rgba(220, 231, 239, 0.3); transition: border-color 0.3s; }
+.film:hover .play-round { border-color: var(--ice); }
+.film-video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: var(--r); background: var(--black); }

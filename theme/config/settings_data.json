@@ -1,0 +1,35 @@
+{
+  "current": {
+    "gift_product": "gift-box",
+    "address": "Workshop address · Cairo (placeholder)",
+    "hours": "Replies within the hour, 10:00–22:00",
+    "cod_title": "Open before you pay",
+    "cod_text": "Cash on delivery. Check every cap before you hand over a pound.",
+    "shipping_note": "Taxes and delivery at checkout.",
+    "edition_option": "Edition",
+    "edition_captions": "Street: Your car’s own badge, floating level.\nSignature: The OUTRUN symbol. Two speed lines.\nCustom: Your design, cut and finished for your wheels.",
+    "finish_option": "Finish",
+    "custom_value": "Custom",
+    "trust_1_icon": "box",
+    "trust_1_title": "Open before you pay",
+    "trust_1_text": "Cash on delivery. Inspect the set first.",
+    "trust_2_icon": "swap",
+    "trust_2_title": "Easy exchange",
+    "trust_2_text": "If it doesn’t fit, we swap it.",
+    "trust_3_icon": "shield",
+    "trust_3_title": "Clear warranty",
+    "trust_3_text": "If it falls off, we replace it.",
+    "trust_4_icon": "chat",
+    "trust_4_title": "Real people",
+    "trust_4_text": "Phone, WhatsApp and a real workshop.",
+    "whatsapp_number": "201000000000",
+    "phone": "+20 100 000 0000",
+    "email": "hello@outrun.example",
+    "enable_3d": true,
+    "section_sweeps": false,
+    "magnetic_buttons": true
+  },
+  "presets": {
+    "Default": {}
+  }
+}

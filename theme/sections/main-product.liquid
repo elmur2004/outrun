@@ -1,0 +1,473 @@
+{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+<script type="module" src="{{ 'product-info.js' | asset_url }}"></script>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign form_id = 'ProductForm-' | append: section.id
+  assign edition_name = settings.edition_option | default: 'Edition'
+  assign finish_name = settings.finish_option | default: 'Finish'
+  assign custom_value = settings.custom_value | default: 'Custom'
+  assign wa_number = settings.whatsapp_number | remove: '+' | remove: ' '
+  assign gift = settings.gift_product
+
+  assign edition_index = -1
+  assign finish_index = -1
+  for option in product.options
+    if option == edition_name
+      assign edition_index = forloop.index0
+    elsif option == finish_name
+      assign finish_index = forloop.index0
+    endif
+  endfor
+
+  assign is_custom = false
+  if edition_index >= 0 and current_variant.options[edition_index] == custom_value
+    assign is_custom = true
+  endif
+
+  assign fitment_required = true
+  if product.metafields.outrun.fitment_required.value == false
+    assign fitment_required = false
+  endif
+
+  assign run_size = product.metafields.outrun.run_size.value | default: 0
+  assign run_label = product.metafields.outrun.drop_label.value | default: section.settings.run_label
+  assign eyebrow = section.settings.eyebrow
+-%}
+
+<product-info class="pdp" data-url="{{ product.url }}">
+  {%- comment -%} Viewer: 3D cap and wheel, with the product image as fallback {%- endcomment -%}
+  <div class="viewer dark">
+    <div class="cv-wrap">
+      {%- if product.featured_media -%}
+        {{
+          product.featured_media.preview_image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'fallback',
+            widths: '600, 900, 1200, 1600',
+            sizes: '(max-width: 960px) 100vw, 55vw',
+            alt: product.featured_media.alt,
+            loading: 'eager',
+            fetchpriority: 'high'
+        }}
+      {%- else -%}
+        {% render 'image', image: section.settings.image, fallback: 'ph-caliper.jpg', class: 'fallback', eager: true %}
+      {%- endif -%}
+      <canvas aria-hidden="true"></canvas>
+    </div>
+    <div class="vtop" aria-hidden="true">
+      <span class="label">{{ 'product.drag' | t }}</span>
+      <span class="label latin">360°</span>
+    </div>
+    <div class="vbar">
+      <button class="spin-toggle" type="button" data-spin aria-pressed="false">
+        {% render 'icon', name: 'wheel' %}
+        <span>{{ 'product.spin' | t }}</span>
+      </button>
+      <span class="label" data-live hidden>{{ 'product.live' | t }}</span>
+    </div>
+  </div>
+
+  <div class="buy">
+    <div class="buy-head">
+      {%- if eyebrow != blank -%}
+        <span class="eyebrow latin">{{ eyebrow | escape }}</span>
+      {%- endif -%}
+      <h1{% if section.settings.title_latin %} class="latin"{% endif %}>{{ product.title | escape }}</h1>
+      {%- if product.description != blank -%}
+        <div class="lead rte">{{ product.description }}</div>
+      {%- endif -%}
+    </div>
+
+    <div class="price-row">
+      <span class="p num latin" data-price>{{ current_variant.price | money }}</span>
+      <s class="p-compare num latin" data-compare {% unless current_variant.compare_at_price > current_variant.price %}hidden{% endunless %}>
+        {{- current_variant.compare_at_price | money -}}
+      </s>
+      {%- if section.settings.price_note != blank -%}
+        <span class="label">{{ section.settings.price_note | escape }}</span>
+      {%- endif -%}
+    </div>
+
+    {%- if run_size > 0 -%}
+      {%- liquid
+        assign show_stock = false
+        if current_variant.inventory_management == 'shopify' and current_variant.inventory_quantity > 0
+          assign show_stock = true
+        endif
+        assign stock_pct = current_variant.inventory_quantity | times: 100.0 | divided_by: run_size | at_most: 100 | at_least: 0
+      -%}
+      {%- capture count_html -%}<b class="num" data-stock-count>{{ current_variant.inventory_quantity }}</b>{%- endcapture -%}
+      <div class="stock" data-stock {% unless show_stock %}hidden{% endunless %}>
+        <div class="stock-row">
+          <span>{{ 'product.stock_html' | t: count: count_html, total: run_size, run: run_label }}</span>
+          <span>{{ section.settings.run_note | escape }}</span>
+        </div>
+        <div class="track"><i data-stock-bar style="width: {{ stock_pct }}%"></i></div>
+      </div>
+    {%- endif -%}
+
+    {%- form 'product', product, id: form_id, class: 'buy-form' -%}
+      {%- comment -%} Without JS this select picks the variant; product-info.js swaps it for a hidden input. {%- endcomment -%}
+      <div class="field no-js-variant" data-no-js-variant>
+        <label for="{{ form_id }}-id">{{ 'product.choose' | t }}</label>
+        <select class="select" id="{{ form_id }}-id" name="id">
+          {%- for variant in product.variants -%}
+            <option value="{{ variant.id }}" {% if variant == current_variant %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+              {{- variant.title | escape }} · {{ variant.price | money }}
+            </option>
+          {%- endfor -%}
+        </select>
+      </div>
+
+      {%- unless product.has_only_default_variant -%}
+        {%- for option in product.options_with_values -%}
+          {%- liquid
+            assign kind = 'chips'
+            assign option_label = option.name
+            if option.name == edition_name
+              assign kind = 'edition'
+              assign option_label = 'editions.edition' | t
+            elsif option.name == finish_name
+              assign kind = 'finish'
+              assign option_label = 'collection.finish' | t
+            endif
+            assign caption_lines = settings.edition_captions | newline_to_br | split: '<br />'
+          -%}
+          <fieldset class="opt opt--{{ kind }}" data-option="{{ forloop.index0 }}">
+            <legend class="opt-h">
+              <span class="label">{{ option_label | escape }}</span>
+              {%- if kind == 'finish' -%}
+                <span class="label latin" data-selected-name>{{ option.selected_value | escape }}</span>
+              {%- endif -%}
+            </legend>
+            <div class="opt-values opt-values--{{ kind }}">
+              {%- for value in option.values -%}
+                {%- assign input_id = form_id | append: '-' | append: option.position | append: '-' | append: forloop.index -%}
+                <input
+                  class="visually-hidden"
+                  type="radio"
+                  id="{{ input_id }}"
+                  name="{{ form_id }}-option-{{ option.position }}"
+                  form="{{ form_id }}-options"
+                  value="{{ value.name | escape }}"
+                  {% if value.selected %}
+                    checked
+                  {% endif %}
+                >
+                {%- case kind -%}
+                  {%- when 'edition' -%}
+                    {%- assign caption = '' -%}
+                    {%- for line in caption_lines -%}
+                      {%- assign parts = line | strip | split: ':' -%}
+                      {%- assign key = parts.first | strip -%}
+                      {%- if key == value.name -%}
+                        {%- assign caption = line | strip | remove_first: parts.first | remove_first: ':' | strip -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    <label class="seg-card" for="{{ input_id }}">
+                      <b class="latin">{{ value.name | escape }}</b>
+                      {%- if caption != blank -%}
+                        <span>{{ caption | escape }}</span>
+                      {%- endif -%}
+                    </label>
+                  {%- when 'finish' -%}
+                    {%- liquid
+                      assign sw_style = ''
+                      if value.swatch.image
+                        assign sw_url = value.swatch.image | image_url: width: 64
+                        assign sw_style = 'background: url(' | append: sw_url | append: ') center / cover;'
+                      elsif value.swatch.color
+                        assign sw_style = 'background: ' | append: value.swatch.color | append: ';'
+                      endif
+                    -%}
+                    <label class="sw" for="{{ input_id }}">
+                      <i data-swatch="{{ value.name | handleize }}" style="{{ sw_style }}" aria-hidden="true"></i>
+                      <span class="latin">{{ value.name | escape }}</span>
+                    </label>
+                  {%- else -%}
+                    <label class="chip" for="{{ input_id }}">{{ value.name | escape }}</label>
+                {%- endcase -%}
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endfor -%}
+      {%- endunless -%}
+
+      {%- if section.settings.enable_upload and edition_index >= 0 -%}
+        <div class="upload" data-upload {% unless is_custom %}hidden{% endunless %}>
+          <span class="thumb" data-upload-thumb aria-hidden="true">{% render 'icon', name: 'upload' %}</span>
+          <div class="upload-tx">
+            <b>{{ 'product.upload_heading' | t }}</b>
+            <span data-upload-msg>{{ 'product.upload_text' | t }}</span>
+          </div>
+          <label class="btn sm upload-btn">
+            {{- 'product.upload_button' | t -}}
+            <input
+              class="visually-hidden"
+              type="file"
+              name="properties[Design file]"
+              accept="image/png,image/svg+xml,image/jpeg,image/webp"
+              data-upload-input
+              {% unless is_custom %}
+                disabled
+              {% endunless %}
+            >
+          </label>
+        </div>
+      {%- endif -%}
+
+      {%- if fitment_required -%}
+        <fieldset class="opt fitment" data-fitment>
+          <legend class="opt-h"><span class="label">{{ 'fitment.fitment' | t }}</span></legend>
+          <div class="two">
+            <div class="field">
+              <label for="{{ form_id }}-make">{{ 'fitment.make' | t }}</label>
+              <select class="select" id="{{ form_id }}-make" name="properties[Make]" required data-make>
+                <option value="">{{ 'product.choose' | t }}</option>
+                {% render 'fitment-data', format: 'options' %}
+                <option value="Other" data-other>{{ 'fitment.other' | t }}</option>
+              </select>
+            </div>
+            <div class="field" data-model-field>
+              <label for="{{ form_id }}-model">{{ 'fitment.model' | t }}</label>
+              <select class="select" id="{{ form_id }}-model" name="properties[Model]" required data-model>
+                <option value="">{{ 'product.choose' | t }}</option>
+                {% render 'fitment-data', format: 'model_options' %}
+              </select>
+            </div>
+            <div class="field field--wide" data-other-field hidden>
+              <label for="{{ form_id }}-car">{{ 'product.other_car_label' | t }}</label>
+              <input
+                class="input"
+                id="{{ form_id }}-car"
+                type="text"
+                name="properties[Car]"
+                placeholder="{{ 'fitment.other_placeholder' | t }}"
+                autocomplete="off"
+                data-other-input
+                disabled
+              >
+            </div>
+          </div>
+          <div class="note">
+            {% render 'icon', name: 'chat' %}
+            <p>
+              <b>{{ 'fitment.other_heading' | t }}</b>
+              {{ 'fitment.other_text' | t }}
+              <a href="https://wa.me/{{ wa_number }}?text={{ 'fitment.whatsapp_message' | t | url_encode }}" target="_blank" rel="noopener">
+                {{- 'fitment.whatsapp_cta' | t -}}
+              </a>
+            </p>
+          </div>
+          <script type="application/json" data-fitment-data>{% render 'fitment-data', format: 'json' %}</script>
+        </fieldset>
+      {%- endif -%}
+
+      {%- if section.settings.show_gift and gift != blank and gift.id != product.id -%}
+        {%- assign gift_variant = gift.selected_or_first_available_variant -%}
+        {%- if gift_variant.available -%}
+          <label class="check gift-check">
+            <input class="visually-hidden" type="checkbox" data-gift value="{{ gift_variant.id }}">
+            <span class="bx" aria-hidden="true"></span>
+            {%- if gift.featured_image -%}
+              {{ gift.featured_image | image_url: width: 128 | image_tag: width: 64, height: 44, alt: '', loading: 'lazy' }}
+            {%- else -%}
+              <img src="{{ 'ph-box.jpg' | asset_url }}" width="64" height="44" alt="" loading="lazy">
+            {%- endif -%}
+            <span class="t">
+              <b>{{ 'product.gift_option' | t }}</b>
+              <span>{{ section.settings.gift_caption | escape }}</span>
+            </span>
+            <span class="num latin">{{ gift_variant.price | money }}</span>
+          </label>
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if section.settings.show_quantity -%}
+        <div class="field qty-field">
+          <label for="{{ form_id }}-qty">{{ 'product.quantity' | t }}</label>
+          <input class="input" id="{{ form_id }}-qty" type="number" name="quantity" value="1" min="1" inputmode="numeric">
+        </div>
+      {%- endif -%}
+
+      <div class="atc">
+        <button class="btn solid mag" type="submit" name="add" data-atc {% unless current_variant.available %}disabled{% endunless %}>
+          <span data-atc-label>
+            {%- if current_variant.available -%}
+              {{ 'product.add_to_cart' | t }}
+            {%- else -%}
+              {{ 'product.sold_out' | t }}
+            {%- endif -%}
+          </span>
+          {% render 'icon', name: 'arrow' %}
+        </button>
+      </div>
+      {%- if section.settings.show_dynamic_checkout -%}
+        <div class="dynamic-checkout">{{ form | payment_button }}</div>
+      {%- endif -%}
+    {%- endform -%}
+
+    <ul class="mini-trust" role="list">
+      {%- for i in (1..4) -%}
+        {%- liquid
+          assign icon_key = 'trust_' | append: i | append: '_icon'
+          assign title_key = 'trust_' | append: i | append: '_title'
+          assign text_key = 'trust_' | append: i | append: '_text'
+        -%}
+        {%- if settings[title_key] != blank -%}
+          <li>
+            {% render 'icon', name: settings[icon_key] %}
+            <p>
+              <b>{{ settings[title_key] | escape }}</b>
+              {{ settings[text_key] | escape }}
+            </p>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  <div class="sticky-atc" data-sticky-atc inert>
+    <div class="sticky-info">
+      <span class="sticky-title{% if section.settings.title_latin %} latin{% endif %}">{{ product.title | escape }}</span>
+      <span class="p num latin" data-sticky-price>{{ current_variant.price | money }}</span>
+    </div>
+    <button class="btn solid sm" type="submit" form="{{ form_id }}" data-sticky-button {% unless current_variant.available %}disabled{% endunless %}>
+      {{- 'product.add_to_cart' | t -}}
+    </button>
+  </div>
+
+  <script type="application/json" data-variants>
+    [
+      {%- for v in product.variants -%}
+        {
+          "id": {{ v.id }},
+          "options": {{ v.options | json }},
+          "available": {{ v.available }},
+          "price": {{ v.price | money | json }},
+          "compare": {% if v.compare_at_price > v.price %}{{ v.compare_at_price | money | json }}{% else %}null{% endif %},
+          "inventory": {% if v.inventory_management == 'shopify' %}{{ v.inventory_quantity }}{% else %}null{% endif %}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  </script>
+  <script type="application/json" data-product-config>
+    {
+      "editionIndex": {{ edition_index }},
+      "finishIndex": {{ finish_index }},
+      "customValue": {{ custom_value | json }},
+      "runSize": {{ run_size }},
+      "fitmentRequired": {{ fitment_required }},
+      "uploadRequired": {{ section.settings.enable_upload }},
+      "strings": {
+        "add": {{ 'product.add_to_cart' | t | json }},
+        "adding": {{ 'product.adding' | t | json }},
+        "soldOut": {{ 'product.sold_out' | t | json }},
+        "unavailable": {{ 'product.unavailable' | t | json }},
+        "needFit": {{ 'product.need_fitment' | t | json }},
+        "needUpload": {{ 'product.upload_required' | t | json }},
+        "uploadDone": {{ 'product.upload_done' | t | json }},
+        "added": {{ 'cart.added' | t | json }}
+      }
+    }
+  </script>
+</product-info>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "OUTRUN Car · Drop 01"
+    },
+    {
+      "type": "checkbox",
+      "id": "title_latin",
+      "label": "Title is a brand name (stays in English)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "price_note",
+      "label": "Next to the price",
+      "default": "Set of 4"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Fallback image",
+      "info": "Shown when the product has no image, before the 3D viewer loads."
+    },
+    {
+      "type": "header",
+      "content": "Stock meter"
+    },
+    {
+      "type": "paragraph",
+      "content": "Shows \"37 of 120 sets left\" when the variant tracks inventory and the product has the outrun.run_size metafield."
+    },
+    {
+      "type": "text",
+      "id": "run_label",
+      "label": "Run name",
+      "info": "Used unless the product has an outrun.drop_label metafield.",
+      "default": "Run 01"
+    },
+    {
+      "type": "text",
+      "id": "run_note",
+      "label": "Right-hand label",
+      "default": "Limited run"
+    },
+    {
+      "type": "paragraph",
+      "content": "Option names, edition captions and the custom edition value are in Theme settings → Product options."
+    },
+    {
+      "type": "header",
+      "content": "Custom design upload"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_upload",
+      "label": "Ask for a design file on the custom edition",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Buying"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_gift",
+      "label": "Offer the gift box",
+      "info": "Choose the gift box product in Theme settings → Cart.",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "gift_caption",
+      "label": "Gift box caption",
+      "default": "Navy box, foam set, gift card"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quantity",
+      "label": "Show quantity",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Show Buy it now button",
+      "info": "Off by default: Buy it now skips the make and model check, so orders could arrive without a fitment.",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

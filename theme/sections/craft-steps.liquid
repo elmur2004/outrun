@@ -1,0 +1,55 @@
+{{ 'section-made-here.css' | asset_url | stylesheet_tag }}
+
+<section class="steps-sec">
+  <div class="wrap">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        case forloop.index
+          when 1
+            assign fallback = 'ph-workshop.jpg'
+          when 2
+            assign fallback = 'ph-wheelspin.jpg'
+          when 3
+            assign fallback = 'ph-caliper.jpg'
+          else
+            assign fallback = 'ph-carrear2.jpg'
+        endcase
+      -%}
+      <div class="step rv" {{ block.shopify_attributes }}>
+        <figure>
+          {% render 'image', image: block.settings.image, fallback: fallback, sizes: '(max-width: 820px) 100vw, 50vw' %}
+        </figure>
+        <div class="tx">
+          <span class="n" aria-hidden="true">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+          {%- if block.settings.eyebrow != blank -%}
+            <span class="eyebrow">{{ block.settings.eyebrow | escape }}</span>
+          {%- endif -%}
+          <h2>{{ block.settings.heading | escape }}</h2>
+          {%- if block.settings.text != blank -%}
+            <p class="lead">{{ block.settings.text | escape }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Craft steps",
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "4:3" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Design" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Every piece starts in CAD." },
+        { "type": "textarea", "id": "text", "label": "Text" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Craft steps" }]
+}
+{% endschema %}

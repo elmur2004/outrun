@@ -1,0 +1,154 @@
+{
+  "accessibility": {
+    "skip_to_content": "انتقل إلى المحتوى",
+    "open_menu": "افتح القائمة",
+    "close_menu": "اقفل القائمة",
+    "cart": "السلة",
+    "switch_language": "غيّر اللغة إلى {{ language }}",
+    "home": "الصفحة الرئيسية لـ {{ shop }}",
+    "play_video": "شغّل الفيديو",
+    "pause_video": "وقّف الفيديو",
+    "skip_intro": "تخطّى المقدمة"
+  },
+  "general": {
+    "page": "صفحة {{ page }}",
+    "scroll": "انزل",
+    "pagination": "الصفحات",
+    "previous": "الصفحة اللي فاتت",
+    "next": "الصفحة الجاية"
+  },
+  "footer": {
+    "calm_motion": "حركة هادية",
+    "whatsapp": "واتساب"
+  },
+  "editions": {
+    "edition": "الإصدار",
+    "shop": "اطلب {{ edition }}"
+  },
+  "fitment": {
+    "make": "الماركة",
+    "model": "الموديل",
+    "other": "تانية",
+    "fitment": "المقاس",
+    "pick_make": "اختار الماركة",
+    "other_placeholder": "مثلًا: أودي A4 2020",
+    "other_label": "عربيتك",
+    "in_run": "موجود في الـ Run",
+    "made_day": "بيتعمل في حوالي يوم",
+    "wait_heading": "عربيتك، ومقاسها.",
+    "wait_text": "اختار الماركة والموديل عشان تشوف الطقم بتاعك.",
+    "ready_heading_html": "مظبوط على {{ car }}",
+    "ready_text_html": "طقم ٤ قطع، مقاسه مظبوط على {{ car }}. بيتركب في السنتر الأصلي على طول.",
+    "ready_cta_html": "اطلب لعربيتي {{ car }}",
+    "other_heading": "عربيتك مش موجودة؟",
+    "other_text": "بنعملها في حوالي يوم. ابعتلنا العربية والجنط على واتساب.",
+    "whatsapp_cta": "اطلب على واتساب",
+    "whatsapp_message": "أهلًا OUTRUN، عايز أغطية سنتر عائمة لعربيتي: "
+  },
+  "reels": {
+    "tap_to_play": "دوس للتشغيل",
+    "clip": "فيديو عميل"
+  },
+  "cart": {
+    "added": "اتضاف. الطقم بتاعك في السلة.",
+    "error": "معرفناش نضيفه. جرّب تاني.",
+    "sold_out": "خلص",
+    "title": "السلة",
+    "empty": "السلة فاضية.",
+    "subtotal": "الإجمالي",
+    "checkout": "كمّل الطلب",
+    "remove": "شيل",
+    "continue": "اطلب من الـ Drop",
+    "gift_upsell": "خليها هدية",
+    "to_checkout": "بيكمّل على الـ checkout العادي بتاع شوبيفاي.",
+    "close": "اقفل السلة",
+    "increase": "زوّد كمية {{ product }}",
+    "decrease": "قلّل كمية {{ product }}",
+    "quantity_for": "كمية {{ product }}",
+    "update_error": "معرفناش نعدّل السلة. جرّب تاني.",
+    "discount": "الخصم",
+    "prop_car": "العربية",
+    "prop_design": "ملف التصميم"
+  },
+  "product": {
+    "choose": "اختار",
+    "stock_html": "فاضل {{ count }} من {{ total }} طقم في {{ run }}",
+    "upload_heading": "ارفع تصميمك",
+    "upload_text": "PNG أو SVG بتباين عالي. بنبعتلك بروفة على واتساب قبل ما نقص.",
+    "upload_button": "اختار ملف",
+    "upload_drop": "أو اسحبه هنا",
+    "upload_done": "بقى على الغطا. لف العارض وشوفه.",
+    "upload_required": "ارفع تصميمك عشان تطلب الـ Custom.",
+    "gift_option": "ضيف علبة الهدية",
+    "add_to_cart": "ضيف للسلة",
+    "adding": "بيتضاف…",
+    "sold_out": "خلص",
+    "unavailable": "مش متاح",
+    "need_fitment": "اختار الماركة والموديل الأول، عشان نبعتلك المقاس الصح.",
+    "other_car_label": "عربيتك (الماركة والموديل والسنة)",
+    "spin": "لف العجلة",
+    "drag": "اسحب عشان تلف",
+    "live": "بيتعدل لوحده، قدامك",
+    "quantity": "الكمية",
+    "regular_price": "السعر الأصلي",
+    "sale_price": "سعر الخصم"
+  },
+  "collection": {
+    "all": "الكل",
+    "finish": "التشطيب",
+    "set_of_4": "طقم ٤ قطع",
+    "no_match": "مفيش حاجة مطابقة. شيل فلتر.",
+    "clear": "امسح الفلاتر",
+    "sort": "الترتيب",
+    "apply": "طبّق",
+    "empty": "المجموعة دي فاضية دلوقتي.",
+    "filters": "فلتر الأغطية",
+    "count": "ظاهر {{ count }}"
+  },
+  "search": {
+    "title": "البحث",
+    "placeholder": "دوّر على أغطية، إصدارات، تشطيبات",
+    "submit": "دوّر",
+    "results": "{{ count }} نتيجة لـ «{{ terms }}»",
+    "no_results": "مفيش نتايج لـ «{{ terms }}». جرّب إصدار أو تشطيب."
+  },
+  "not_found": {
+    "heading": "طريق غلط.",
+    "text": "الصفحة دي مش موجودة، أو اتنقلت. الطريق مكمّل تحت.",
+    "home": "ارجع للبداية",
+    "shop": "اطلب من الـ Drop"
+  },
+  "notify": {
+    "email": "الإيميل",
+    "which": "أنهي خط",
+    "both": "الاتنين",
+    "success": "إنت على القائمة. هنبعتلك مرة واحدة لما يفتح.",
+    "error": "اكتب إيميل نقدر نوصلك عليه.",
+    "prefer_whatsapp": "تفضّل واتساب؟",
+    "message_us": "ابعتلنا"
+  },
+  "contact": {
+    "phone": "تليفون",
+    "workshop": "الورشة",
+    "email": "الإيميل",
+    "copy": "انسخ",
+    "copied": "اتنسخ",
+    "call": "اتصل",
+    "write": "ابعتلنا",
+    "whatsapp_message": "أهلًا OUTRUN"
+  },
+  "heat": {
+    "draft_note": "ظاهرة في محرر الثيم بس: حط الأرقام الحقيقية بعد الاختبار، وبعدين علّم «الأرقام مختبرة» عشان تظهر."
+  },
+  "password": {
+    "signup_button": "بلّغني",
+    "signup_success": "إنت على القائمة. هنبعتلك إيميل مرة واحدة لما الـ Drop يفتح.",
+    "email_placeholder": "إيميلك",
+    "toggle": "ادخل بالباسورد",
+    "label": "الباسورد",
+    "enter": "ادخل",
+    "wrong": "الباسورد ده مش صح. جرّب تاني.",
+    "owner": "صاحب المتجر؟",
+    "login": "ادخل من هنا"
+  }
+}

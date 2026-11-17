@@ -1,0 +1,81 @@
+{{ 'section-support.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign wa_number = settings.whatsapp_number | remove: '+' | remove: ' '
+  assign tel = settings.phone | remove: ' '
+-%}
+<section class="sec" id="{{ section.settings.anchor | handleize | default: 'contact' }}">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
+        {%- endif -%}
+        <h2>{{ section.settings.heading | escape }}</h2>
+      </div>
+      {%- if settings.hours != blank -%}
+        <p class="lead">{{ settings.hours | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <ul class="contact" role="list">
+      {%- if wa_number != blank -%}
+        <li>
+          <span class="label">{{ 'footer.whatsapp' | t }}</span>
+          <b class="latin">{{ settings.phone | escape }}</b>
+          <div class="copy-row">
+            <a class="link" href="https://wa.me/{{ wa_number }}?text={{ 'contact.whatsapp_message' | t | url_encode }}" target="_blank" rel="noopener">
+              {{- 'fitment.whatsapp_cta' | t -}}
+            </a>
+          </div>
+        </li>
+      {%- endif -%}
+      {%- if settings.phone != blank -%}
+        <li>
+          <span class="label">{{ 'contact.phone' | t }}</span>
+          <b class="latin">{{ settings.phone | escape }}</b>
+          <div class="copy-row">
+            <a class="link" href="tel:{{ tel }}">{{ 'contact.call' | t }}</a>
+            <button class="copy" type="button" data-copy="{{ settings.phone | escape }}" data-copied="{{ 'contact.copied' | t }}">
+              {{- 'contact.copy' | t -}}
+            </button>
+          </div>
+        </li>
+      {%- endif -%}
+      {%- if settings.address != blank -%}
+        <li>
+          <span class="label">{{ 'contact.workshop' | t }}</span>
+          <b>{{ settings.address | escape }}</b>
+        </li>
+      {%- endif -%}
+      {%- if settings.email != blank -%}
+        <li>
+          <span class="label">{{ 'contact.email' | t }}</span>
+          <b class="latin">{{ settings.email | escape }}</b>
+          <div class="copy-row">
+            <a class="link" href="mailto:{{ settings.email }}">{{ 'contact.write' | t }}</a>
+            <button class="copy" type="button" data-copy="{{ settings.email | escape }}" data-copied="{{ 'contact.copied' | t }}">
+              {{- 'contact.copy' | t -}}
+            </button>
+          </div>
+        </li>
+      {%- endif -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact tiles",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "WhatsApp, phone, address, email and reply hours come from Theme settings → Contact."
+    },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Real people" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Talk to the workshop." },
+    { "type": "text", "id": "anchor", "label": "Anchor", "default": "contact" }
+  ],
+  "presets": [{ "name": "Contact tiles" }]
+}
+{% endschema %}

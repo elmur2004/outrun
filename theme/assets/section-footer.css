@@ -1,0 +1,36 @@
+.foot { border-top: 1px solid var(--hair); padding-block: 64px 32px; }
+.foot .big { overflow: hidden; margin-bottom: 48px; color: rgba(220, 231, 239, 0.24); } /* fix: a touch stronger than 16% so it reads */
+.foot .big svg { width: 100%; height: auto; }
+
+.foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 32px; }
+@media (max-width: 860px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .foot-grid { grid-template-columns: 1fr; } }
+
+.foot-brand { display: flex; flex-direction: column; gap: 16px; }
+.foot-brand p { color: var(--muted); max-width: 36ch; }
+.foot-tagline { font-family: var(--f-display); font-size: 22px; font-weight: 600; }
+.foot-h {
+  margin: 0 0 14px; font-family: var(--f-display); font-size: 11px; font-weight: 500; line-height: 1.55;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted);
+}
+[dir="rtl"] .foot-h { letter-spacing: 0.02em; }
+.foot ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.foot a:hover { color: var(--ice); }
+.foot .muted { color: var(--muted); }
+
+.foot .base {
+  margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--hair);
+  display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; color: var(--muted); font-size: 13px;
+}
+.base-r { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+
+.toggle { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+.toggle i { width: 34px; height: 18px; border-radius: 2px; border: 1px solid var(--field-border); position: relative; transition: background 0.3s; }
+.toggle i::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 1px;
+  background: var(--ice); transition: transform 0.3s;
+}
+.toggle[aria-pressed="true"] i { background: var(--steel); border-color: var(--steel); }
+.toggle[aria-pressed="true"] i::after { transform: translateX(16px); }
+[dir="rtl"] .toggle i::after { left: auto; right: 2px; }
+[dir="rtl"] .toggle[aria-pressed="true"] i::after { transform: translateX(-16px); }

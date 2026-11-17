@@ -1,0 +1,105 @@
+<!doctype html>
+{%- liquid
+  assign lang = request.locale.iso_code | slice: 0, 2
+  assign dir = 'ltr'
+  if lang == 'ar' or lang == 'he' or lang == 'fa' or lang == 'ur'
+    assign dir = 'rtl'
+  endif
+-%}
+<html
+  lang="{{ request.locale.iso_code }}"
+  dir="{{ dir }}"
+  data-enable-3d="{{ settings.enable_3d }}"
+  data-sweeps="{{ settings.section_sweeps }}"
+  data-magnetic="{{ settings.magnetic_buttons }}"
+>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0A1E2E">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    <title>
+      {{- page_title -}}
+      {%- if current_page != 1 %} – {{ 'general.page' | t: page: current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} – {{ shop.name }}{% endunless -%}
+    </title>
+    {%- if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif %}
+
+    {%- if settings.favicon %}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
+    {%- else %}
+      <link rel="icon" type="image/svg+xml" href="{{ 'favicon.svg' | asset_url }}">
+    {%- endif %}
+    <link rel="apple-touch-icon" href="{{ 'apple-touch-icon.png' | asset_url }}">
+
+    {%- comment -%} Before first paint: mark JS, and apply calm motion (saved choice, else the OS setting). {%- endcomment -%}
+    <script>
+      (function (d) {
+        d.classList.add('js');
+        var calm = null;
+        try { calm = JSON.parse(localStorage.getItem('or_calm')); } catch (e) {}
+        if (calm === null) calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (calm) d.classList.add('calm');
+      })(document.documentElement);
+    </script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "outrun": "{{ 'outrun.js' | asset_url }}",
+          "outrun-3d": "{{ 'outrun-3d.js' | asset_url }}",
+          "three": "{{ 'three.module.min.js' | asset_url }}",
+          "three/addons/environments/RoomEnvironment.js": "{{ 'three-room-environment.js' | asset_url }}"
+        }
+      }
+    </script>
+
+    {% render 'font-faces' %}
+    {% render 'css-variables' %}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>
+      window.OUTRUN_CONFIG = {
+        routes: {
+          root: {{ routes.root_url | json }},
+          cart: {{ routes.cart_url | json }},
+          cartAdd: {{ routes.cart_add_url | json }},
+          cartChange: {{ routes.cart_change_url | json }}
+        },
+        strings: {
+          added: {{ 'cart.added' | t | json }},
+          error: {{ 'cart.error' | t | json }},
+          cartError: {{ 'cart.update_error' | t | json }}
+        }
+      };
+    </script>
+    <script type="module" src="{{ 'outrun.js' | asset_url }}"></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body>
+    <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+    <div class="progress" data-progress aria-hidden="true"></div>
+    <div class="sweep" data-sweep aria-hidden="true"><i></i></div>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    {% section 'cart-drawer' %}
+
+    {%- comment -%} Makes, models and badge artwork: read by outrun.js for the Street edition's 3D face. {%- endcomment -%}
+    <script type="application/json" id="FitmentData">{% render 'fitment-data', format: 'json' %}</script>
+
+    <div class="toast" data-toast role="status" aria-live="polite"></div>
+  </body>
+</html>

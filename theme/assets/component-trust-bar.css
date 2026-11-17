@@ -1,0 +1,13 @@
+.trust { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-block: 1px solid var(--hair); }
+.trust > li { display: flex; gap: 14px; padding: 22px clamp(12px, 2vw, 24px); border-inline-end: 1px solid var(--hair); min-width: 0; }
+.trust > li:last-child { border-inline-end: 0; }
+.trust svg { flex: none; width: 26px; height: 26px; stroke: var(--eyebrow); fill: none; stroke-width: 1.2; }
+.trust b { display: block; font-family: var(--f-display); font-size: 14px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+.trust span { font-size: 14px; color: var(--muted); }
+[dir="rtl"] .trust b { letter-spacing: 0; }
+@media (max-width: 900px) {
+  .trust { grid-template-columns: 1fr 1fr; }
+  .trust > li:nth-child(2) { border-inline-end: 0; }
+  .trust > li:nth-child(-n + 2) { border-bottom: 1px solid var(--hair); }
+}
+@media (max-width: 460px) { .trust > li { flex-direction: column; gap: 8px; } }

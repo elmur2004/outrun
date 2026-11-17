@@ -1,0 +1,92 @@
+{{ 'section-header.css' | asset_url | stylesheet_tag }}
+
+<header class="hdr">
+  <div class="wrap">
+    <a class="logo" href="{{ routes.root_url }}" aria-label="{{ 'accessibility.home' | t: shop: shop.name }}">
+      {%- render 'logo', decorative: true -%}
+    </a>
+
+    {%- if section.settings.menu != blank -%}
+      <nav class="nav" aria-label="{{ section.settings.menu.title | escape }}">
+        {%- for link in section.settings.menu.links -%}
+          <a
+            href="{{ link.url }}"
+            {% if link.current or link.child_active %}
+              aria-current="page"
+            {% endif %}
+          >
+            {{- link.title | escape -}}
+          </a>
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+
+    <div class="hdr-r">
+      {% render 'language-switch', style: 'pill' %}
+      <a class="icon-btn cart-btn" href="{{ routes.cart_url }}" data-cart-button>
+        {% render 'icon', name: 'wheel' %}
+        <span class="visually-hidden">{{ 'accessibility.cart' | t }}</span>
+        <span class="count num" data-cart-count>{{ cart.item_count }}</span>
+      </a>
+      <button
+        class="icon-btn menu-btn"
+        type="button"
+        data-menu-open
+        aria-controls="MobileMenu"
+        aria-expanded="false"
+        aria-label="{{ 'accessibility.open_menu' | t }}"
+      >
+        {% render 'icon', name: 'menu' %}
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="mnav" id="MobileMenu" aria-label="{{ 'accessibility.open_menu' | t }}">
+  <div class="top">
+    <a class="logo" href="{{ routes.root_url }}" aria-label="{{ 'accessibility.home' | t: shop: shop.name }}">
+      {%- render 'logo', decorative: true -%}
+    </a>
+    <button class="icon-btn" type="button" data-menu-close aria-label="{{ 'accessibility.close_menu' | t }}">
+      {% render 'icon', name: 'close' %}
+    </button>
+  </div>
+  <nav aria-label="{{ section.settings.menu.title | escape }}">
+    <a href="{{ routes.root_url }}"><span class="latin">{{ section.settings.menu_tagline | escape }}</span></a>
+    {%- for link in section.settings.menu.links -%}
+      <a href="{{ link.url }}">{{ link.title | escape }}</a>
+    {%- endfor -%}
+  </nav>
+  <div class="foot">
+    {%- if settings.phone != blank -%}
+      <span class="label">{{ 'footer.whatsapp' | t }}</span>
+      <a class="latin" href="https://wa.me/{{ settings.whatsapp_number | remove: '+' | remove: ' ' }}">
+        {{- settings.phone | escape -}}
+      </a>
+    {%- endif -%}
+    {% render 'language-switch', style: 'button' %}
+  </div>
+</dialog>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "info": "The design uses four links: Shop, Made Here, Coming next, Warranty & FAQ.",
+      "default": "main-menu"
+    },
+    {
+      "type": "text",
+      "id": "menu_tagline",
+      "label": "Mobile menu home link",
+      "default": "Drive the feeling."
+    }
+  ]
+}
+{% endschema %}

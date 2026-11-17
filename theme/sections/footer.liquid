@@ -1,0 +1,145 @@
+{{ 'section-footer.css' | asset_url | stylesheet_tag }}
+
+<footer class="foot dark">
+  <div class="wrap">
+    <div class="big" aria-hidden="true">{% render 'logo-outline', decorative: true %}</div>
+
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <span class="foot-tagline latin">{{ section.settings.tagline | escape }}</span>
+        {%- if section.settings.text != blank -%}
+          <p>{{ section.settings.text | escape }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- for i in (1..2) -%}
+        {%- liquid
+          assign heading_key = 'menu_' | append: i | append: '_heading'
+          assign menu_key = 'menu_' | append: i
+          assign menu = section.settings[menu_key]
+        -%}
+        {%- if menu != blank -%}
+          <nav aria-label="{{ section.settings[heading_key] | escape }}">
+            <h2 class="foot-h">{{ section.settings[heading_key] | escape }}</h2>
+            <ul role="list">
+              {%- for link in menu.links -%}
+                <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <div>
+        <h2 class="foot-h">{{ section.settings.contact_heading | escape }}</h2>
+        <ul role="list">
+          {%- if settings.phone != blank -%}
+            <li>
+              <a href="https://wa.me/{{ settings.whatsapp_number | remove: '+' | remove: ' ' }}" rel="noopener" target="_blank">
+                {{- 'footer.whatsapp' | t }} · <span class="latin">{{ settings.phone | escape }}</span>
+              </a>
+            </li>
+          {%- endif -%}
+          {%- if settings.address != blank -%}
+            <li>{{ settings.address | escape }}</li>
+          {%- endif -%}
+          {%- if settings.hours != blank -%}
+            <li class="muted">{{ settings.hours | escape }}</li>
+          {%- endif -%}
+        </ul>
+      </div>
+    </div>
+
+    <div class="base">
+      <span class="latin">© {{ 'now' | date: '%Y' }} {{ shop.name | escape }} · {{ section.settings.copyright_line | escape }}</span>
+      <span class="base-r">
+        {%- if section.settings.show_calm_toggle -%}
+          <button class="toggle" type="button" data-calm-toggle aria-pressed="false">
+            <i aria-hidden="true"></i>{{ 'footer.calm_motion' | t }}
+          </button>
+        {%- endif -%}
+        {% render 'language-switch', style: 'link' %}
+      </span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "enabled_on": { "groups": ["footer"] },
+  "settings": [
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Drive the feeling."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Exclusive pieces, finished to the smallest detail, that put drivers and riders ahead."
+    },
+    {
+      "type": "header",
+      "content": "Column 1"
+    },
+    {
+      "type": "text",
+      "id": "menu_1_heading",
+      "label": "Heading",
+      "default": "Shop"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_1",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "Column 2"
+    },
+    {
+      "type": "text",
+      "id": "menu_2_heading",
+      "label": "Heading",
+      "default": "Help"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Menu",
+      "default": "footer"
+    },
+    {
+      "type": "header",
+      "content": "Contact"
+    },
+    {
+      "type": "text",
+      "id": "contact_heading",
+      "label": "Heading",
+      "info": "Details come from Theme settings → Contact.",
+      "default": "Talk to us"
+    },
+    {
+      "type": "header",
+      "content": "Bottom row"
+    },
+    {
+      "type": "text",
+      "id": "copyright_line",
+      "label": "Line after the copyright",
+      "default": "Always ahead. Always noticed."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_calm_toggle",
+      "label": "Show calm motion switch",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

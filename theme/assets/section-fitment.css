@@ -1,0 +1,37 @@
+fitment-picker { display: block; }
+
+.fit-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(24px, 5vw, 80px); align-items: start; }
+@media (max-width: 860px) { .fit-grid { grid-template-columns: 1fr; } }
+
+.fit-steps { display: flex; gap: 10px; align-items: center; font-family: var(--f-display); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.fit-steps--model { margin-top: 28px; }
+[dir="rtl"] .fit-steps { letter-spacing: 0.02em; }
+
+.makes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+@media (max-width: 520px) { .makes { grid-template-columns: 1fr 1fr; } }
+.make {
+  height: 88px; padding: 14px 16px; border: 1px solid var(--hair-2); border-radius: var(--r); background: var(--surface);
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; text-align: start;
+  transition: border-color 0.3s, background 0.3s;
+}
+.make:hover { border-color: var(--btn-hover); }
+.make b { font-family: var(--f-display); font-size: 20px; font-weight: 600; }
+.make span { font-size: 12px; color: var(--muted); font-family: var(--f-display); letter-spacing: 0.14em; text-transform: uppercase; }
+[dir="rtl"] .make span { letter-spacing: 0; }
+.make[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--cloud); }
+.make[aria-pressed="true"] span { color: var(--blue); }
+
+.models { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; min-height: 44px; align-items: center; }
+.models .muted, .fit-card .muted { color: var(--muted); }
+.other-car { max-width: 360px; }
+
+.fit-card { position: relative; overflow: hidden; border-radius: var(--r); padding: 28px; min-height: 280px; display: flex; flex-direction: column; gap: 18px; }
+.fit-card h3 { font-size: 28px; }
+.fit-card .fit-cta { margin-top: auto; align-self: flex-start; }
+.fit-card .streak { display: none; left: -6%; bottom: 30px; width: 80%; transform: rotate(-7deg); }
+.fit-card--streak .streak { display: block; animation: cardStreak 6s 1s ease-in-out infinite; }
+@keyframes cardStreak {
+  0%, 70% { opacity: 0; transform: translateX(-30%) rotate(-7deg); }
+  74% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(50%) rotate(-7deg); }
+}

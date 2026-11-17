@@ -1,0 +1,13 @@
+{
+  "settings_schema": {
+    "brand": {
+      "name": "Brand",
+      "settings": {
+        "favicon": {
+          "label": "Favicon",
+          "info": "Square image, at least 64 × 64px. Leave empty to use the OUTRUN symbol."
+        }
+      }
+    }
+  }
+}

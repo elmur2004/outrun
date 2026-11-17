@@ -1,0 +1,154 @@
+{
+  "accessibility": {
+    "skip_to_content": "Skip to content",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu",
+    "cart": "Cart",
+    "switch_language": "Switch language to {{ language }}",
+    "home": "{{ shop }} home",
+    "play_video": "Play video",
+    "pause_video": "Pause video",
+    "skip_intro": "Skip intro"
+  },
+  "general": {
+    "page": "Page {{ page }}",
+    "scroll": "Scroll",
+    "pagination": "Pagination",
+    "previous": "Previous page",
+    "next": "Next page"
+  },
+  "footer": {
+    "calm_motion": "Calm motion",
+    "whatsapp": "WhatsApp"
+  },
+  "editions": {
+    "edition": "Edition",
+    "shop": "Shop {{ edition }}"
+  },
+  "fitment": {
+    "make": "Make",
+    "model": "Model",
+    "other": "Other",
+    "fitment": "Fitment",
+    "pick_make": "Pick your make",
+    "other_placeholder": "e.g. Audi A4 2020",
+    "other_label": "Your car",
+    "in_run": "In the run",
+    "made_day": "Made in about a day",
+    "wait_heading": "Your car, your fit.",
+    "wait_text": "Choose a make and model to see your set.",
+    "ready_heading_html": "Fits your {{ car }}",
+    "ready_text_html": "Set of 4, sized for the {{ car }}. Clips straight into the original hub.",
+    "ready_cta_html": "Shop for my {{ car }}",
+    "other_heading": "Don’t see your car?",
+    "other_text": "We make it in about a day. Send us your car and wheel on WhatsApp.",
+    "whatsapp_cta": "Request on WhatsApp",
+    "whatsapp_message": "Hi OUTRUN, floating caps for my car: "
+  },
+  "reels": {
+    "tap_to_play": "Tap to play",
+    "clip": "Customer clip"
+  },
+  "cart": {
+    "added": "Added. Your set is in the cart.",
+    "error": "Couldn’t add that. Please try again.",
+    "sold_out": "Sold out",
+    "title": "Cart",
+    "empty": "Your cart is empty.",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "continue": "Shop the drop",
+    "gift_upsell": "Make it a gift",
+    "to_checkout": "Continues to the standard Shopify checkout.",
+    "close": "Close cart",
+    "increase": "Increase quantity for {{ product }}",
+    "decrease": "Decrease quantity for {{ product }}",
+    "quantity_for": "Quantity for {{ product }}",
+    "update_error": "Couldn’t update the cart. Please try again.",
+    "discount": "Discount",
+    "prop_car": "Car",
+    "prop_design": "Design file"
+  },
+  "product": {
+    "choose": "Choose",
+    "stock_html": "{{ count }} of {{ total }} sets left in {{ run }}",
+    "upload_heading": "Upload your design",
+    "upload_text": "PNG or SVG, high contrast. We send a proof on WhatsApp before we cut.",
+    "upload_button": "Choose file",
+    "upload_drop": "or drop it here",
+    "upload_done": "On the cap. Drag the viewer to see it.",
+    "upload_required": "Upload your design to order the Custom edition.",
+    "gift_option": "Add the gift box",
+    "add_to_cart": "Add to cart",
+    "adding": "Adding…",
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable",
+    "need_fitment": "Pick your make and model first, so we send the right fit.",
+    "other_car_label": "Your car (make, model, year)",
+    "spin": "Spin the wheel",
+    "drag": "Drag to rotate",
+    "live": "Self-leveling, live",
+    "quantity": "Quantity",
+    "regular_price": "Regular price",
+    "sale_price": "Sale price"
+  },
+  "collection": {
+    "all": "All",
+    "finish": "Finish",
+    "set_of_4": "Set of 4",
+    "no_match": "Nothing matches. Clear a filter.",
+    "clear": "Clear filters",
+    "sort": "Sort",
+    "apply": "Apply",
+    "empty": "This collection is empty for now.",
+    "filters": "Filter the caps",
+    "count": "{{ count }} shown"
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search caps, editions, finishes",
+    "submit": "Search",
+    "results": "{{ count }} results for “{{ terms }}”",
+    "no_results": "Nothing found for “{{ terms }}”. Try an edition or a finish."
+  },
+  "not_found": {
+    "heading": "Wrong turn.",
+    "text": "This page doesn’t exist, or it moved. The road continues below.",
+    "home": "Back to the start",
+    "shop": "Shop the drop"
+  },
+  "notify": {
+    "email": "Email",
+    "which": "Which line",
+    "both": "Both",
+    "success": "You’re on the list. We’ll message you once, when it opens.",
+    "error": "Enter an email we can reach.",
+    "prefer_whatsapp": "Prefer WhatsApp?",
+    "message_us": "Message us"
+  },
+  "contact": {
+    "phone": "Phone",
+    "workshop": "Workshop",
+    "email": "Email",
+    "copy": "Copy",
+    "copied": "Copied",
+    "call": "Call",
+    "write": "Write to us",
+    "whatsapp_message": "Hi OUTRUN"
+  },
+  "heat": {
+    "draft_note": "Only visible in the theme editor: replace these placeholder figures with tested ones, then tick “Figures are tested” to show them."
+  },
+  "password": {
+    "signup_button": "Tell me",
+    "signup_success": "You’re on the list. We’ll email you once, when the drop opens.",
+    "email_placeholder": "Your email",
+    "toggle": "Enter with password",
+    "label": "Password",
+    "enter": "Enter",
+    "wrong": "That password didn’t work. Try again.",
+    "owner": "Store owner?",
+    "login": "Log in here"
+  }
+}

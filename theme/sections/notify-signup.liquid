@@ -1,0 +1,94 @@
+{{ 'section-support.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign form_id = 'NotifyForm-' | append: section.id
+  assign wa_number = settings.whatsapp_number | remove: '+' | remove: ' '
+-%}
+<section class="sec notify-sec" id="{{ section.settings.anchor | handleize | default: 'notify' }}">
+  <div class="wrap notify">
+    <div class="notify-head">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+      <h2>{{ section.settings.heading | escape }}</h2>
+      {%- if section.settings.text != blank -%}
+        <p class="lead">{{ section.settings.text | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%}
+      Shopify's customer form: creates a subscriber tagged notify-ride / notify-kart. Shopify requires an email,
+      so WhatsApp is offered as a link instead of a field.
+    {%- endcomment -%}
+    {%- form 'customer', id: form_id, class: 'form' -%}
+      {%- if form.posted_successfully? -%}
+        <div class="msg msg--ok" role="status">
+          {% render 'icon', name: 'check' %}
+          <p>{{ 'notify.success' | t }}</p>
+        </div>
+      {%- else -%}
+        {%- if form.errors -%}
+          <div class="msg msg--error" role="alert" id="{{ form_id }}-error">
+            {% render 'icon', name: 'alert' %}
+            <p>{{ 'notify.error' | t }}</p>
+          </div>
+        {%- endif -%}
+        <div class="field">
+          <label for="{{ form_id }}-email">{{ 'notify.email' | t }}</label>
+          <input
+            class="input"
+            type="email"
+            id="{{ form_id }}-email"
+            name="contact[email]"
+            autocomplete="email"
+            placeholder="name@mail.com"
+            required
+            {% if form.errors %}
+              aria-invalid="true" aria-describedby="{{ form_id }}-error"
+            {% endif %}
+          >
+        </div>
+        <fieldset class="field choice">
+          <legend class="label">{{ 'notify.which' | t }}</legend>
+          <div class="choice-row">
+            <input class="visually-hidden" type="radio" id="{{ form_id }}-both" name="contact[tags]" value="notify-ride,notify-kart" checked>
+            <label class="chip" for="{{ form_id }}-both">{{ 'notify.both' | t }}</label>
+            <input class="visually-hidden" type="radio" id="{{ form_id }}-ride" name="contact[tags]" value="notify-ride">
+            <label class="chip latin" for="{{ form_id }}-ride">Ride</label>
+            <input class="visually-hidden" type="radio" id="{{ form_id }}-kart" name="contact[tags]" value="notify-kart">
+            <label class="chip latin" for="{{ form_id }}-kart">Kart</label>
+          </div>
+        </fieldset>
+        <button class="btn solid mag" type="submit">
+          {{- section.settings.button_label | escape }}
+          {% render 'icon', name: 'arrow' -%}
+        </button>
+        {%- if wa_number != blank -%}
+          <p class="form-note">
+            {{ 'notify.prefer_whatsapp' | t }}
+            <a href="https://wa.me/{{ wa_number }}" target="_blank" rel="noopener">{{ 'notify.message_us' | t }}</a>
+          </p>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Notify me signup",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Notify me" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Be first when they drop." },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Leave your email. One message when a line opens, nothing else."
+    },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Notify me" },
+    { "type": "text", "id": "anchor", "label": "Anchor", "info": "Buttons can link here with #anchor.", "default": "notify" }
+  ],
+  "presets": [{ "name": "Notify me signup" }]
+}
+{% endschema %}
