@@ -161,6 +161,17 @@ export const webgl = (() => {
 // Theme settings → Motion → Show 3D scenes. (Read the attribute: dataset can't camel-case "-3d".)
 export const threeDEnabled = () => root.getAttribute('data-enable-3d') !== 'false';
 
+// Phones on Data Saver or with very little memory keep the photo: 3D would cost them more than it gives.
+const lowEnd = () => navigator.connection?.saveData === true || (navigator.deviceMemory !== undefined && navigator.deviceMemory <= 2);
+export const can3D = () => webgl && threeDEnabled() && !lowEnd();
+
+// 3D starts after the page has loaded and gone idle, so it never competes with the first paint or the hero photo.
+export const afterLoad = new Promise((resolve) => {
+  const idle = () => (window.requestIdleCallback ? requestIdleCallback(() => resolve(), { timeout: 2000 }) : setTimeout(resolve, 300));
+  if (document.readyState === 'complete') idle();
+  else addEventListener('load', idle, { once: true });
+});
+
 // Option values → the 3D scene's keys (street | signature | custom, gloss | steel | ice).
 const handleOf = (s) => String(s).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
 export const editionKey = (value) => ['street', 'signature', 'custom'].find((k) => handleOf(value).includes(k)) || 'signature';
@@ -210,7 +221,7 @@ export function lazy3D(wrap, mount) {
   let io = null;
   const handle = { api: () => api, dispose: () => { dead = true; io?.disconnect(); api?.dispose?.(); } };
   if (!wrap) return handle;
-  if (!webgl || !threeDEnabled()) {
+  if (!can3D()) {
     wrap.classList.add('no-3d');
     return handle;
   }
@@ -218,6 +229,8 @@ export function lazy3D(wrap, mount) {
     if (!entry.isIntersecting) return;
     io.disconnect();
     try {
+      await afterLoad;
+      if (dead) return;
       scenes ??= import('outrun-3d');
       const S = await scenes;
       if (dead) return;

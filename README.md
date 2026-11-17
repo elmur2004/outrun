@@ -10,7 +10,8 @@ Custom Online Store 2.0 theme for OUTRUN ("Exclusive Motion Gear"): English + Eg
 | `design-handoff/` | The designer's working prototype (`index.html`, `app.js`, `three-scenes.js`, `img/`). Read-only reference. Open `index.html` through a local server to view it. | yes |
 | `docs/` | `00-discovery.md` (tokens, inventory, Shopify mapping, open questions), `design-reference/` (prototype screenshots at 375/768/1280/1440, EN + AR, used for design-parity checks), `licenses/` (font licenses). | yes |
 | `store-files/` | Images that go into **Admin → Content → Files** or admin settings, not into the theme. | yes |
-| `tools/` | Build scripts. | yes |
+| `tools/` | Build scripts (brand assets, Arabic translations). | yes |
+| `src/3d/` | Source of the 3D scenes. Built into `theme/assets/outrun-3d.js` (see "3D scenes" below). | yes |
 | `brand/` | The client's brand pack (Brand Book, Brand Foundation, Logo Pack, fonts, mockups). Confidential, about 67 MB. Copy it in by hand. | **no** |
 
 ## Brand assets
@@ -35,6 +36,26 @@ python3 -m venv .venv
 ```
 
 Font stack, used everywhere: `"Chakra Petch", "Changa", "Segoe UI", system-ui, sans-serif`. Chakra Petch has no Arabic letters, so the browser uses Changa for Arabic text and keeps Latin text in Chakra Petch, which is what the brand book asks for.
+
+## 3D scenes
+
+`src/3d/outrun-3d.js` holds the hero wheel, the editions showcase, the product viewer and the Shop page thumbnails (ported from `design-handoff/three-scenes.js`). `theme/assets/outrun-3d.js` is a **build output**: esbuild bundles the source with only the parts of three.js r160 it uses (about 134 KB gzipped, against 173 KB for the full library plus the source). Don't edit the built file; edit the source and rebuild:
+
+```sh
+npm install          # once: esbuild + three, pinned in package.json
+npm run build:3d     # writes theme/assets/outrun-3d.js, then push the theme
+```
+
+How 3D loads:
+
+- Only after the page has loaded and gone idle, and only when a 3D section is near the viewport. The photo underneath is what loads first.
+- Not at all with Data Saver on, on devices with 2 GB of memory or less, or with Theme settings → Motion → Show 3D scenes off. The photo stays.
+- With calm motion on, the 3D still loads but nothing spins, and Shop cards don't turn.
+- Shop page: one offscreen renderer draws frame 0 of every card up front. A card's other 11 turntable frames are drawn the first time it's about to spin (hover, keyboard focus, or mostly in view on touch screens).
+
+## Sharing and search
+
+`snippets/meta-tags.liquid` adds Open Graph and Twitter tags to every page, including the password page. The image is the page's own (product, collection), or the store's social sharing image from Online Store → Preferences, falling back to `assets/og-default.jpg`. Product pages also output schema.org structured data from Shopify's `structured_data` filter.
 
 ## Connecting to Shopify
 

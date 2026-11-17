@@ -1,6 +1,8 @@
 // <collection-grid>: filter chips (edition, finish, make as fitment context), sort, and spinning 3D cards.
 // Ported from mountShop() in design-handoff/app.js. Every variant card is a real link, so the grid works without JS.
-import { webgl, threeDEnabled, isCalm, editionKey, finishKey, streetEmblem } from 'outrun';
+import { can3D, afterLoad, isCalm, editionKey, finishKey, streetEmblem } from 'outrun';
+
+const FRAMES = 12; // turntable steps per card: frame 0 up front, the other 11 only when the card is about to spin
 
 const KEYS = ['make', 'edition', 'finish'];
 
@@ -32,6 +34,7 @@ class CollectionGrid extends HTMLElement {
   disconnectedCallback() {
     this.io?.disconnect();
     this.timers?.forEach(clearInterval);
+    this.thumbs?.dispose();
   }
 
   chip(key, value) {
@@ -72,11 +75,11 @@ class CollectionGrid extends HTMLElement {
     }
   }
 
-  // One offscreen renderer draws every cap's turntable frames when the grid is near the viewport.
+  // One offscreen renderer, kept while the page is open, draws the caps once the page has loaded and the grid is near.
   setup3D() {
     this.capCards = this.cards.filter((c) => c.hasAttribute('data-card-3d'));
     if (!this.capCards.length) return;
-    if (!webgl || !threeDEnabled()) {
+    if (!can3D()) {
       this.grid.classList.add('no-3d');
       return;
     }
@@ -85,8 +88,10 @@ class CollectionGrid extends HTMLElement {
       if (!entry.isIntersecting) return;
       this.io.disconnect();
       try {
-        this.S = await import('outrun-3d');
-        await this.render(this.capCards);
+        await afterLoad;
+        const S = await import('outrun-3d');
+        this.thumbs = S.createThumbnailer(320);
+        await this.renderFirst(this.capCards);
       } catch (err) {
         console.warn('[OUTRUN] 3D cards unavailable, showing product photos.', err);
         this.grid.classList.add('no-3d');
@@ -101,49 +106,73 @@ class CollectionGrid extends HTMLElement {
     return streetEmblem(make === 'all' ? undefined : this.chip('make', make)?.dataset.name);
   }
 
-  async render(cards) {
+  itemFor(card, street) {
+    const edition = editionKey(card.dataset.edition);
+    const face = edition === 'street' ? street || {} : {};
+    return { id: card.dataset.variant, edition, finish: finishKey(card.dataset.finish), img: face.img || null, label: face.label || null };
+  }
+
+  // Frame 0 of every card: 9 renders instead of 108. The other frames wait until a card is about to spin.
+  async renderFirst(cards) {
     const token = (this.renderToken = (this.renderToken || 0) + 1);
     this.renderedMake = this.state.make;
     const street = await this.streetFor(this.state.make);
-    const items = cards.map((c) => {
-      const edition = editionKey(c.dataset.edition);
-      const face = edition === 'street' ? street : {};
-      return { id: c.dataset.variant, edition, finish: finishKey(c.dataset.finish), img: face.img || null, label: face.label || null };
-    });
-    const frames = await this.S.renderThumbs(items, isCalm() ? 1 : 12, 320);
+    this.street = street;
+    const out = await this.thumbs.render(cards.map((c) => this.itemFor(c, street)), { frames: FRAMES, from: 0, to: 1 });
     const outdated = token !== this.renderToken; // a newer make choice is redrawing the Street cards
     cards.forEach((c) => {
       if (outdated && editionKey(c.dataset.edition) === 'street') return;
-      this.attachFrames(c, frames[c.dataset.variant]);
+      c.frames = out[c.dataset.variant];
+      c.frame = 0;
+      c.faceToken = token; // spin frames must be drawn with the same face
+      this.showFrame(c, 0);
+      this.bindSpin(c);
     });
   }
 
-  // After a make chip changes, redraw only the Street cards.
-  rerenderStreet() {
-    if (!this.S || this.renderedMake === this.state.make) return;
-    const streetCards = this.capCards.filter((c) => editionKey(c.dataset.edition) === 'street');
-    if (streetCards.length) this.render(streetCards).catch(() => {});
+  // The other 11 frames for one card, the first time it's about to spin.
+  async spinFrames(card) {
+    if (!card.frames || card.frames.length >= FRAMES || card.loadingSpin) return;
+    card.loadingSpin = true;
+    const token = card.faceToken;
+    try {
+      const out = await this.thumbs.render([this.itemFor(card, this.street)], { frames: FRAMES, from: 1, to: FRAMES });
+      if (token === card.faceToken) card.frames = [card.frames[0], ...out[card.dataset.variant]];
+    } finally {
+      card.loadingSpin = false;
+    }
   }
 
-  attachFrames(card, frames) {
-    if (!frames?.length) return;
-    card.frames = frames;
-    card.frame = 0;
+  // After a make chip changes, redraw only the Street cards (frame 0; their spin frames follow on demand).
+  rerenderStreet() {
+    if (!this.thumbs || this.renderedMake === this.state.make) return;
+    const streetCards = this.capCards.filter((c) => editionKey(c.dataset.edition) === 'street');
+    if (streetCards.length) this.renderFirst(streetCards).catch(() => {});
+  }
+
+  showFrame(card, i) {
     const img = card.querySelector('.card-img');
     img.removeAttribute('srcset');
     img.removeAttribute('sizes');
-    img.src = frames[0];
+    img.src = card.frames[i];
     card.classList.add('has-frames');
+  }
+
+  bindSpin(card) {
     if (card.dataset.spinBound) return; // listeners read card.frames, so a redraw needs no new ones
     card.dataset.spinBound = '1';
+    const img = card.querySelector('.card-img');
     let timer = 0;
-    const start = () => {
-      if (isCalm() || !card.frames || card.frames.length < 2) return;
+    const start = async () => {
+      if (isCalm()) return;
+      card.wantsSpin = true;
+      await this.spinFrames(card);
+      if (!card.wantsSpin || !card.frames || card.frames.length < 2) return;
       clearInterval(timer);
       timer = setInterval(() => { card.frame = (card.frame + 1) % card.frames.length; img.src = card.frames[card.frame]; }, 70);
       this.timers.push(timer);
     };
-    const stop = () => clearInterval(timer);
+    const stop = () => { card.wantsSpin = false; clearInterval(timer); };
     card.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') start(); });
     card.addEventListener('pointerleave', stop);
     card.addEventListener('focus', start);
