@@ -4,7 +4,9 @@ import html, json, re, sys
 
 content_path, t_path, out_path = sys.argv[1:4]
 t = open(content_path).read()
-content = json.loads(t[t.find("{"):])["data"]["translatableResource"]["translatableContent"]
+doc = json.loads(t[t.find("{"):])
+doc = doc.get("data", doc)  # `shopify store execute` omits the "data" wrapper without --json
+content = doc["translatableResource"]["translatableContent"]
 T = json.load(open(t_path, encoding="utf-8"))
 
 def norm(s):
@@ -24,6 +26,9 @@ MANUAL = {
     "Leave your email. One message when a line opens, nothing else.": "سيب إيميلك. رسالة واحدة لما الخط يفتح، ومفيش غيرها.",
     "Your set, ready to go.": "الطقم بتاعك جاهز.",
     "Collections": "المجموعات",
+    "Drop 01 · Opening soon": "Drop 01 · بيفتح قريب",
+    "Floating center caps, finished to the smallest detail. Leave your email and we’ll tell you once, when the drop opens.":
+        "أغطية سنتر عائمة، متشطبة لأدق تفصيلة. سيب إيميلك وهنقولك مرة واحدة لما الـ Drop يفتح.",
     "Street: Your car’s own badge, floating level.\nSignature: The OUTRUN symbol. Two speed lines.\nCustom: Your design, cut and finished for your wheels.":
         "Street: شعار عربيتك نفسه، ثابت وهو بيلف.\nSignature: رمز OUTRUN. خطين سرعة.\nCustom: تصميمك إنت، متقصوص ومتشطب لجنوطك.",
 }
@@ -36,6 +41,7 @@ KEEP_VALUES = {
     "Performance looks better here.", "Drive the feeling.", "OUTRUN", "OUTRUN Car", "OUTRUN Car · Drop 01",
     "Street", "Signature", "Custom", "OUTRUN Ride", "OUTRUN Kart", "CAR", "NEXT", "AHEAD", "WORKSHOP", "FIND", "LINES",
     "°C", "km", "BMW 3 Series", "Mercedes C-Class", "BMW X5", "Mercedes E-Class",
+    "Drive the", "SOON", "Exclusive Motion Gear", "drop-01-launch",
 }
 # Keys never translated: option names the theme matches on, contact data, and our own locale strings.
 SKIP_KEYS = {"general.edition_option", "general.finish_option", "general.custom_value", "general.whatsapp_number",

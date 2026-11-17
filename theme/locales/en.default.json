@@ -139,5 +139,16 @@
   },
   "heat": {
     "draft_note": "Only visible in the theme editor: replace these placeholder figures with tested ones, then tick “Figures are tested” to show them."
+  },
+  "password": {
+    "signup_button": "Tell me",
+    "signup_success": "You’re on the list. We’ll email you once, when the drop opens.",
+    "email_placeholder": "Your email",
+    "toggle": "Enter with password",
+    "label": "Password",
+    "enter": "Enter",
+    "wrong": "That password didn’t work. Try again.",
+    "owner": "Store owner?",
+    "login": "Log in here"
   }
 }
