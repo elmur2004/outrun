@@ -28,6 +28,7 @@
     {%- if page_description %}
       <meta name="description" content="{{ page_description | escape }}">
     {%- endif %}
+    {% render 'meta-tags' %}
 
     {%- if settings.favicon %}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">
@@ -51,9 +52,7 @@
       {
         "imports": {
           "outrun": "{{ 'outrun.js' | asset_url }}",
-          "outrun-3d": "{{ 'outrun-3d.js' | asset_url }}",
-          "three": "{{ 'three.module.min.js' | asset_url }}",
-          "three/addons/environments/RoomEnvironment.js": "{{ 'three-room-environment.js' | asset_url }}"
+          "outrun-3d": "{{ 'outrun-3d.js' | asset_url }}"
         }
       }
     </script>

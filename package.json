@@ -1,0 +1,12 @@
+{
+  "name": "outrun-theme",
+  "private": true,
+  "description": "Build tooling for the OUTRUN Shopify theme. The theme itself lives in theme/.",
+  "scripts": {
+    "build:3d": "esbuild src/3d/outrun-3d.js --bundle --format=esm --minify --target=es2020 --legal-comments=eof --banner:js=\"/* Built from src/3d/outrun-3d.js with npm run build:3d (three.js r160 bundled, MIT). Edit the source, not this file. */\" --outfile=theme/assets/outrun-3d.js"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.0",
+    "three": "0.160.0"
+  }
+}
